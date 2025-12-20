@@ -1,12 +1,5 @@
 import { useComponent } from "../lib/use-component.tsx";
-import {
-  NCard,
-  NTabs,
-  NTabPane,
-  NCollapse,
-  NCollapseItem,
-  NButton,
-} from "naive-ui";
+import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from "naive-ui";
 
 // 示例1：简单的div组件
 export const SimpleDiv = useComponent({

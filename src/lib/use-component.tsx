@@ -1,5 +1,5 @@
-import { defineComponent, h,  isVNode, reactive, isReactive } from "vue";
-import type { Component, VNode, Reactive } from 'vue'
+import { defineComponent, h, isVNode, reactive, isReactive } from "vue";
+import type { Component, VNode, Reactive } from "vue";
 
 type SlotContent =
   | string
@@ -7,21 +7,20 @@ type SlotContent =
   | boolean
   | UiComponent
   | SlotContent[]
-  | ((...args: any) => SlotContent)
-
+  | ((...args: any) => SlotContent);
 
 type Event = (...args: any) => any;
 
 interface InnerParam {
-  props: Reactive<any>
-  events: Record<string, Event>
+  props: Reactive<any>;
+  events: Record<string, Event>;
 }
 export interface UiComponent {
   component?: string | Component;
   props?: Record<string, any>;
   events?: Record<string, (...args: any) => any>;
   slots?: Record<string, SlotContent>;
-  use ?: (params:InnerParam, context:any) => InnerParam
+  use?: (params: InnerParam, context: any) => InnerParam;
 }
 
 // 辅助函数：将任何值转换为 VNode 数组
@@ -30,22 +29,13 @@ function toVNodes(value: any): VNode[] {
     return [];
   }
 
-  if (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "boolean"
-  ) {
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     // 字符串或数字直接返回（Vue 会自动转换为文本节点）
     return [String(value) as any];
   } else if (Array.isArray(value)) {
     // 如果已经是数组，递归处理每个元素
     return value.flatMap((item) => toVNodes(item));
-  } else if (
-    value &&
-    typeof value === "object" &&
-    "component" in value &&
-    !isVNode(value)
-  ) {
+  } else if (value && typeof value === "object" && "component" in value && !isVNode(value)) {
     // 组件配置对象，递归创建组件
     const ChildComponent = renderComponent(value as UiComponent);
     const vnode = h(ChildComponent);
@@ -60,17 +50,13 @@ function toVNodes(value: any): VNode[] {
   return [];
 }
 
-
-
 function transformEvents(events: Record<string, Event>) {
   // 处理事件 - 将事件名转换为 Vue 事件处理格式
   const eventHandlers: Record<string, any> = {};
   for (const [eventName, handler] of Object.entries(events)) {
     if (typeof handler === "function") {
       // 将事件名转换为驼峰式：click -> onClick, update:modelValue -> onUpdate:modelValue
-      const camelCaseEventName = `on${
-        eventName.charAt(0).toUpperCase() + eventName.slice(1)
-      }`;
+      const camelCaseEventName = `on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`;
       eventHandlers[camelCaseEventName] = handler;
     }
   }
@@ -91,33 +77,26 @@ function transformSlot(slots: Record<string, any | any[]>) {
   return slotFns;
 }
 
-function mergeProps(props:Reactive<any> | Record<string, any>, innerProps:Reactive<any>) {
-  if(isReactive(props)) {
-    return Object.assign(props, innerProps)
+function mergeProps(props: Reactive<any> | Record<string, any>, innerProps: Reactive<any>) {
+  if (isReactive(props)) {
+    return Object.assign(props, innerProps);
   } else {
-    return Object.assign(reactive(props), innerProps)
+    return Object.assign(reactive(props), innerProps);
   }
 }
 
 export function useComponent(option: UiComponent): Component {
-  const {
-    component: Comp = "div",
-    props = {},
-    events = {},
-    slots = {},
-    use
-  } = option;
+  const { component: Comp = "div", props = {}, events = {}, slots = {}, use } = option;
   return defineComponent({
     name: "wrapper",
     setup(_props, context) {
-      const __props = mergeProps(props, _props)
-      if(use) {
-        const { props:innerProps, events: innerEvents } = use({ props: __props, events }, context )
-        return { innerProps, innerEvents}
+      const __props = mergeProps(props, _props);
+      if (use) {
+        const { props: innerProps, events: innerEvents } = use({ props: __props, events }, context);
+        return { innerProps, innerEvents };
       } else {
-        return { innerProps: __props, innerEvents:events}
+        return { innerProps: __props, innerEvents: events };
       }
-
     },
     render() {
       const eventHandlers = transformEvents(events);
@@ -130,12 +109,7 @@ export function useComponent(option: UiComponent): Component {
 }
 
 export function renderComponent(option: UiComponent): VNode | Component {
-  const {
-    component: Comp = "div",
-    props = {},
-    events = {},
-    slots = {},
-  } = option;
+  const { component: Comp = "div", props = {}, events = {}, slots = {} } = option;
   if (typeof Comp === "object") {
     // 创建 slot 函数对象
     const eventHandlers = transformEvents(events);
