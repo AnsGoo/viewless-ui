@@ -79,10 +79,12 @@ function transformSlot(slots: Record<string, any | any[]>) {
 
 function mergeProps(props: Reactive<any> | Record<string, any>, innerProps: Reactive<any>) {
   if (isReactive(props)) {
-    return Object.assign(props, innerProps);
+    Object.assign(props, innerProps);
   } else {
-    return Object.assign(reactive(props), innerProps);
+    Object.assign(reactive(props), innerProps);
   }
+  console.log("合并后的 props:", props);
+  return props;
 }
 
 export function useComponent(option: UiComponent): Component {

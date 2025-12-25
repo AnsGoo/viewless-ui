@@ -34,6 +34,9 @@
     <NCard class="card-tabs">
       <UiLessTabs />
     </NCard>
+    <NCard class="card-form">
+      <ViewlessForm />
+    </NCard>
   </div>
 </template>
 
@@ -50,6 +53,8 @@ import {
   ComplexCollapse,
   UiLessTabs,
 } from "./examples/example-components.ts";
+import { UseForm } from "./examples/form.ts";
+const ViewlessForm = UseForm();
 </script>
 
 <style scoped>

@@ -3,7 +3,8 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "types": ["vite/client", "naive-ui/volar"],
-
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
