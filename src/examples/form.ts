@@ -3,8 +3,8 @@ import { useComponent } from "../lib/use-component.tsx";
 import { NForm, NFormItem, NInput } from "naive-ui";
 
 export function UseForm() {
-    const username = ref("123");
-    const password = ref("");
+  const username = ref("123");
+  const password = ref("");
   const model = reactive({
     username,
     password,
@@ -31,18 +31,18 @@ export function UseForm() {
                 placeholder: "请输入用户名",
                 onUpdateValue: (value: string) => {
                   console.log(value);
-                  model.username = value;    
+                  model.username = value;
                 },
               },
-            //   events: {
-            //     change: (_value) => {
-            //     //   console.log(value);
-            //     },
-            //     // "update:value": (value) => {
-            //     //   console.log(value);
-            //     // //   model.username = value;
-            //     // },
-            //   },
+              //   events: {
+              //     change: (_value) => {
+              //     //   console.log(value);
+              //     },
+              //     // "update:value": (value) => {
+              //     //   console.log(value);
+              //     // //   model.username = value;
+              //     // },
+              //   },
             },
           },
         },
@@ -60,9 +60,9 @@ export function UseForm() {
                 value: password,
                 placeholder: "请输入密码",
                 type: "password",
-                onUpdateValue: (value:string) => {
+                onUpdateValue: (value: string) => {
                   console.log(value);
-                  model.password = value;    
+                  model.password = value;
                 },
               },
             },

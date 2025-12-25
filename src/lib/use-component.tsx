@@ -95,17 +95,20 @@ export function useComponent(option: UiComponent): Component {
     setup(_props, context) {
       const __props = mergeProps(props, _props);
       if (setup) {
-        const { props: innerProps, events: innerEvents } = setup({ props: __props, events }, context);
+        const { props: innerProps, events: innerEvents } = setup(
+          { props: __props, events },
+          context,
+        );
         return { innerProps, innerEvents };
       } else {
         return { innerProps: __props, innerEvents: events };
       }
     },
-    render() {  
+    render() {
       const innerEvents = transformEvents(this.innerEvents);
       // 创建 slot 函数对象
       const innerSlots = transformSlot(slots);
-      // 渲染组件 
+      // 渲染组件
       return h(Comp, { ...this.innerProps, ...innerEvents }, innerSlots);
     },
   });
