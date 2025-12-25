@@ -20,7 +20,7 @@ export interface UiComponent {
   props?: Record<string, any>;
   events?: Record<string, (...args: any) => any>;
   slots?: Record<string, SlotContent>;
-  use?: (params: InnerParam, context: any) => InnerParam;
+  setup?: (params: InnerParam, context: any) => InnerParam;
 }
 
 // 辅助函数：将任何值转换为 VNode 数组
@@ -78,6 +78,7 @@ function transformSlot(slots: Record<string, any | any[]>) {
 }
 
 function mergeProps(props: Reactive<any> | Record<string, any>, innerProps: Reactive<any>) {
+  console.log("原始 props:", props, innerProps);
   if (isReactive(props)) {
     Object.assign(props, innerProps);
   } else {
@@ -88,24 +89,24 @@ function mergeProps(props: Reactive<any> | Record<string, any>, innerProps: Reac
 }
 
 export function useComponent(option: UiComponent): Component {
-  const { component: Comp = "div", props = {}, events = {}, slots = {}, use } = option;
+  const { component: Comp = "div", props = {}, events = {}, slots = {}, setup } = option;
   return defineComponent({
     name: "wrapper",
     setup(_props, context) {
       const __props = mergeProps(props, _props);
-      if (use) {
-        const { props: innerProps, events: innerEvents } = use({ props: __props, events }, context);
+      if (setup) {
+        const { props: innerProps, events: innerEvents } = setup({ props: __props, events }, context);
         return { innerProps, innerEvents };
       } else {
         return { innerProps: __props, innerEvents: events };
       }
     },
-    render() {
-      const eventHandlers = transformEvents(events);
+    render() {  
+      const innerEvents = transformEvents(this.innerEvents);
       // 创建 slot 函数对象
-      const slotFunctions = transformSlot(slots);
-      // 渲染组件
-      return h(Comp, { ...props, ...eventHandlers }, slotFunctions);
+      const innerSlots = transformSlot(slots);
+      // 渲染组件 
+      return h(Comp, { ...this.innerProps, ...innerEvents }, innerSlots);
     },
   });
 }
@@ -114,10 +115,12 @@ export function renderComponent(option: UiComponent): VNode | Component {
   const { component: Comp = "div", props = {}, events = {}, slots = {} } = option;
   if (typeof Comp === "object") {
     // 创建 slot 函数对象
-    const eventHandlers = transformEvents(events);
+    const innerProps = mergeProps(props, reactive({}));
+    console.log(innerProps);
+    const innerEvents = transformEvents(events);
     // 创建 slot 函数对象
-    const slotFunctions = transformSlot(slots);
-    return h(Comp, { ...props, ...eventHandlers }, slotFunctions);
+    const innerSlots = transformSlot(slots);
+    return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
   }
 
   return useComponent(option);

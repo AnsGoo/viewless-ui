@@ -12,28 +12,28 @@
     <h1>UseComponent 示例集合</h1>
 
     <!-- 简单div组件 -->
-    <SimpleDiv />
+    <!-- <SimpleDiv /> -->
 
     <!-- 带事件的按钮组件 -->
-    <EventButton />
+    <!-- <EventButton /> -->
 
     <!-- 数字作为slot内容 -->
-    <NumberSlotExample />
+    <!-- <NumberSlotExample /> -->
 
     <!-- 混合内容的slot -->
-    <MixedSlotExample />
+    <!-- <MixedSlotExample /> -->
 
     <!-- 卡片包含标签页 -->
-    <CardWithTabs />
+    <!-- <CardWithTabs /> -->
 
     <!-- 折叠面板组件 -->
-    <ComplexCollapse />
+    <!-- <ComplexCollapse /> -->
 
     <!-- UiLess标签页组件 -->
 
-    <NCard class="card-tabs">
+    <!-- <NCard class="card-tabs">
       <UiLessTabs />
-    </NCard>
+    </NCard> -->
     <NCard class="card-form">
       <ViewlessForm />
     </NCard>
@@ -54,6 +54,7 @@ import {
   UiLessTabs,
 } from "./examples/example-components.ts";
 import { UseForm } from "./examples/form.ts";
+import { reactive } from "vue";
 const ViewlessForm = UseForm();
 </script>
 
