@@ -1,4 +1,4 @@
-import { defineComponent, h, isVNode, reactive, isReactive } from "vue";
+import { capitalize, defineComponent, h, isVNode, reactive } from "vue";
 import type { Component, VNode, Reactive } from "vue";
 
 type SlotContent =
@@ -11,16 +11,12 @@ type SlotContent =
 
 type Event = (...args: any) => any;
 
-interface InnerParam {
-  props: Reactive<any>;
-  events: Record<string, Event>;
-}
 export interface UiComponent {
-  component?: string | Component;
+  component: string | Component;
+  key?: string | number | symbol;
   props?: Record<string, any>;
   events?: Record<string, (...args: any) => any>;
   slots?: Record<string, SlotContent>;
-  setup?: (params: InnerParam, context: any) => InnerParam;
 }
 
 // 辅助函数：将任何值转换为 VNode 数组
@@ -56,7 +52,7 @@ function transformEvents(events: Record<string, Event>) {
   for (const [eventName, handler] of Object.entries(events)) {
     if (typeof handler === "function") {
       // 将事件名转换为驼峰式：click -> onClick, update:modelValue -> onUpdate:modelValue
-      const camelCaseEventName = `on${eventName.charAt(0).toUpperCase() + eventName.slice(1)}`;
+      const camelCaseEventName = `on${capitalize(eventName)}`;
       eventHandlers[camelCaseEventName] = handler;
     }
   }
@@ -73,58 +69,54 @@ function transformSlot(slots: Record<string, any | any[]>) {
       return toVNodes(slotValue);
     };
   }
-
   return slotFns;
 }
 
-function mergeProps(props: Reactive<any> | Record<string, any>, innerProps: Reactive<any>) {
-  console.log("原始 props:", props, innerProps);
-  if (isReactive(props)) {
-    Object.assign(props, innerProps);
-  } else {
-    Object.assign(reactive(props), innerProps);
+function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive<any>) {
+  const { key, show } = kwargs;
+  if (key) {
+    attrs.key = key;
   }
-  console.log("合并后的 props:", props);
-  return props;
-}
-
-export function useComponent(option: UiComponent): Component {
-  const { component: Comp = "div", props = {}, events = {}, slots = {}, setup } = option;
-  return defineComponent({
-    name: "wrapper",
-    setup(_props, context) {
-      const __props = mergeProps(props, _props);
-      if (setup) {
-        const { props: innerProps, events: innerEvents } = setup(
-          { props: __props, events },
-          context,
-        );
-        return { innerProps, innerEvents };
-      } else {
-        return { innerProps: __props, innerEvents: events };
-      }
-    },
-    render() {
-      const innerEvents = transformEvents(this.innerEvents);
-      // 创建 slot 函数对象
-      const innerSlots = transformSlot(slots);
-      // 渲染组件
-      return h(Comp, { ...this.innerProps, ...innerEvents }, innerSlots);
-    },
-  });
+  if (typeof show === "boolean" && show === false) {
+    if (attrs.style) {
+      attrs.style.display = "none";
+    } else {
+      attrs.style = { display: "none" };
+    }
+  }
+  return attrs;
 }
 
 export function renderComponent(option: UiComponent): VNode | Component {
-  const { component: Comp = "div", props = {}, events = {}, slots = {} } = option;
-  if (typeof Comp === "object") {
-    // 创建 slot 函数对象
-    const innerProps = mergeProps(props, reactive({}));
-    console.log(innerProps);
-    const innerEvents = transformEvents(events);
-    // 创建 slot 函数对象
-    const innerSlots = transformSlot(slots);
-    return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
-  }
+  const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = option;
+  // 创建 slot 函数对象
+  const innerProps = mergeProps(props, kwargs);
+  const innerEvents = transformEvents(events);
+  // 创建 slot 函数对象
+  const innerSlots = transformSlot(slots);
+  return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
+}
 
-  return useComponent(option);
+type InnerSetup = (props: Record<string, any>, context: any) => UiComponent;
+
+export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Component {
+  return defineComponent({
+    name: "wrapper",
+    setup(_props, context) {
+      const resp = setup(_props, context);
+      return {
+        component: resp.component,
+        innerProps: resp.props,
+        innerEvents: resp.events,
+        innerSlots: resp.slots,
+      };
+    },
+    render() {
+      const innerEvents = transformEvents(this.innerEvents || {});
+      // 创建 slot 函数对象
+      const innerSlots = transformSlot(this.innerSlots || {});
+      // 渲染组件
+      return h(this.component, { ...this.innerProps, ...innerEvents }, innerSlots);
+    },
+  });
 }
