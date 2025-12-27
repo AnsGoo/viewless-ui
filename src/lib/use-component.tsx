@@ -1,4 +1,4 @@
-import { capitalize, defineComponent, h, isVNode, reactive } from "vue";
+import { capitalize, defineComponent, h, isVNode } from "vue";
 import type { Component, VNode, Reactive } from "vue";
 
 type SlotContent =

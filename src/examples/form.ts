@@ -4,7 +4,7 @@ import { NForm, NFormItem, NInput } from "naive-ui";
 
 export function UseForm() {
   return defineViewlessComponent({
-    setup: (props, context) => {
+    setup: (_props, context) => {
       const username = ref("123");
       const password = ref("");
       const model = reactive({
@@ -20,6 +20,7 @@ export function UseForm() {
         () => model.username,
         (newValue, oldValue) => {
           console.log("用户名变化了", newValue, oldValue);
+          context.emit("change", model);
         },
       );
       watch(

@@ -3,7 +3,7 @@ import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from "naive
 
 // 示例1：简单的div组件
 export const SimpleDiv = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: "div",
       props: {
@@ -18,7 +18,7 @@ export const SimpleDiv = defineViewlessComponent({
 
 // 示例2：带事件的按钮组件
 export const EventButton = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: NButton,
       props: {
@@ -39,7 +39,7 @@ export const EventButton = defineViewlessComponent({
 
 // 示例3：嵌套组件 - Card包含Tabs
 export const CardWithTabs = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: NCard,
       props: {
@@ -58,7 +58,7 @@ export const CardWithTabs = defineViewlessComponent({
 
 // 示例4：复杂嵌套 - Collapse包含多个Item
 export const ComplexCollapse = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: NCollapse,
       props: {
@@ -96,7 +96,7 @@ export const ComplexCollapse = defineViewlessComponent({
 
 // 示例5：数字作为slot内容
 export const NumberSlotExample = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: "div",
       props: {
@@ -111,7 +111,7 @@ export const NumberSlotExample = defineViewlessComponent({
 
 // 示例6：混合内容的slot
 export const MixedSlotExample = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: "div",
       props: {
@@ -131,7 +131,7 @@ export const MixedSlotExample = defineViewlessComponent({
 });
 
 export const UiLessTabs = defineViewlessComponent({
-  setup: (props, context) => {
+  setup: (_props, _context) => {
     return {
       component: NTabs,
       props: {

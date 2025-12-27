@@ -35,7 +35,7 @@
       <UiLessTabs />
     </NCard>
     <NCard class="card-form">
-      <ViewlessForm />
+      <ViewlessForm @change="formChange" />
     </NCard>
   </div>
 </template>
@@ -55,6 +55,11 @@ import {
 } from "./examples/example-components.ts";
 import { UseForm } from "./examples/form.ts";
 const ViewlessForm = UseForm();
+
+
+function formChange(value: any) {
+  console.log("form change", value);
+}
 </script>
 
 <style scoped>
