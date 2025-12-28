@@ -77,22 +77,16 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   if (key) {
     attrs.key = key;
   }
+
   // 移除样式配置
-  if (attrs.style) {
-      attrs.style = {}
-  }
+  attrs.style = {}
   // 移除类名配置
   if(attrs.class) {
     delete attrs.class
 
   }
   if (typeof show !== "undefined" && !show) {
-    if (attrs.style) {
-
       attrs.style.display = "none";
-    } else {
-      attrs.style = { display: "none" };
-    }
   }
   return attrs;
 }
@@ -114,11 +108,16 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
     name: "wrapper",
     setup(_props, context) {
       const resp = setup(_props, context);
+      if(resp.props) {
+        //  不允许通过props 配置样式，移除样式相关的属性
+        delete resp.props.style
+        delete resp.props.class
+      }
       return {
         component: resp.component,
-        innerProps: resp.props,
-        innerEvents: resp.events,
-        innerSlots: resp.slots,
+        innerProps: resp.props || {},
+        innerEvents: resp.events || {},
+        innerSlots: resp.slots || {},
       };
     },
     render() {
