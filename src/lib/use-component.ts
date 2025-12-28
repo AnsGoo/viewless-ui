@@ -19,6 +19,8 @@ export interface UiComponent {
   slots?: Record<string, SlotContent>;
 }
 
+export type  ViewlessComponent = UiComponent | UiComponent[];
+
 // 辅助函数：将任何值转换为 VNode 数组
 function toVNodes(value: any): VNode[] {
   if (value === null || value === undefined) {
