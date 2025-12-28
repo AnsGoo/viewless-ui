@@ -77,9 +77,18 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   if (key) {
     attrs.key = key;
   }
+  // 移除样式配置
+  if (attrs.style) {
+      attrs.style = {}
+  }
+  // 移除类名配置
+  if(attrs.class) {
+    delete attrs.class
+
+  }
   if (typeof show !== "undefined" && !show) {
     if (attrs.style) {
-      attrs.style = {}
+
       attrs.style.display = "none";
     } else {
       attrs.style = { display: "none" };
@@ -116,8 +125,9 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
       const innerEvents = transformEvents(this.innerEvents || {});
       // 创建 slot 函数对象
       const innerSlots = transformSlot(this.innerSlots || {});
+      const innerProps = mergeProps(this.innerProps || {}, {});
       // 渲染组件
-      return h(this.component, { ...this.innerProps, ...innerEvents }, innerSlots);
+      return h(this.component, { ...innerProps, ...innerEvents, ...this.$attrs }, innerSlots);
     },
   });
 }
