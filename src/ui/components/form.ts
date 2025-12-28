@@ -8,7 +8,7 @@ interface FormProps {
   labelPosition?: "left" | "right" | "top";
 }
 interface FormEvents {
-  "update:modelValue": (value: Record<string, any>) => void;
+  change: (value: Record<string, any>) => void;
 }
 interface FormSlots {
   default: ViewlessComponent;
