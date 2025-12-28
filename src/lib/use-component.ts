@@ -79,6 +79,7 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   }
   if (typeof show !== "undefined" && !show) {
     if (attrs.style) {
+      attrs.style = {}
       attrs.style.display = "none";
     } else {
       attrs.style = { display: "none" };

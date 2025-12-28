@@ -1,4 +1,4 @@
-import { defineViewlessComponent } from "@lib/use-component";
+import { defineViewlessComponent } from "@/lib/use-component.ts";
 import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from "naive-ui";
 
 // 示例1：简单的div组件

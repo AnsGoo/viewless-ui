@@ -1,5 +1,5 @@
 import { computed, onMounted, reactive, ref, shallowRef, watch } from "vue";
-import { defineViewlessComponent } from "@lib/use-component";
+import { defineViewlessComponent } from "@/lib/use-component.ts";
 import { NForm, NFormItem, NInput } from "naive-ui";
 
 export function UseForm() {
