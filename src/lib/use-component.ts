@@ -2,7 +2,9 @@ import { capitalize, defineComponent, h, inject, isVNode } from 'vue';
 import type { Component, VNode, Reactive } from 'vue';
 import { ADAPTOR_KEY } from './const';
 
-type SlotContent =
+export type SlotContent =
+  | undefined
+  | null
   | string
   | number
   | boolean
@@ -10,18 +12,41 @@ type SlotContent =
   | SlotContent[]
   | ((...args: any) => SlotContent);
 
-type Event = (...args: any) => any;
+type Event = ((...args: any) => any) | undefined;
 
-export interface UiComponent {
+// 保留原有的基础类型（用于向后兼容）
+export interface Props {
+  [key: string]: any;
+}
+
+export interface Events {
+  [key: string]: Event;
+}
+
+export interface Slots {
+  [key: string]: SlotContent;
+}
+
+export type ComponentOption<
+  P extends Props = Props,
+  E extends Events = Events,
+  S extends Slots = Slots,
+> = {
+  props?: P;
+  events?: E;
+  slots?: S;
+};
+
+export interface UiComponent<O extends ComponentOption = ComponentOption> {
   component: string | Component;
   key?: string | number | symbol;
-  props?: Record<string, any>;
-  events?: Record<string, (...args: any) => any>;
-  slots?: Record<string, SlotContent>;
+  props?: O['props'];
+  events?: O['events'];
+  slots?: O['slots'];
   vshow?: boolean;
 }
 
-export type ViewlessComponent = UiComponent | UiComponent[];
+export type ViewlessComponent = UiComponent | UiComponent[] | undefined;
 
 // 辅助函数：将任何值转换为 VNode 数组
 function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNode[] {

@@ -1,52 +1,46 @@
 import type { UiComponent } from '@/lib/use-component';
-import { NCard, NForm, NFormItem, NInput, NTabPane, NTabs } from 'naive-ui';
+import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import { shallowRef } from 'vue';
+import type { FormOption, FormItemOption } from '@/ui/components/form';
+import type { CardOption } from '@/ui/components/card';
+import type { InputOption } from '../components/input';
 
-function useFormAdaptor(opt: UiComponent) {
+function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
-  return opt;
+  return opt as UiComponent<FormOption>;
 }
 
-function useFormItemAdaptor(opt: UiComponent) {
+function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
   opt.component = shallowRef(NFormItem);
-  return opt;
+  return opt as UiComponent<FormItemOption>;
 }
 
-function useInputAdaptor(opt: UiComponent) {
+function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(NInput);
-  return opt;
+  return opt as UiComponent<InputOption>;
 }
 
-function useCardAdaptor(opt: UiComponent) {
+function useCardAdaptor(opt: UiComponent<CardOption>) {
   opt.component = shallowRef(NCard);
-  return opt;
-}
-
-function useTabsAdaptor(opt: UiComponent) {
-  opt.component = shallowRef(NTabs);
-  return opt;
-}
-function useTabPaneAdaptor(opt: UiComponent) {
-  opt.component = shallowRef(NTabPane);
-  return opt;
+  return opt as UiComponent<CardOption>;
 }
 
 export function useAdaptor() {
-  const adaptorMap: Record<string, (opt: UiComponent) => UiComponent> = {};
-  adaptorMap['Form'] = useFormAdaptor;
-  adaptorMap['FormItem'] = useFormItemAdaptor;
-  adaptorMap['Input'] = useInputAdaptor;
-  adaptorMap['Card'] = useCardAdaptor;
-  adaptorMap['Tabs'] = useTabsAdaptor;
-  adaptorMap['TabPane'] = useTabPaneAdaptor;
+  // 使用类型断言来放宽类型要求
+  const adaptorMap: Record<string, (opt: UiComponent) => UiComponent> = {
+    Form: (opt: UiComponent) => useFormAdaptor(opt as UiComponent<FormOption>),
+    FormItem: (opt: UiComponent) => useFormItemAdaptor(opt as UiComponent<FormItemOption>),
+    Input: (opt: UiComponent) => useInputAdaptor(opt as UiComponent<InputOption>),
+    Card: (opt: UiComponent) => useCardAdaptor(opt as UiComponent<CardOption>),
+  };
 
   const adaptor = (opt: UiComponent) => {
     if (typeof opt.component !== 'string') {
       return opt;
     }
-    const adaptor = adaptorMap[opt.component];
-    if (adaptor) {
-      return adaptor(opt);
+    const adaptorFn = adaptorMap[opt.component];
+    if (adaptorFn) {
+      return adaptorFn(opt);
     }
     return opt;
   };
