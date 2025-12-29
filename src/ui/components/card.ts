@@ -19,11 +19,12 @@ export interface CardOption extends BaseAttrs {
   slots?: CardSlots;
 }
 export function useCard(options: CardOption) {
-  const { props, events, slots } = options;
+  const { props, events, slots, ...kwargs } = options;
   return {
     component: 'Card',
     props,
     events,
     slots,
+    ...kwargs,  
   };
 }

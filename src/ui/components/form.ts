@@ -23,12 +23,13 @@ export interface FormOption extends BaseAttrs {
 }
 
 export function useForm(options: FormOption) {
-  const { props, events, slots } = options;
+  const { props, events, slots, ...kwargs } = options;
   return {
     component: 'Form',
     props,
     events,
     slots,
+    ...kwargs,
   };
 }
 
@@ -54,21 +55,12 @@ export interface FormItemSlots extends Slots {
 }
 
 export function useFormItem(options: FormItemOption) {
-  const { props, events, slots } = options;
+  const { props, events, slots, ...kwargs } = options;
   return {
     component: 'FormItem',
     props,
     events,
     slots,
-  };
-}
-
-export function useInput(options: FormItemOption) {
-  const { props, events, slots } = options;
-  return {
-    component: 'Input',
-    props,
-    events,
-    slots,
+    ...kwargs,
   };
 }

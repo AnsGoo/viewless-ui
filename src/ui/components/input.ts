@@ -18,11 +18,12 @@ export interface InputSlots extends Slots {
 }
 
 export function useInput(option: InputOption) {
-  const { props, events, slots } = option;
+  const { props, events, slots, ...kwargs } = option;
   return {
     component: 'Input',
     props,
     events,
     slots,
+    ...kwargs,
   };
 }

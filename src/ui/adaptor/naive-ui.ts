@@ -20,8 +20,6 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(NInput);
   transfromProp(opt.props, 'modelValue', 'value');
-
-  console.log(opt.props);
   return opt as UiComponent<InputOption>;
 }
 
