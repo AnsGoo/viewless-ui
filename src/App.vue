@@ -15,15 +15,12 @@
 </template>
 
 <script setup lang="ts">
-
-import { provide } from "vue";
 import { UseForm } from "./examples/form.ts";
 import { useAdaptor } from "@/ui/adaptor/naive-ui.ts";
-import { ADAPTOR_KEY } from "@/lib/const.ts";
+import { useProvideAdaptor } from "@/ui/provide.ts";
 const ViewlessForm = UseForm();
 
-const {adaptor} = useAdaptor();
-provide(ADAPTOR_KEY, adaptor);
+useProvideAdaptor(useAdaptor);
 
 
 function formChange(value: any) {
