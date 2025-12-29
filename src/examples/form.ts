@@ -4,7 +4,7 @@ import { useFormItem, useInput } from '@/ui';
 
 export function UseForm() {
   return defineViewlessComponent({
-    setup: (_props, context) => {
+    setup(_props, context){
       const username = ref('123');
       const password = ref('');
       const model = reactive({
