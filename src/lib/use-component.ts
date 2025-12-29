@@ -1,6 +1,6 @@
-import { capitalize, defineComponent, h, inject, isVNode } from "vue";
-import type { Component, VNode, Reactive } from "vue";
-import { ADAPTOR_KEY } from "./const";
+import { capitalize, defineComponent, h, inject, isVNode } from 'vue';
+import type { Component, VNode, Reactive } from 'vue';
+import { ADAPTOR_KEY } from './const';
 
 type SlotContent =
   | string
@@ -29,13 +29,13 @@ function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNod
     return [];
   }
 
-  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
     // 字符串或数字直接返回（Vue 会自动转换为文本节点）
     return [String(value) as any];
   } else if (Array.isArray(value)) {
     // 如果已经是数组，递归处理每个元素
     return value.flatMap((item) => toVNodes(item, adaptor));
-  } else if (value && typeof value === "object" && "component" in value && !isVNode(value)) {
+  } else if (value && typeof value === 'object' && 'component' in value && !isVNode(value)) {
     // 组件配置对象，递归创建组件
     const ChildComponent = renderComponent(value as UiComponent, adaptor);
     const vnode = h(ChildComponent);
@@ -43,7 +43,7 @@ function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNod
   } else if (value && isVNode(value)) {
     // 已经是 VNode，直接返回
     return [value as VNode];
-  } else if (value && typeof value === "function") {
+  } else if (value && typeof value === 'function') {
     // 函数组件，直接调用
     return toVNodes(value(), adaptor);
   }
@@ -54,7 +54,7 @@ function transformEvents(events: Record<string, Event>) {
   // 处理事件 - 将事件名转换为 Vue 事件处理格式
   const eventHandlers: Record<string, any> = {};
   for (const [eventName, handler] of Object.entries(events)) {
-    if (typeof handler === "function") {
+    if (typeof handler === 'function') {
       // 将事件名转换为驼峰式：click -> onClick, update:modelValue -> onUpdate:modelValue
       const camelCaseEventName = `on${capitalize(eventName)}`;
       eventHandlers[camelCaseEventName] = handler;
@@ -91,8 +91,8 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   if (attrs.class) {
     delete attrs.class;
   }
-  if (typeof vshow !== "undefined" && !vshow) {
-    attrs.style.display = "none";
+  if (typeof vshow !== 'undefined' && !vshow) {
+    attrs.style.display = 'none';
   }
   return attrs;
 }
@@ -118,11 +118,11 @@ type InnerSetup = (props: Record<string, any>, context: any) => UiComponent;
 
 export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Component {
   return defineComponent({
-    name: "wrapper",
+    name: 'wrapper',
     setup(_props, context) {
       let resp = setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
-      console.log("adaptor", adaptor);
+      console.log('adaptor', adaptor);
       if (adaptor) {
         resp = adaptor(resp);
       }

@@ -1,6 +1,6 @@
-import type { UiComponent } from "@/lib/use-component";
-import { NCard, NForm, NFormItem, NInput } from "naive-ui";
-import { shallowRef } from "vue";
+import type { UiComponent } from '@/lib/use-component';
+import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import { shallowRef } from 'vue';
 
 function useFormAdaptor(opt: UiComponent) {
   opt.component = shallowRef(NForm);
@@ -24,12 +24,12 @@ function useCardAdaptor(opt: UiComponent) {
 
 export function useAdaptor() {
   const adaptorMap: Record<string, (opt: UiComponent) => UiComponent> = {};
-  adaptorMap["Form"] = useFormAdaptor;
-  adaptorMap["FormItem"] = useFormItemAdaptor;
-  adaptorMap["Input"] = useInputAdaptor;
-  adaptorMap["Card"] = useCardAdaptor;
+  adaptorMap['Form'] = useFormAdaptor;
+  adaptorMap['FormItem'] = useFormItemAdaptor;
+  adaptorMap['Input'] = useInputAdaptor;
+  adaptorMap['Card'] = useCardAdaptor;
   const adaptor = (opt: UiComponent) => {
-    if (typeof opt.component !== "string") {
+    if (typeof opt.component !== 'string') {
       return opt;
     }
     const adaptor = adaptorMap[opt.component];

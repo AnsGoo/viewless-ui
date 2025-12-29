@@ -130,14 +130,14 @@ defineViewlessComponent({ setup: (props, context) => UiComponent }): Component
 
 ### UiComponent 属性说明
 
-| 属性 | 类型 | 说明 |
-|------|------|------|
-| `component` | `string \| Component` | 组件本身，可以是 HTML 标签字符串或 Vue 组件 |
-| `key` | `string \| number \| symbol` | 用于列表渲染时的唯一标识 |
-| `props` | `Record<string, any>` | 组件的属性配置 |
-| `events` | `Record<string, (...args: any) => any>` | 事件处理函数，会自动转换为 on 开头格式 |
-| `slots` | `Record<string, SlotContent>` | 插槽内容配置 |
-| `vshow` | `boolean` | 控制组件显示/隐藏，false 时设置 display: none |
+| 属性        | 类型                                    | 说明                                          |
+| ----------- | --------------------------------------- | --------------------------------------------- |
+| `component` | `string \| Component`                   | 组件本身，可以是 HTML 标签字符串或 Vue 组件   |
+| `key`       | `string \| number \| symbol`            | 用于列表渲染时的唯一标识                      |
+| `props`     | `Record<string, any>`                   | 组件的属性配置                                |
+| `events`    | `Record<string, (...args: any) => any>` | 事件处理函数，会自动转换为 on 开头格式        |
+| `slots`     | `Record<string, SlotContent>`           | 插槽内容配置                                  |
+| `vshow`     | `boolean`                               | 控制组件显示/隐藏，false 时设置 display: none |
 
 ### SlotContent 类型
 
@@ -226,27 +226,35 @@ const MyComponent = defineViewlessComponent({
 本项目提供了丰富的示例组件，位于 `src/examples/` 目录下：
 
 ### 1. 简单 div 组件
+
 展示最基本的组件定义，支持文本插槽。
 
 ### 2. 带事件的按钮
+
 演示事件处理，监听原生 DOM 事件和自定义事件。
 
 ### 3. 卡片组件
+
 使用 Naive UI 的 NCard 组件，展示 props 传递和多个插槽。
 
 ### 4. 折叠面板
+
 演示复杂嵌套，折叠面板包含多个折叠项。
 
 ### 5. 数字插槽
+
 展示数字作为插槽内容的用法。
 
 ### 6. 混合内容插槽
+
 演示数组形式的插槽内容，混合文本、组件和函数。
 
 ### 7. 标签页组件
+
 创建可复用的标签页组件。
 
 ### 8. 表单组件
+
 展示响应式数据、生命周期钩子和计算属性的综合应用。
 
 ## 项目结构
