@@ -27,6 +27,11 @@ export interface Slots {
   [key: string]: SlotContent;
 }
 
+export interface BaseAttrs {
+  key?: string | number | symbol;
+  vshow?: boolean;
+}
+
 export type ComponentOption<
   P extends Props = Props,
   E extends Events = Events,

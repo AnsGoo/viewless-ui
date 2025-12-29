@@ -4,6 +4,7 @@ import { shallowRef } from 'vue';
 import type { FormOption, FormItemOption } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
+import { transfromProp } from './utils';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
@@ -12,11 +13,15 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
 
 function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
   opt.component = shallowRef(NFormItem);
+  transfromProp(opt.props, 'prop', 'path');
   return opt as UiComponent<FormItemOption>;
 }
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(NInput);
+  transfromProp(opt.props, 'modelValue', 'value');
+
+  console.log(opt.props);
   return opt as UiComponent<InputOption>;
 }
 

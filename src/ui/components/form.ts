@@ -1,4 +1,4 @@
-import type { Events, Props, Slots, ViewlessComponent } from '@/lib/use-component';
+import type { BaseAttrs, Events, Props, Slots, ViewlessComponent } from '@/lib/use-component';
 
 export interface FormProps extends Props {
   modelValue: Record<string, any>;
@@ -16,7 +16,7 @@ export interface FormSlots extends Slots {
   default: ViewlessComponent;
 }
 
-export interface FormOption {
+export interface FormOption extends BaseAttrs {
   props: FormProps;
   events: FormEvents;
   slots: FormSlots;
@@ -37,19 +37,20 @@ export interface FormItemProps extends Props {
   label?: string;
   labelPosition?: 'left' | 'right' | 'top';
   size?: 'small' | 'medium' | 'large';
+  required?: boolean;
 }
 
 export interface FormItemEvents extends Events {}
 
-export interface FormItemOption {
-  props: FormItemProps;
-  events: FormItemEvents;
-  slots: FormItemSlots;
+export interface FormItemOption extends BaseAttrs {
+  props?: FormItemProps;
+  events?: FormItemEvents;
+  slots?: FormItemSlots;
 }
 
 export interface FormItemSlots extends Slots {
-  default: ViewlessComponent;
-  label: ViewlessComponent;
+  default?: ViewlessComponent;
+  label?: ViewlessComponent;
 }
 
 export function useFormItem(options: FormItemOption) {

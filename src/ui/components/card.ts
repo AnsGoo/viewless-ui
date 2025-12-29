@@ -1,4 +1,4 @@
-import type { Props, Events, Slots, ViewlessComponent } from '@/lib/use-component';
+import type { Props, Events, Slots, ViewlessComponent, BaseAttrs } from '@/lib/use-component';
 
 export interface CardProps extends Props {
   title?: string;
@@ -13,7 +13,7 @@ export interface CardSlots extends Slots {
   footer?: ViewlessComponent;
 }
 
-export interface CardOption {
+export interface CardOption extends BaseAttrs {
   props?: CardProps;
   events?: CardEvents;
   slots?: CardSlots;

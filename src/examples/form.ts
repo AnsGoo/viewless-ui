@@ -1,5 +1,6 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { defineViewlessComponent } from '@/lib/use-component.ts';
+import { useFormItem, useInput } from '@/ui';
 
 export function UseForm() {
   return defineViewlessComponent({
@@ -38,40 +39,36 @@ export function UseForm() {
             }),
             slots: {
               default: [
-                {
-                  component: 'FormItem',
+                useFormItem({
                   props: reactive({
-                    path: 'username',
+                    prop: 'username',
                     label: '用户名',
                     required: true,
                   }),
                   key: 'username',
                   slots: {
-                    default: {
-                      component: 'Input',
+                    default: useInput({
                       props: {
-                        value: username,
+                        modelValue: username,
                         placeholder: '请输入用户名',
                         onUpdateValue: (value: string) => {
                           console.log(value);
                           model.username = value;
                         },
                       },
-                    },
+                    }),
                   },
-                },
-                {
-                  component: 'FormItem',
+                }),
+                useFormItem({
                   props: reactive({
-                    path: 'password',
+                    prop: 'password',
                     label: '密码',
                     required: true,
                   }),
                   key: 'password',
                   vshow: computed(() => model.username !== '1234'),
                   slots: {
-                    default: {
-                      component: 'Input',
+                    default: useInput({
                       props: {
                         value: password,
                         placeholder: '请输入密码',
@@ -81,9 +78,9 @@ export function UseForm() {
                           model.password = value;
                         },
                       },
-                    },
+                    }),
                   },
-                },
+                }),
               ],
             },
           },
