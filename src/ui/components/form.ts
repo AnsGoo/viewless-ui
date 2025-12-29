@@ -22,11 +22,11 @@ interface FormOptions {
 export function useForm(options: FormOptions, slots: FormSlots) {
   const { props, events } = options;
   return {
-    component: 'Form',
+    component: "Form",
     props,
     events,
     slots,
-  }
+  };
 }
 
 interface FormItemProps {
@@ -48,9 +48,9 @@ interface FormItemSlots {
 export function useFormItem(options: FormItemOptions, slots: FormItemSlots) {
   const { props, events } = options;
   return {
-    component: 'FormItem',
+    component: "FormItem",
     props,
     events,
     slots,
-  }
+  };
 }

@@ -30,59 +30,64 @@ export function UseForm() {
         },
       );
       return reactive({
-        component: shallowRef(NForm),
-        props: reactive({
-          model: model,
-        }),
+        component: "Card",
         slots: {
-          default: [
-            {
-              component: shallowRef(NFormItem),
-              props: reactive({
-                path: "username",
-                label: "用户名",
-                required: true,
-              }),
-              key: "username",
-              slots: {
-                default: {
-                  component: shallowRef(NInput),
-                  props: {
-                    value: username,
-                    placeholder: "请输入用户名",
-                    onUpdateValue: (value: string) => {
-                      console.log(value);
-                      model.username = value;
+          default: {
+            component: "Form",
+            props: reactive({
+              model: model,
+            }),
+            slots: {
+              default: [
+                {
+                  component: "FormItem",
+                  props: reactive({
+                    path: "username",
+                    label: "用户名",
+                    required: true,
+                  }),
+                  key: "username",
+                  slots: {
+                    default: {
+                      component: "Input",
+                      props: {
+                        value: username,
+                        placeholder: "请输入用户名",
+                        onUpdateValue: (value: string) => {
+                          console.log(value);
+                          model.username = value;
+                        },
+                      },
                     },
                   },
                 },
-              },
-            },
-            {
-              component: shallowRef(NFormItem),
-              props: reactive({
-                path: "password",
-                label: "密码",
-                required: true,
-              }),
-              key: "password",
-              show: computed(() => model.username !== "1234"),
-              slots: {
-                default: {
-                  component: shallowRef(NInput),
-                  props: {
-                    value: password,
-                    placeholder: "请输入密码",
-                    type: "password",
-                    onUpdateValue: (value: string) => {
-                      console.log(value);
-                      model.password = value;
+                {
+                  component: "FormItem",
+                  props: reactive({
+                    path: "password",
+                    label: "密码",
+                    required: true,
+                  }),
+                  key: "password",
+                  vshow: computed(() => model.username !== "1234"),
+                  slots: {
+                    default: {
+                      component: "Input",
+                      props: {
+                        value: password,
+                        placeholder: "请输入密码",
+                        type: "password",
+                        onUpdateValue: (value: string) => {
+                          console.log(value);
+                          model.password = value;
+                        },
+                      },
                     },
                   },
                 },
-              },
+              ],
             },
-          ],
+          },
         },
       });
     },

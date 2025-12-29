@@ -1,5 +1,6 @@
-import { capitalize, defineComponent, h, isVNode } from "vue";
+import { capitalize, defineComponent, h, inject, isVNode } from "vue";
 import type { Component, VNode, Reactive } from "vue";
+import { ADAPTOR_KEY } from "./const";
 
 type SlotContent =
   | string
@@ -17,12 +18,13 @@ export interface UiComponent {
   props?: Record<string, any>;
   events?: Record<string, (...args: any) => any>;
   slots?: Record<string, SlotContent>;
+  vshow?: boolean;
 }
 
-export type  ViewlessComponent = UiComponent | UiComponent[];
+export type ViewlessComponent = UiComponent | UiComponent[];
 
 // 辅助函数：将任何值转换为 VNode 数组
-function toVNodes(value: any): VNode[] {
+function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNode[] {
   if (value === null || value === undefined) {
     return [];
   }
@@ -32,10 +34,10 @@ function toVNodes(value: any): VNode[] {
     return [String(value) as any];
   } else if (Array.isArray(value)) {
     // 如果已经是数组，递归处理每个元素
-    return value.flatMap((item) => toVNodes(item));
+    return value.flatMap((item) => toVNodes(item, adaptor));
   } else if (value && typeof value === "object" && "component" in value && !isVNode(value)) {
     // 组件配置对象，递归创建组件
-    const ChildComponent = renderComponent(value as UiComponent);
+    const ChildComponent = renderComponent(value as UiComponent, adaptor);
     const vnode = h(ChildComponent);
     return [vnode];
   } else if (value && isVNode(value)) {
@@ -43,7 +45,7 @@ function toVNodes(value: any): VNode[] {
     return [value as VNode];
   } else if (value && typeof value === "function") {
     // 函数组件，直接调用
-    return toVNodes(value());
+    return toVNodes(value(), adaptor);
   }
   return [];
 }
@@ -61,45 +63,54 @@ function transformEvents(events: Record<string, Event>) {
   return eventHandlers;
 }
 
-function transformSlot(slots: Record<string, any | any[]>) {
+function transformSlot(
+  slots: Record<string, any | any[]>,
+  adaptor?: (opt: UiComponent) => UiComponent,
+) {
   const slotFns: Record<string, () => VNode[]> = {};
 
   // 处理每个 slot
   for (const [slotName, slotValue] of Object.entries(slots)) {
     slotFns[slotName] = () => {
       // 使用改进的 toVNodes 函数处理所有类型的 slot 内容
-      return toVNodes(slotValue);
+      return toVNodes(slotValue, adaptor);
     };
   }
   return slotFns;
 }
 
 function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive<any>) {
-  const { key, show } = kwargs;
+  const { key, vshow } = kwargs;
   if (key) {
     attrs.key = key;
   }
 
   // 移除样式配置
-  attrs.style = {}
+  attrs.style = {};
   // 移除类名配置
-  if(attrs.class) {
-    delete attrs.class
-
+  if (attrs.class) {
+    delete attrs.class;
   }
-  if (typeof show !== "undefined" && !show) {
-      attrs.style.display = "none";
+  if (typeof vshow !== "undefined" && !vshow) {
+    attrs.style.display = "none";
   }
   return attrs;
 }
 
-export function renderComponent(option: UiComponent): VNode | Component {
-  const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = option;
+export function renderComponent(
+  option: UiComponent,
+  adaptor?: (slotContent: UiComponent) => UiComponent,
+): VNode | Component {
+  let opt = option;
+  if (adaptor) {
+    opt = adaptor(opt);
+  }
+  const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
   // 创建 slot 函数对象
   const innerProps = mergeProps(props, kwargs);
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
-  const innerSlots = transformSlot(slots);
+  const innerSlots = transformSlot(slots, adaptor);
   return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
@@ -109,23 +120,29 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
   return defineComponent({
     name: "wrapper",
     setup(_props, context) {
-      const resp = setup(_props, context);
-      if(resp.props) {
+      let resp = setup(_props, context);
+      const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
+      console.log("adaptor", adaptor);
+      if (adaptor) {
+        resp = adaptor(resp);
+      }
+      if (resp.props) {
         //  不允许通过props 配置样式，移除样式相关的属性
-        delete resp.props.style
-        delete resp.props.class
+        delete resp.props.style;
+        delete resp.props.class;
       }
       return {
         component: resp.component,
         innerProps: resp.props || {},
         innerEvents: resp.events || {},
         innerSlots: resp.slots || {},
+        adaptor,
       };
     },
     render() {
       const innerEvents = transformEvents(this.innerEvents || {});
       // 创建 slot 函数对象
-      const innerSlots = transformSlot(this.innerSlots || {});
+      const innerSlots = transformSlot(this.innerSlots || {}, this.adaptor);
       const innerProps = mergeProps(this.innerProps || {}, {});
       // 渲染组件
       return h(this.component, { ...innerProps, ...innerEvents, ...this.$attrs }, innerSlots);

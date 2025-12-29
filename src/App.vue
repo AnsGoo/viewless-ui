@@ -10,51 +10,20 @@
     </div>
 
     <h1>UseComponent 示例集合</h1>
-
-    <!-- 简单div组件 -->
-    <SimpleDiv />
-
-    <!-- 带事件的按钮组件 -->
-    <EventButton />
-
-    <!-- 数字作为slot内容 -->
-    <NumberSlotExample />
-
-    <!-- 混合内容的slot -->
-    <MixedSlotExample />
-
-    <!-- 卡片包含标签页 -->
-    <CardWithTabs />
-
-    <!-- 折叠面板组件 -->
-    <ComplexCollapse />
-
-    <!-- UiLess标签页组件 -->
-
-    <NCard class="card-tabs">
-      <UiLessTabs />
-    </NCard>
-    <NCard class="card-form">
-      <ViewlessForm @change="formChange" />
-    </NCard>
+    <ViewlessForm @change="formChange" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { NCard } from "naive-ui";
 
-// import HelloWorld from "./components/HelloWorld.vue";
-import {
-  SimpleDiv,
-  EventButton,
-  NumberSlotExample,
-  MixedSlotExample,
-  CardWithTabs,
-  ComplexCollapse,
-  UiLessTabs,
-} from "./examples/example-components.ts";
+import { provide } from "vue";
 import { UseForm } from "./examples/form.ts";
+import { useAdaptor } from "@/ui/adaptor/naive-ui.ts";
+import { ADAPTOR_KEY } from "@/lib/const.ts";
 const ViewlessForm = UseForm();
+
+const {adaptor} = useAdaptor();
+provide(ADAPTOR_KEY, adaptor);
 
 
 function formChange(value: any) {
