@@ -122,7 +122,6 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
     setup(_props, context) {
       let resp = setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
-      console.log('adaptor', adaptor);
       if (adaptor) {
         resp = adaptor(resp);
       }

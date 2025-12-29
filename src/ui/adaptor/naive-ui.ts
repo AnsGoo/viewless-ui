@@ -1,5 +1,5 @@
 import type { UiComponent } from '@/lib/use-component';
-import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import { NCard, NForm, NFormItem, NInput, NTabPane, NTabs } from 'naive-ui';
 import { shallowRef } from 'vue';
 
 function useFormAdaptor(opt: UiComponent) {
@@ -22,12 +22,24 @@ function useCardAdaptor(opt: UiComponent) {
   return opt;
 }
 
+function useTabsAdaptor(opt: UiComponent) {
+  opt.component = shallowRef(NTabs);
+  return opt;
+}
+function useTabPaneAdaptor(opt: UiComponent) {
+  opt.component = shallowRef(NTabPane);
+  return opt;
+}
+
 export function useAdaptor() {
   const adaptorMap: Record<string, (opt: UiComponent) => UiComponent> = {};
   adaptorMap['Form'] = useFormAdaptor;
   adaptorMap['FormItem'] = useFormItemAdaptor;
   adaptorMap['Input'] = useInputAdaptor;
   adaptorMap['Card'] = useCardAdaptor;
+  adaptorMap['Tabs'] = useTabsAdaptor;
+  adaptorMap['TabPane'] = useTabPaneAdaptor;
+
   const adaptor = (opt: UiComponent) => {
     if (typeof opt.component !== 'string') {
       return opt;
