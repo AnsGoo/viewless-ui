@@ -15,10 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { UseForm } from "./examples/form.ts";
+import { UseViewlessForm } from "./examples/form.ts";
 import { useAdaptor } from "@/ui/adaptor/naive-ui.ts";
 import { useProvideAdaptor } from "@/ui/provide.ts";
-const ViewlessForm = UseForm();
+const ViewlessForm = UseViewlessForm();
 
 useProvideAdaptor(useAdaptor);
 

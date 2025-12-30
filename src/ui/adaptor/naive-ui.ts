@@ -4,7 +4,7 @@ import type { UiComponent } from '@/lib/use-component';
 import type { FormOption, FormItemOption } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
-import { transfromProp } from './utils';
+import { transfromEvent, transfromProp } from './utils';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
@@ -22,6 +22,7 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(NInput);
   transfromProp(opt.props, 'modelValue', 'value');
+  transfromEvent(opt.events, 'update:modelValue', 'update:value');
   return opt as UiComponent<InputOption>;
 }
 

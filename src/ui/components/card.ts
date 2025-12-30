@@ -1,4 +1,6 @@
 import type { Props, Events, Slots, ViewlessComponent, BaseAttrs } from '@/lib/use-component';
+import type { FlatOption } from './type';
+import { transformFlatOption } from './transform';
 
 export interface CardProps extends Props {
   title?: string;
@@ -18,8 +20,8 @@ export interface CardOption extends BaseAttrs {
   events?: CardEvents;
   slots?: CardSlots;
 }
-export function useCard(options: CardOption) {
-  const { props, events, slots, ...kwargs } = options;
+export function useCard(options: FlatOption<CardOption>) {
+  const { props, events, slots, ...kwargs } = transformFlatOption(options);
   return {
     component: 'Card',
     props,

@@ -1,8 +1,10 @@
 import type { BaseAttrs, Events, Props, Slots, ViewlessComponent } from '@/lib/use-component';
+import { transformFlatOption } from './transform';
+import type { FlatOption } from './type';
 
 export interface FormProps extends Props {
-  modelValue: Record<string, any>;
-  rules: Record<string, any>;
+  modelValue?: Record<string, any>;
+  rules?: Record<string, any>;
   inline?: boolean;
   size?: 'small' | 'medium' | 'large';
   labelPosition?: 'left' | 'right' | 'top';
@@ -13,7 +15,7 @@ export interface FormEvents extends Events {
 }
 
 export interface FormSlots extends Slots {
-  default: ViewlessComponent<FormItemOption>[];
+  default: ViewlessComponent[];
 }
 
 export interface FormOption extends BaseAttrs {
@@ -22,8 +24,8 @@ export interface FormOption extends BaseAttrs {
   slots: FormSlots;
 }
 
-export function useForm(options: FormOption) {
-  const { props, events, slots, ...kwargs } = options;
+export function useForm(options: FlatOption<FormOption>) {
+  const { props, events, slots, ...kwargs } = transformFlatOption(options);
   return {
     component: 'Form',
     props,
@@ -44,7 +46,7 @@ export interface FormItemProps extends Props {
 export interface FormItemEvents extends Events {}
 
 export interface FormItemOption extends BaseAttrs {
-  props?: FormItemProps;
+  props?: FormItemProps | undefined;
   events?: FormItemEvents;
   slots?: FormItemSlots;
 }
@@ -54,8 +56,8 @@ export interface FormItemSlots extends Slots {
   label?: ViewlessComponent | string | undefined;
 }
 
-export function useFormItem(options: FormItemOption) {
-  const { props, events, slots, ...kwargs } = options;
+export function useFormItem(options: FlatOption<FormItemOption>) {
+  const { props, events, slots, ...kwargs } = transformFlatOption(options);
   return {
     component: 'FormItem',
     props,

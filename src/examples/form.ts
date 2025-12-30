@@ -1,6 +1,6 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { defineViewlessComponent, type UiComponent } from '@/lib/use-component.ts';
-import { useFormItem, useInput } from '@/ui';
+import { useCard, useFormItem, useInput, useForm } from '@/ui';
 
 // 定义表单数据类型
 interface FormModel {
@@ -8,7 +8,7 @@ interface FormModel {
   password: string;
 }
 
-export function UseForm() {
+export function UseViewlessForm() {
   return defineViewlessComponent({
     setup(_props, context) {
       const username = ref('123');
@@ -39,63 +39,46 @@ export function UseForm() {
         },
       );
 
-      return reactive<UiComponent>({
-        component: 'Card',
-        slots: {
-          default: {
-            component: 'Form',
-            props: {
-              model: model,
-            },
-            slots: {
-              default: [
-                useFormItem({
-                  props: {
-                    prop: 'username',
-                    label: '用户名',
-                    required: true,
-                  },
-                  key: 'username',
-                  slots: {
-                    default: useInput({
-                      props: {
-                        modelValue: username,
-                        placeholder: '请输入用户名',
-                        onUpdateValue: (value: string) => {
-                          console.log(value);
-                          model.username = value;
-                        },
-                      },
-                    }),
+      return reactive<UiComponent>(
+        useCard({
+          $key: 'form-card',
+          defaultSlot: useForm({
+            modelValue: model,
+            defaultSlot: [
+              useFormItem({
+                prop: 'username',
+                label: '用户名',
+                required: true,
+                $key: 'username',
+                defaultSlot: useInput({
+                  modelValue: username,
+                  placeholder: '请输入用户名',
+                  onUpdateModelValue: (value: string) => {
+                    console.log('用户名输入框值变化了', value);
+                    model.username = value;
                   },
                 }),
-                useFormItem({
-                  props: {
-                    prop: 'password',
-                    label: '密码',
-                    required: true,
-                  },
-                  key: 'password',
-                  vshow: computed(() => model.username !== '1234'),
-                  slots: {
-                    default: useInput({
-                      props: {
-                        value: password,
-                        placeholder: '请输入密码',
-                        type: 'password',
-                        onUpdateValue: (value: string) => {
-                          console.log(value);
-                          model.password = value;
-                        },
-                      },
-                    }),
+              }),
+              useFormItem({
+                prop: 'password',
+                label: '密码',
+                required: true,
+                $key: 'password',
+                $vshow: computed(() => model.username !== '1234'),
+                defaultSlot: useInput({
+                  modelValue: password,
+                  placeholder: '请输入密码',
+                  type: 'password',
+                  onUpdateModelValue: (value: string) => {
+                    console.log('密码输入框值变化了', value);
+                    model.password = value;
                   },
                 }),
-              ],
-            },
-          },
-        },
-      });
+              }),
+            ],
+          }),
+        }),
+      );
     },
   });
 }
