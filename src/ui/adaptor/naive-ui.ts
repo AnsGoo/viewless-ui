@@ -1,6 +1,6 @@
-import type { UiComponent } from '@/lib/use-component';
-import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import { shallowRef } from 'vue';
+import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import type { UiComponent } from '@/lib/use-component';
 import type { FormOption, FormItemOption } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
@@ -8,6 +8,8 @@ import { transfromProp } from './utils';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
+  transfromProp(opt.props, 'modelValue', 'model');
+  transfromProp(opt.props, 'labelPosition', 'labelPlacement');
   return opt as UiComponent<FormOption>;
 }
 
