@@ -1,21 +1,29 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { defineViewlessComponent } from '@/lib/use-component.ts';
+import { defineViewlessComponent, type UiComponent } from '@/lib/use-component.ts';
 import { useFormItem, useInput } from '@/ui';
+
+// 定义表单数据类型
+interface FormModel {
+  username: string;
+  password: string;
+}
 
 export function UseForm() {
   return defineViewlessComponent({
-    setup(_props, context){
+    setup(_props, context) {
       const username = ref('123');
       const password = ref('');
-      const model = reactive({
+      const model: FormModel = reactive({
         username,
         password,
       });
+
       onMounted(() => {
         console.log('组件挂载完成');
         console.log(model);
         model.username = '默认用户名';
       });
+
       watch(
         () => model.username,
         (newValue, oldValue) => {
@@ -23,28 +31,30 @@ export function UseForm() {
           context.emit('change', model);
         },
       );
+
       watch(
         () => model.password,
         (newValue, oldValue) => {
           console.log('密码变化了', newValue, oldValue);
         },
       );
-      return reactive({
+
+      return reactive<UiComponent>({
         component: 'Card',
         slots: {
           default: {
             component: 'Form',
-            props: reactive({
+            props: {
               model: model,
-            }),
+            },
             slots: {
               default: [
                 useFormItem({
-                  props: reactive({
+                  props: {
                     prop: 'username',
                     label: '用户名',
                     required: true,
-                  }),
+                  },
                   key: 'username',
                   slots: {
                     default: useInput({
@@ -60,11 +70,11 @@ export function UseForm() {
                   },
                 }),
                 useFormItem({
-                  props: reactive({
+                  props: {
                     prop: 'password',
                     label: '密码',
                     required: true,
-                  }),
+                  },
                   key: 'password',
                   vshow: computed(() => model.username !== '1234'),
                   slots: {

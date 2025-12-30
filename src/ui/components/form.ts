@@ -9,11 +9,11 @@ export interface FormProps extends Props {
 }
 
 export interface FormEvents extends Events {
-  change: (value: Record<string, any>) => void;
+  change?: (value: Record<string, any>) => void;
 }
 
 export interface FormSlots extends Slots {
-  default: ViewlessComponent;
+  default: ViewlessComponent<FormItemOption>[];
 }
 
 export interface FormOption extends BaseAttrs {
@@ -50,8 +50,8 @@ export interface FormItemOption extends BaseAttrs {
 }
 
 export interface FormItemSlots extends Slots {
-  default?: ViewlessComponent;
-  label?: ViewlessComponent;
+  default: ViewlessComponent;
+  label?: ViewlessComponent | string | undefined;
 }
 
 export function useFormItem(options: FormItemOption) {

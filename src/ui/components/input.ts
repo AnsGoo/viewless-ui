@@ -1,4 +1,4 @@
-import type { Events, Props, ViewlessComponent, Slots, BaseAttrs } from '@/lib/use-component';
+import type { Events, Props, Slots, BaseAttrs } from '@/lib/use-component';
 
 export interface InputOption extends BaseAttrs {
   props?: InputProps;
@@ -13,9 +13,7 @@ export interface InputProps extends Props {
 export interface InputEvents extends Events {
   change?: (value: string) => void;
 }
-export interface InputSlots extends Slots {
-  default?: ViewlessComponent;
-}
+export interface InputSlots extends Slots {}
 
 export function useInput(option: InputOption) {
   const { props, events, slots, ...kwargs } = option;

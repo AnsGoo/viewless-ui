@@ -2,15 +2,18 @@ import { capitalize, defineComponent, h, inject, isVNode } from 'vue';
 import type { Component, VNode, Reactive } from 'vue';
 import { ADAPTOR_KEY } from './const';
 
+/**
+ * 插槽内容类型定义
+ * 支持字符串、数字、组件、组件数组、函数等多种内容类型
+ */
 export type SlotContent =
   | undefined
-  | null
   | string
   | number
-  | boolean
   | UiComponent
   | SlotContent[]
-  | ((...args: any) => SlotContent);
+  | (() => SlotContent)
+  | null; // 保留 null 用于显式清空插槽
 
 type Event = ((...args: any) => any) | undefined;
 
@@ -23,14 +26,9 @@ export interface Events {
   [key: string]: Event;
 }
 
-export interface Slots {
-  [key: string]: SlotContent;
-}
+export type Slots = Record<string, SlotContent>;
 
-export interface BaseAttrs {
-  key?: string | number | symbol;
-  vshow?: boolean;
-}
+export type BaseAttrs = Pick<UiComponent, 'key' | 'vshow'>;
 
 export type ComponentOption<
   P extends Props = Props,
@@ -51,33 +49,44 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   vshow?: boolean;
 }
 
-export type ViewlessComponent = UiComponent | UiComponent[] | undefined;
+export type ViewlessComponent<O extends ComponentOption = ComponentOption> = UiComponent<O>;
 
 // 辅助函数：将任何值转换为 VNode 数组
 function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNode[] {
+  // 处理 null/undefined - 返回空数组
   if (value === null || value === undefined) {
     return [];
   }
 
-  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-    // 字符串或数字直接返回（Vue 会自动转换为文本节点）
+  // 处理字符串和数字 - 转换为文本节点
+  if (typeof value === 'string' || typeof value === 'number') {
     return [String(value) as any];
-  } else if (Array.isArray(value)) {
-    // 如果已经是数组，递归处理每个元素
+  }
+
+  // 处理数组 - 递归处理每个元素
+  if (Array.isArray(value)) {
     return value.flatMap((item) => toVNodes(item, adaptor));
-  } else if (value && typeof value === 'object' && 'component' in value && !isVNode(value)) {
-    // 组件配置对象，递归创建组件
+  }
+
+  // 处理组件配置对象
+  if (value && typeof value === 'object' && 'component' in value && !isVNode(value)) {
     const ChildComponent = renderComponent(value as UiComponent, adaptor);
     const vnode = h(ChildComponent);
     return [vnode];
-  } else if (value && isVNode(value)) {
-    // 已经是 VNode，直接返回
+  }
+
+  // 处理 VNode
+  if (value && isVNode(value)) {
     return [value as VNode];
-  } else if (value && typeof value === 'function') {
-    // 函数组件，直接调用
+  }
+
+  // 处理函数
+  if (typeof value === 'function') {
     return toVNodes(value(), adaptor);
   }
-  return [];
+
+  // 其他类型转换为字符串
+  return [String(value) as any];
 }
 
 function transformEvents(events: Record<string, Event>) {
@@ -121,9 +130,25 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   if (attrs.class) {
     delete attrs.class;
   }
-  if (typeof vshow !== 'undefined' && !vshow) {
-    attrs.style.display = 'none';
+
+  // 处理 vshow 属性，支持响应式值和计算属性
+  if (typeof vshow !== 'undefined') {
+    let isVisible = true;
+
+    // 处理不同的响应式类型
+    if (vshow && typeof vshow === 'object' && 'value' in vshow) {
+      // Ref 或 ComputedRef
+      isVisible = Boolean(vshow.value);
+    } else if (typeof vshow === 'boolean') {
+      // 静态布尔值
+      isVisible = vshow;
+    }
+
+    if (!isVisible) {
+      attrs.style.display = 'none';
+    }
   }
+
   return attrs;
 }
 
@@ -144,7 +169,7 @@ export function renderComponent(
   return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
-type InnerSetup = (props: Record<string, any>, context: any) => UiComponent;
+type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
 
 export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Component {
   return defineComponent({

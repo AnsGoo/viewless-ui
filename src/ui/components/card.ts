@@ -25,6 +25,6 @@ export function useCard(options: CardOption) {
     props,
     events,
     slots,
-    ...kwargs,  
+    ...kwargs,
   };
 }
