@@ -9,7 +9,7 @@
       </a>
     </div>
 
-    <h1>UseComponent 示例集合</h1>
+    <h1>Viewless-UI 示例集合</h1>
     <ViewlessForm @change="formChange" />
   </div>
 </template>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 透明背景 -->
+  
+  <!-- 粗线条V字母 - 体现"无视图"概念 -->
+  <path d="M64 80 L128 160 L192 80" stroke="#42B883" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.4"/>
+  
+  <!-- 更粗的U字母 - 代表UI -->
+  <path d="M80 160 Q80 200 128 200 Q176 200 176 160" stroke="#6366F1" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- 突出的"less"概念装饰 -->
+  <circle cx="128" cy="128" r="6" fill="#6366F1" opacity="0.8"/>
+  <circle cx="128" cy="128" r="3" fill="white"/>
+</svg>
