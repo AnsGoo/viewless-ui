@@ -68,5 +68,5 @@ export function useFormItem(options: FlatOption<FormItemOption>) {
 }
 
 export interface FormHandler {
-  validate: () => Promise<boolean>;
+  validate?: () => Promise<boolean>;
 }

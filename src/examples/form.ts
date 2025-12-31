@@ -5,6 +5,7 @@ import {
   type UiComponent,
 } from '@/lib/use-component.ts';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
+import type { FormHandler } from '@/ui/components/form';
 
 // 定义表单数据类型
 interface FormModel {
@@ -28,8 +29,9 @@ export function UseViewlessForm() {
         console.log('组件挂载完成');
         // console.log(model);
         model.username = '默认用户名';
-        console.log('formRef.value', formRef.value?.validate);
-        console.log('formRef.value.validate()', formRef.value?.validate());
+        if (formRef.value) {
+          console.log('formRef.value.validate()', (formRef.value as FormHandler).validate?.());
+        }
       });
 
       watch(
