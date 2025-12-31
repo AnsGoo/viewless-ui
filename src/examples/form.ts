@@ -1,4 +1,4 @@
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, useTemplateRef, watch } from 'vue';
 import { defineViewlessComponent, type UiComponent } from '@/lib/use-component.ts';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 
@@ -18,16 +18,19 @@ export function UseViewlessForm() {
         password,
       });
 
+      const formRef = useTemplateRef('formRef');
+
       onMounted(() => {
         console.log('组件挂载完成');
-        console.log(model);
+        // console.log(model);
         model.username = '默认用户名';
+        console.log('formRef.value', formRef.value);
       });
 
       watch(
         () => model.username,
         (newValue, oldValue) => {
-          console.log('用户名变化了', newValue, oldValue);
+          // console.log('用户名变化了', newValue, oldValue);
           context.emit('change', model);
         },
       );
@@ -44,6 +47,7 @@ export function UseViewlessForm() {
           $key: 'form-card',
           defaultSlot: useForm({
             modelValue: model,
+            $ref: 'formRef',
             defaultSlot: [
               useFormItem({
                 prop: 'username',
@@ -53,7 +57,7 @@ export function UseViewlessForm() {
                 defaultSlot: useInput({
                   modelValue: username,
                   placeholder: '请输入用户名',
-                  onUpdateModelValue: (value: string) => {
+                  'onUpdate:modelValue': (value: string) => {
                     console.log('用户名输入框值变化了', value);
                     model.username = value;
                   },
@@ -69,7 +73,7 @@ export function UseViewlessForm() {
                   modelValue: password,
                   placeholder: '请输入密码',
                   type: 'password',
-                  onUpdateModelValue: (value: string) => {
+                  'onUpdate:modelValue': (value: string) => {
                     console.log('密码输入框值变化了', value);
                     model.password = value;
                   },

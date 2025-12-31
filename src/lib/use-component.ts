@@ -28,7 +28,7 @@ export interface Events {
 
 export type Slots = Record<string, SlotContent>;
 
-export type BaseAttrs = Pick<UiComponent, 'key' | 'vshow'>;
+export type BaseAttrs = Pick<UiComponent, 'key' | 'vshow' | 'ref'>;
 
 export type ComponentOption<
   P extends Props = Props,
@@ -47,6 +47,7 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   events?: O['events'];
   slots?: O['slots'];
   vshow?: boolean;
+  ref?: string;
 }
 
 export type ViewlessComponent<O extends ComponentOption = ComponentOption> = UiComponent<O>;
@@ -70,7 +71,7 @@ function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNod
 
   // 处理组件配置对象
   if (value && typeof value === 'object' && 'component' in value && !isVNode(value)) {
-    const ChildComponent = renderComponent(value as UiComponent, adaptor);
+    const ChildComponent = renderComponent(value as UiComponent, { adaptor });
     const vnode = h(ChildComponent);
     return [vnode];
   }
@@ -119,9 +120,12 @@ function transformSlot(
 }
 
 function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive<any>) {
-  const { key, vshow } = kwargs;
+  const { key, vshow, ref } = kwargs;
   if (key) {
     attrs.key = key;
+  }
+  if (ref) {
+    attrs.ref = ref;
   }
 
   // 移除样式配置
@@ -152,11 +156,14 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   return attrs;
 }
 
-export function renderComponent(
-  option: UiComponent,
-  adaptor?: (slotContent: UiComponent) => UiComponent,
-): VNode | Component {
+interface Context {
+  attrs?: Record<string, any>;
+  adaptor?: (slotContent: UiComponent) => UiComponent;
+}
+
+export function renderComponent(option: UiComponent, context: Context): VNode | Component {
   let opt = option;
+  const { adaptor, attrs } = context;
   if (adaptor) {
     opt = adaptor(opt);
   }
@@ -166,7 +173,7 @@ export function renderComponent(
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
   const innerSlots = transformSlot(slots, adaptor);
-  return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
+  return h(Comp, { ...innerProps, ...innerEvents, ...attrs }, innerSlots);
 }
 
 type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
@@ -175,31 +182,21 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
   return defineComponent({
     name: 'wrapper',
     setup(_props, context) {
-      let resp = setup(_props, context);
+      const opt = setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
-      if (adaptor) {
-        resp = adaptor(resp);
-      }
-      if (resp.props) {
+      if (opt.props) {
         //  不允许通过props 配置样式，移除样式相关的属性
-        delete resp.props.style;
-        delete resp.props.class;
+        delete opt.props.style;
+        delete opt.props.class;
       }
       return {
-        component: resp.component,
-        innerProps: resp.props || {},
-        innerEvents: resp.events || {},
-        innerSlots: resp.slots || {},
+        option: opt,
         adaptor,
       };
     },
     render() {
-      const innerEvents = transformEvents(this.innerEvents || {});
-      // 创建 slot 函数对象
-      const innerSlots = transformSlot(this.innerSlots || {}, this.adaptor);
-      const innerProps = mergeProps(this.innerProps || {}, {});
-      // 渲染组件
-      return h(this.component, { ...innerProps, ...innerEvents, ...this.$attrs }, innerSlots);
+      const { option, adaptor } = this;
+      return renderComponent(option, { adaptor, attrs: this.$attrs });
     },
   });
 }
