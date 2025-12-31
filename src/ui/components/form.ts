@@ -66,3 +66,7 @@ export function useFormItem(options: FlatOption<FormItemOption>) {
     ...kwargs,
   };
 }
+
+export interface FormHandler {
+  validate: () => Promise<boolean>;
+}

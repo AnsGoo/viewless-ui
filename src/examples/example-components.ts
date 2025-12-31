@@ -130,7 +130,7 @@ export const MixedSlotExample = defineViewlessComponent({
   },
 });
 
-export const viewless-uiTabs = defineViewlessComponent({
+export const viewlessUiTabs = defineViewlessComponent({
   setup: (_props, _context) => {
     return {
       component: NTabs,

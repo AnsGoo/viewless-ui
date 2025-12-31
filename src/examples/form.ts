@@ -1,5 +1,9 @@
-import { computed, onMounted, reactive, ref, useTemplateRef, watch } from 'vue';
-import { defineViewlessComponent, type UiComponent } from '@/lib/use-component.ts';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import {
+  defineViewlessComponent,
+  useViewlessTemplateRef,
+  type UiComponent,
+} from '@/lib/use-component.ts';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 
 // 定义表单数据类型
@@ -18,19 +22,20 @@ export function UseViewlessForm() {
         password,
       });
 
-      const formRef = useTemplateRef('formRef');
+      const formRef = useViewlessTemplateRef('formRef');
 
       onMounted(() => {
         console.log('组件挂载完成');
         // console.log(model);
         model.username = '默认用户名';
-        console.log('formRef.value', formRef.value);
+        console.log('formRef.value', formRef.value?.validate);
+        console.log('formRef.value.validate()', formRef.value?.validate());
       });
 
       watch(
         () => model.username,
         (newValue, oldValue) => {
-          // console.log('用户名变化了', newValue, oldValue);
+          console.log('用户名变化了', newValue, oldValue);
           context.emit('change', model);
         },
       );

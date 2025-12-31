@@ -1,6 +1,15 @@
-import { capitalize, defineComponent, h, inject, isVNode } from 'vue';
-import type { Component, VNode, Reactive } from 'vue';
-import { ADAPTOR_KEY } from './const';
+import {
+  capitalize,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  inject,
+  isVNode,
+  shallowReadonly,
+  useTemplateRef,
+} from 'vue';
+import type { Component, VNode, Reactive, TemplateRef } from 'vue';
+import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 
 /**
  * 插槽内容类型定义
@@ -53,7 +62,7 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
 export type ViewlessComponent<O extends ComponentOption = ComponentOption> = UiComponent<O>;
 
 // 辅助函数：将任何值转换为 VNode 数组
-function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNode[] {
+function toVNodes(value: any, context: Context): VNode[] {
   // 处理 null/undefined - 返回空数组
   if (value === null || value === undefined) {
     return [];
@@ -66,12 +75,12 @@ function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNod
 
   // 处理数组 - 递归处理每个元素
   if (Array.isArray(value)) {
-    return value.flatMap((item) => toVNodes(item, adaptor));
+    return value.flatMap((item) => toVNodes(item, context));
   }
 
   // 处理组件配置对象
   if (value && typeof value === 'object' && 'component' in value && !isVNode(value)) {
-    const ChildComponent = renderComponent(value as UiComponent, { adaptor });
+    const ChildComponent = renderComponent(value as UiComponent, context);
     const vnode = h(ChildComponent);
     return [vnode];
   }
@@ -83,7 +92,7 @@ function toVNodes(value: any, adaptor?: (opt: UiComponent) => UiComponent): VNod
 
   // 处理函数
   if (typeof value === 'function') {
-    return toVNodes(value(), adaptor);
+    return toVNodes(value(), context);
   }
 
   // 其他类型转换为字符串
@@ -103,17 +112,14 @@ function transformEvents(events: Record<string, Event>) {
   return eventHandlers;
 }
 
-function transformSlot(
-  slots: Record<string, any | any[]>,
-  adaptor?: (opt: UiComponent) => UiComponent,
-) {
+function transformSlot(slots: Record<string, any | any[]>, context: Context) {
   const slotFns: Record<string, () => VNode[]> = {};
 
   // 处理每个 slot
   for (const [slotName, slotValue] of Object.entries(slots)) {
     slotFns[slotName] = () => {
       // 使用改进的 toVNodes 函数处理所有类型的 slot 内容
-      return toVNodes(slotValue, adaptor);
+      return toVNodes(slotValue, context);
     };
   }
   return slotFns;
@@ -156,15 +162,25 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   return attrs;
 }
 
+export type HandleAdaptor = (
+  temRefValue: TemplateRef['value'],
+  component: string | Component,
+  prop: string,
+) => any;
 interface Context {
   attrs?: Record<string, any>;
   adaptor?: (slotContent: UiComponent) => UiComponent;
+  refMap?: Map<string, string | Component>;
+  handleAdaptor?: HandleAdaptor;
 }
 
 export function renderComponent(option: UiComponent, context: Context): VNode | Component {
   let opt = option;
-  const { adaptor, attrs } = context;
+  const { adaptor, attrs, refMap } = context;
   if (adaptor) {
+    if (opt.ref && refMap) {
+      refMap.set(opt.ref, opt.component);
+    }
     opt = adaptor(opt);
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
@@ -172,7 +188,7 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
   const innerProps = mergeProps(props, kwargs);
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
-  const innerSlots = transformSlot(slots, adaptor);
+  const innerSlots = transformSlot(slots, context);
   return h(Comp, { ...innerProps, ...innerEvents, ...attrs }, innerSlots);
 }
 
@@ -182,8 +198,10 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
   return defineComponent({
     name: 'wrapper',
     setup(_props, context) {
+      const refMap = new Map<string, string | Component>();
       const opt = setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
+      const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
       if (opt.props) {
         //  不允许通过props 配置样式，移除样式相关的属性
         delete opt.props.style;
@@ -191,12 +209,45 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
       }
       return {
         option: opt,
-        adaptor,
+        context: { adaptor, refMap, handleAdaptor },
       };
     },
     render() {
-      const { option, adaptor } = this;
-      return renderComponent(option, { adaptor, attrs: this.$attrs });
+      const { option, context } = this;
+      const { adaptor, refMap, handleAdaptor } = context;
+      return renderComponent(option, { adaptor, attrs: this.$attrs, refMap, handleAdaptor });
     },
   });
+}
+
+export function useViewlessTemplateRef<T = unknown, Keys extends string = string>(
+  key: Keys,
+): TemplateRef<T> {
+  const temRef = useTemplateRef<T>(key);
+  const vm = getCurrentInstance()!.proxy;
+
+  const proxyRef = shallowReadonly(
+    new Proxy(temRef, {
+      get(target, prop) {
+        if (!target) {
+          return target;
+        }
+        if (prop === 'value') {
+          return new Proxy(target.value!, {
+            get(obj: TemplateRef['value'], prop: string) {
+              const { context } = (vm || {}) as any;
+              const { refMap, handleAdaptor }: Context = context || {};
+              if (refMap && refMap.get(key) && handleAdaptor) {
+                const component = refMap.get(key);
+                return handleAdaptor(obj, component!, prop);
+              }
+              return Reflect.get(obj as object, prop);
+            },
+          });
+        }
+        return Reflect.get(target, prop);
+      },
+    }),
+  );
+  return proxyRef;
 }

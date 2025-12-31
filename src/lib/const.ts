@@ -1,2 +1,3 @@
 const ADAPTOR_KEY = Symbol('adaptor');
-export { ADAPTOR_KEY };
+const HANDLE_ADAPTOR_KEY = Symbol('handleAdaptor');
+export { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY };
