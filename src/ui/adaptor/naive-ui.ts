@@ -1,7 +1,7 @@
 import { shallowRef, type TemplateRef } from 'vue';
 import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import type { UiComponent } from '@/lib/use-component';
-import type { FormOption, FormItemOption } from '@/ui/components/form';
+import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
 import { transfromEvent, transfromProp } from './utils';
@@ -13,17 +13,17 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
   return opt as UiComponent<FormOption>;
 }
 
-function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: string) {
+function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHandler) {
   if (!refValue) {
     return refValue;
   }
-  if (prop === 'validate') {
-    return (callback?: (valid: boolean) => void) => {
-      return (refValue as Record<string, any>)[prop](callback);
-    };
+  const formHandlers: FormHandler = {
+    validate: () => (refValue as Record<string, any>)['validate'](),
+  };
+  if (formHandlers[prop]) {
+    return formHandlers[prop];
   }
-
-  return refValue;
+  return (refValue as FormHandler)[prop];
 }
 
 function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
@@ -56,7 +56,7 @@ export function useAdaptor() {
   type HandleAdaptorItemFn = (refValue: Record<string, any>, prop: string) => any;
 
   const handleAdaptorMap: Record<string, HandleAdaptorItemFn> = {
-    Form: useFormHandleAdaptor,
+    Form: (refValue, prop: string) => useFormHandleAdaptor(refValue, prop as keyof FormHandler),
   };
 
   const adaptor = (opt: UiComponent) => {
