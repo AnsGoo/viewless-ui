@@ -10,7 +10,6 @@ import type { Adaptor, AdaptorFn } from '../provide';
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(ElForm);
   transformProp(opt.props, 'modelValue', 'model');
-//   transformEvent(opt.events, 'change', 'change', () => {  opt.events?.change?.(opt.props?.model); });  
   console.log("opt.props?.model", opt);
   return opt as UiComponent<FormOption>;
 }

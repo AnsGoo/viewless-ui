@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="flex flex-row justify-center items-center pt-20">
       <a href="https://vite.dev" target="_blank">
         <img src="/vite.svg" class="logo" alt="Vite logo" />
       </a>
@@ -9,26 +9,21 @@
       </a>
     </div>
 
-    <h1>Viewless-UI 示例集合</h1>
-    <ViewlessForm @change="formChange"  ref="formRef"/>
+    <div class="text-2xl font-bold mb-4 text-center">Viewless-UI 示例集合</div>
+    <div class="flex flex-col justify-center items-center px-4">
+      <div class="w-1/2">
+        <element-plus-form />
+      </div>
+      <div class="w-1/2">
+        <naive-ui-form />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { UseViewlessForm } from "./examples/form.ts";
-// import { useAdaptor } from "@/ui/adaptor/naive-ui.ts";
-import { useAdaptor as useElementPlusAdaptor } from "@/ui/adaptor/element-plus.ts";
-import { useProvideAdaptor } from "@/ui/provide.ts";
-const ViewlessForm = UseViewlessForm();
-
-// useProvideAdaptor(useAdaptor);
-useProvideAdaptor(useElementPlusAdaptor);
-
-
-
-function formChange(...value: any) {
-  console.log("form change", ...value);
-}
+  import ElementPlusForm from './components/element-plus.vue'
+  import NaiveUiForm from './components/naive-ui.vue'
 </script>
 
 <style scoped>

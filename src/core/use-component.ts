@@ -194,9 +194,10 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
 
 type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
 
-export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Component {
+export function defineViewlessComponent({ name, props, setup }: { name?: string; props?: Record<string, any>; setup: InnerSetup }): Component {
   return defineComponent({
-    name: 'wrapper',
+    name: name || 'wrapper',
+    props,
     setup(_props, context) {
       const refMap = new Map<string, string | Component>();
       const opt = setup(_props, context);
@@ -215,7 +216,7 @@ export function defineViewlessComponent({ setup }: { setup: InnerSetup }): Compo
     render() {
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
-      return renderComponent(option, { adaptor, attrs: this.$attrs, refMap, handleAdaptor });
+      return renderComponent(option, { adaptor, refMap, handleAdaptor });
     },
   });
 }

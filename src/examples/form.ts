@@ -15,7 +15,14 @@ interface FormModel {
 
 export function UseViewlessForm() {
   return defineViewlessComponent({
-    setup(_props, context) {
+    name: 'UseViewlessForm',
+    props: {
+      title: {
+        type: String,
+        default: 'viewless-ui 表单示例',
+      },
+    },
+    setup(props, context) {
       const username = ref('123');
       const password = ref('');
       const model: FormModel = reactive({
@@ -38,7 +45,7 @@ export function UseViewlessForm() {
         () => model.username,
         (newValue, oldValue) => {
           console.log('用户名变化了', newValue, oldValue);
-          context.emit('change', model);
+          // context.emit('change', model);
         },
       );
 
@@ -52,7 +59,7 @@ export function UseViewlessForm() {
       return reactive<UiComponent>(
         useCard({
           $key: 'form-card',
-          title: 'ViewlessUI 示意表单',
+          title: props.title,
           defaultSlot: useForm({
             modelValue: model,
             $ref: 'formRef',
