@@ -1,16 +1,17 @@
 import { shallowRef, type Component, type TemplateRef } from 'vue';
-import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import { ElCard, ElForm, ElFormItem, ElInput } from 'element-plus';
 import type { UiComponent } from '@/core/use-component';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
-import { transformEvent, transformProp } from './utils';
+import { transformProp, transformEvent } from './utils';
 import type { Adaptor, AdaptorFn } from '../provide';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
-  opt.component = shallowRef(NForm);
+  opt.component = shallowRef(ElForm);
   transformProp(opt.props, 'modelValue', 'model');
-  transformProp(opt.props, 'labelPosition', 'labelPlacement');
+//   transformEvent(opt.events, 'change', 'change', () => {  opt.events?.change?.(opt.props?.model); });  
+  console.log("opt.props?.model", opt);
   return opt as UiComponent<FormOption>;
 }
 
@@ -28,20 +29,20 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
 }
 
 function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
-  opt.component = shallowRef(NFormItem);
-  transformProp(opt.props, 'prop', 'path');
+  opt.component = shallowRef(ElFormItem);
   return opt as UiComponent<FormItemOption>;
 }
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
-  opt.component = shallowRef(NInput);
-  transformProp(opt.props, 'modelValue', 'value');
-  transformEvent(opt.events, 'update:modelValue', 'update:value');
+  opt.component = shallowRef(ElInput);
+//   transfromEvent(opt.events, 'update:modelValue', 'update:value');
   return opt as UiComponent<InputOption>;
 }
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
-  opt.component = shallowRef(NCard);
+  opt.component = shallowRef(ElCard);
+  transformProp(opt.props, 'title', 'header');
+  console.log("card opt", opt.props);
   return opt as UiComponent<CardOption>;
 }
 

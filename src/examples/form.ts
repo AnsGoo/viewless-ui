@@ -25,12 +25,12 @@ export function UseViewlessForm() {
 
       const formRef = useViewlessTemplateRef('formRef');
 
-      onMounted(() => {
+      onMounted(async() => {
         console.log('组件挂载完成');
         // console.log(model);
-        model.username = '默认用户名';
+        // model.username = '默认用户名';
         if (formRef.value) {
-          console.log('formRef.value.validate()', (formRef.value as FormHandler).validate?.());
+          console.log('formRef.value.validate()', await (formRef.value as FormHandler).validate?.());
         }
       });
 
@@ -52,6 +52,7 @@ export function UseViewlessForm() {
       return reactive<UiComponent>(
         useCard({
           $key: 'form-card',
+          title: 'ViewlessUI 示意表单',
           defaultSlot: useForm({
             modelValue: model,
             $ref: 'formRef',

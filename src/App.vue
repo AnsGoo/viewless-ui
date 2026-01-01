@@ -10,21 +10,24 @@
     </div>
 
     <h1>Viewless-UI 示例集合</h1>
-    <ViewlessForm @change="formChange" />
+    <ViewlessForm @change="formChange"  ref="formRef"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import { UseViewlessForm } from "./examples/form.ts";
-import { useAdaptor } from "@/ui/adaptor/naive-ui.ts";
+// import { useAdaptor } from "@/ui/adaptor/naive-ui.ts";
+import { useAdaptor as useElementPlusAdaptor } from "@/ui/adaptor/element-plus.ts";
 import { useProvideAdaptor } from "@/ui/provide.ts";
 const ViewlessForm = UseViewlessForm();
 
-useProvideAdaptor(useAdaptor);
+// useProvideAdaptor(useAdaptor);
+useProvideAdaptor(useElementPlusAdaptor);
 
 
-function formChange(value: any) {
-  console.log("form change", value);
+
+function formChange(...value: any) {
+  console.log("form change", ...value);
 }
 </script>
 

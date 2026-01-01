@@ -1,14 +1,14 @@
 import { toRef, toRefs } from 'vue';
 import type { Reactive } from 'vue';
 
-export function transfromProp(obj: Reactive<any>, from: string, to: string) {
+export function transformProp(obj: Reactive<any>, from: string, to: string) {
   if (obj && obj[from]) {
-    const warpValue = toRef(obj)[from];
+    const warpValue = toRef(obj, from);
     obj[to] = warpValue;
   }
 }
 
-export function transfromProps(obj: Reactive<any>, props: Record<string, string>) {
+export function transformProps(obj: Reactive<any>, props: Record<string, string>) {
   const warpValues = toRefs(obj);
   for (const key in props) {
     const to = props[key];
@@ -17,10 +17,9 @@ export function transfromProps(obj: Reactive<any>, props: Record<string, string>
     }
   }
 }
-export function transfromEvent(obj: Reactive<any>, from: string, to: string) {
+export function transformEvent(obj: Reactive<any>, from: string, to: string, defaultFn?: (...args: any[]) => any) {
   if (obj && obj[from]) {
     const event = obj[from];
-    delete obj[from];
-    obj[to] = event;
+    obj[to] = defaultFn? defaultFn : event;
   }
 }
