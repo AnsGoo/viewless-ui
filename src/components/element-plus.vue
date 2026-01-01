@@ -1,5 +1,5 @@
 <template>
-  <viewless-form title="Element Plus 表单" />
+  <viewless-form title="Element Plus 表单"  style="border: 1px solid red;" />
 </template>
 <script setup lang="ts">
 import { UseViewlessForm } from '@/examples/form';

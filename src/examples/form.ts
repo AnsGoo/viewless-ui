@@ -1,9 +1,9 @@
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref, useAttrs, watch } from 'vue';
 import {
   defineViewlessComponent,
   useViewlessTemplateRef,
   type UiComponent,
-} from '@/core/use-component';
+} from '@/core/render';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 import type { FormHandler } from '@/ui/components/form';
 

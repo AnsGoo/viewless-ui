@@ -1,6 +1,6 @@
 import { shallowRef, type Component, type TemplateRef } from 'vue';
 import { ElCard, ElForm, ElFormItem, ElInput } from 'element-plus';
-import type { UiComponent } from '@/core/use-component';
+import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
@@ -18,7 +18,14 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
     return refValue;
   }
   const formHandlers: FormHandler = {
-    validate: () => (refValue as Record<string, any>)['validate'](),
+    validate: async () => {
+        try {
+            await (refValue as Record<string, any>)['validate']()
+        } catch (error) {
+            return false
+        }
+        return true
+    },
   };
   if (formHandlers[prop]) {
     return formHandlers[prop];
@@ -33,7 +40,6 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(ElInput);
-  //   transfromEvent(opt.events, 'update:modelValue', 'update:value');
   return opt as UiComponent<InputOption>;
 }
 

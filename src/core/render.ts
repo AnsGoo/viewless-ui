@@ -126,7 +126,7 @@ function transformSlot(slots: Record<string, any | any[]>, context: Context) {
 }
 
 function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive<any>) {
-  const { key, vshow, ref } = kwargs;
+  const { key, vshow, ref, style } = kwargs;
   if (key) {
     attrs.key = key;
   }
@@ -136,10 +136,12 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
 
   // 移除样式配置
   attrs.style = {};
+  Object.assign(attrs.style, style || {});
   // 移除类名配置
   if (attrs.class) {
     delete attrs.class;
   }
+  attrs.class = kwargs.class || '';
 
   // 处理 vshow 属性，支持响应式值和计算属性
   if (typeof vshow !== 'undefined') {
@@ -185,10 +187,10 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
   // 创建 slot 函数对象
-  const innerProps = mergeProps(props, kwargs);
+  const innerProps = mergeProps(props, {...kwargs, ...attrs || {}});
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
-  const innerSlots = transformSlot(slots, context);
+  const innerSlots = transformSlot(slots, {...context, attrs: {}});
   return h(Comp, { ...innerProps, ...innerEvents, ...attrs }, innerSlots);
 }
 
@@ -224,7 +226,10 @@ export function defineViewlessComponent({
     render() {
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
-      return renderComponent(option, { adaptor, refMap, handleAdaptor });
+      return renderComponent(option, { adaptor, refMap, attrs: {
+        class: this.$attrs.class,
+        style: this.$attrs.style,
+      }, handleAdaptor });
     },
   });
 }

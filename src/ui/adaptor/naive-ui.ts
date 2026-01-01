@@ -1,6 +1,6 @@
 import { shallowRef, type Component, type TemplateRef } from 'vue';
 import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
-import type { UiComponent } from '@/core/use-component';
+import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
@@ -19,7 +19,16 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
     return refValue;
   }
   const formHandlers: FormHandler = {
-    validate: () => (refValue as Record<string, any>)['validate'](),
+    validate: async () => {
+      try {
+        const {warning} = await (refValue as Record<string, any>)['validate']();
+        return !warning
+
+      } catch (error) {
+        return false;
+      }
+      return true;
+    },
   };
   if (formHandlers[prop]) {
     return formHandlers[prop];

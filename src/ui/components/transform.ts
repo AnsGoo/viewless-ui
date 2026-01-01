@@ -1,4 +1,4 @@
-import type { BaseAttrs, ComponentOption } from '@/core/use-component';
+import type { BaseAttrs, ComponentOption } from '@/core/render';
 import type { FlatOption } from './type';
 
 function firstLetterToLowerCase(str: string) {

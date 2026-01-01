@@ -11,7 +11,7 @@
 
     <div class="text-2xl font-bold mb-4 text-center">Viewless-UI 示例集合</div>
     <div class="flex flex-col justify-center items-center px-4">
-      <div class="w-1/2">
+      <div class="w-1/2 mb-4">
         <element-plus-form />
       </div>
       <div class="w-1/2">
