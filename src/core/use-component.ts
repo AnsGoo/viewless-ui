@@ -194,7 +194,15 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
 
 type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
 
-export function defineViewlessComponent({ name, props, setup }: { name?: string; props?: Record<string, any>; setup: InnerSetup }): Component {
+export function defineViewlessComponent({
+  name,
+  props,
+  setup,
+}: {
+  name?: string;
+  props?: Record<string, any>;
+  setup: InnerSetup;
+}): Component {
   return defineComponent({
     name: name || 'wrapper',
     props,

@@ -7,5 +7,4 @@ import { useAdaptor as useElementPlusAdaptor } from "@/ui/adaptor/element-plus.t
 import { useProvideAdaptor } from "@/ui/provide.ts";
 const ViewlessForm = UseViewlessForm();
 useProvideAdaptor(useElementPlusAdaptor);
-
 </script>

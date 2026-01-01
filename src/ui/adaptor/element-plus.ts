@@ -4,13 +4,12 @@ import type { UiComponent } from '@/core/use-component';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
-import { transformProp, transformEvent } from './utils';
+import { transformProp } from './utils';
 import type { Adaptor, AdaptorFn } from '../provide';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(ElForm);
   transformProp(opt.props, 'modelValue', 'model');
-  console.log("opt.props?.model", opt);
   return opt as UiComponent<FormOption>;
 }
 
@@ -34,14 +33,14 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(ElInput);
-//   transfromEvent(opt.events, 'update:modelValue', 'update:value');
+  //   transfromEvent(opt.events, 'update:modelValue', 'update:value');
   return opt as UiComponent<InputOption>;
 }
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
   opt.component = shallowRef(ElCard);
   transformProp(opt.props, 'title', 'header');
-  console.log("card opt", opt.props);
+  console.log('card opt', opt.props);
   return opt as UiComponent<CardOption>;
 }
 
@@ -71,7 +70,11 @@ export function useAdaptor(): ReturnType<AdaptorFn> {
     return opt;
   };
 
-  const handleAdaptor = (refValue: TemplateRef['value'], component: string|Component, prop: string) => {  
+  const handleAdaptor = (
+    refValue: TemplateRef['value'],
+    component: string | Component,
+    prop: string,
+  ) => {
     const handleAdaptorFn = handleAdaptorMap[component as string];
     if (handleAdaptorFn) {
       return handleAdaptorFn(refValue, prop);

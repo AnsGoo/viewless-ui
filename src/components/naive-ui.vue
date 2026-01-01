@@ -7,5 +7,4 @@ import { useAdaptor as useNaiveUiAdaptor } from "@/ui/adaptor/naive-ui.ts";
 import { useProvideAdaptor } from "@/ui/provide.ts";
 const ViewlessForm = UseViewlessForm();
 useProvideAdaptor(useNaiveUiAdaptor);
-
 </script>

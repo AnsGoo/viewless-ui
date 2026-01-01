@@ -71,7 +71,11 @@ export function useAdaptor(): ReturnType<AdaptorFn> {
     return opt;
   };
 
-  const handleAdaptor = (refValue: TemplateRef['value'], component: string|Component, prop: string) => {  
+  const handleAdaptor = (
+    refValue: TemplateRef['value'],
+    component: string | Component,
+    prop: string,
+  ) => {
     const handleAdaptorFn = handleAdaptorMap[component as string];
     if (handleAdaptorFn) {
       return handleAdaptorFn(refValue, prop);

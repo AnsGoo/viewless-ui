@@ -13,5 +13,5 @@ export function useProvideAdaptor(useAdaptor: AdaptorFn) {
   const { adaptor, handleAdaptor, adaptorMap } = useAdaptor();
   provide(ADAPTOR_KEY, adaptor);
   provide(HANDLE_ADAPTOR_KEY, handleAdaptor);
-  return adaptorMap
+  return adaptorMap;
 }

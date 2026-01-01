@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-  import ElementPlusForm from './components/element-plus.vue'
-  import NaiveUiForm from './components/naive-ui.vue'
+import ElementPlusForm from './components/element-plus.vue'
+import NaiveUiForm from './components/naive-ui.vue'
 </script>
 
 <style scoped>

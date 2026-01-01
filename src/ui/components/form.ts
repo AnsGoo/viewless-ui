@@ -10,9 +10,7 @@ export interface FormProps extends Props {
   labelPosition?: 'left' | 'right' | 'top';
 }
 
-export interface FormEvents extends Events {
-  change?: (value: Record<string, any>) => void;
-}
+export interface FormEvents extends Events {}
 
 export interface FormSlots extends Slots {
   default: ViewlessComponent[];
