@@ -1,4 +1,4 @@
-import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@/lib/use-component';
+import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@/core/use-component';
 import { transformFlatOption } from './transform';
 import type { FlatOption } from './type';
 

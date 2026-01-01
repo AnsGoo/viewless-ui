@@ -1,10 +1,11 @@
-import { shallowRef, type TemplateRef } from 'vue';
+import { shallowRef, type Component, type TemplateRef } from 'vue';
 import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
-import type { UiComponent } from '@/lib/use-component';
+import type { UiComponent } from '@/core/use-component';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
 import { transfromEvent, transfromProp } from './utils';
+import type { Adaptor, AdaptorFn } from '../provide';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
@@ -44,16 +45,16 @@ function useCardAdaptor(opt: UiComponent<CardOption>) {
   return opt as UiComponent<CardOption>;
 }
 
-export function useAdaptor() {
+export function useAdaptor(): ReturnType<AdaptorFn> {
   // 使用类型断言来放宽类型要求
-  const adaptorMap: Record<string, (opt: UiComponent) => UiComponent> = {
+  const adaptorMap: Record<string, Adaptor> = {
     Form: (opt: UiComponent) => useFormAdaptor(opt as UiComponent<FormOption>),
     FormItem: (opt: UiComponent) => useFormItemAdaptor(opt as UiComponent<FormItemOption>),
     Input: (opt: UiComponent) => useInputAdaptor(opt as UiComponent<InputOption>),
     Card: (opt: UiComponent) => useCardAdaptor(opt as UiComponent<CardOption>),
   };
 
-  type HandleAdaptorItemFn = (refValue: Record<string, any>, prop: string) => any;
+  type HandleAdaptorItemFn = (refValue: TemplateRef['value'], prop: string) => any;
 
   const handleAdaptorMap: Record<string, HandleAdaptorItemFn> = {
     Form: (refValue, prop: string) => useFormHandleAdaptor(refValue, prop as keyof FormHandler),
@@ -70,12 +71,12 @@ export function useAdaptor() {
     return opt;
   };
 
-  const handleAdaptor = (refValue: Record<string, any>, component: string, prop: string) => {
-    const handleAdaptorFn = handleAdaptorMap[component];
+  const handleAdaptor = (refValue: TemplateRef['value'], component: string|Component, prop: string) => {  
+    const handleAdaptorFn = handleAdaptorMap[component as string];
     if (handleAdaptorFn) {
       return handleAdaptorFn(refValue, prop);
     }
-    return refValue[prop];
+    return (refValue as any)[prop];
   };
 
   return {

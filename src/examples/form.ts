@@ -3,7 +3,7 @@ import {
   defineViewlessComponent,
   useViewlessTemplateRef,
   type UiComponent,
-} from '@/lib/use-component.ts';
+} from '@/core/use-component';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 import type { FormHandler } from '@/ui/components/form';
 
