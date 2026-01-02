@@ -1,13 +1,11 @@
-import type { BaseAttrs, ComponentOption } from '@/core/render';
+import type { ComponentOption } from './render';
 import type { FlatOption } from './type';
 
 function firstLetterToLowerCase(str: string) {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
 
-export function transformFlatOption<T extends ComponentOption>(
-  flatOption: FlatOption<T>,
-): T & BaseAttrs {
+export function transformFlatOption<T extends ComponentOption>(flatOption: FlatOption<T>): T {
   const { $key, $vshow, $ref, ...rest } = flatOption;
   const props = {} as T['props'];
   const events = {} as T['events'];
@@ -33,5 +31,5 @@ export function transformFlatOption<T extends ComponentOption>(
     props,
     events,
     slots,
-  } as T & BaseAttrs;
+  } as T;
 }

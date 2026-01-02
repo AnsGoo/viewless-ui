@@ -44,17 +44,20 @@ export type ComponentOption<
   E extends Events = Events,
   S extends Slots = Slots,
 > = {
-  props?: P;
-  events?: E;
-  slots?: S;
+  props: P;
+  events: E;
+  slots: S;
+  key?: string | number | symbol;
+  vshow?: boolean;
+  ref?: string;
 };
 
 export interface UiComponent<O extends ComponentOption = ComponentOption> {
   component: string | Component;
   key?: string | number | symbol;
-  props?: O['props'];
-  events?: O['events'];
-  slots?: O['slots'];
+  props: O['props'];
+  events: O['events'];
+  slots: O['slots'];
   vshow?: boolean;
   ref?: string;
 }
@@ -186,10 +189,10 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
     opt = adaptor(opt);
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
-  const innerProps = mergeProps(props, {...kwargs, ...(attrs || {})});
+  const innerProps = mergeProps(props, { ...kwargs, ...attrs });
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
-  const innerSlots = transformSlot(slots, {...context, attrs: {}});
+  const innerSlots = transformSlot(slots, { ...context, attrs: {} });
   return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
@@ -226,10 +229,15 @@ export function defineViewlessComponent({
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
       const attrs = this.$attrs;
-      return renderComponent(option, { adaptor, refMap, attrs: {
-        class: attrs.class,
-        style: attrs.style,
-      }, handleAdaptor });
+      return renderComponent(option, {
+        adaptor,
+        refMap,
+        attrs: {
+          class: attrs.class,
+          style: attrs.style,
+        },
+        handleAdaptor,
+      });
     },
   });
 }

@@ -4,7 +4,7 @@ import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '../components/input';
-import { transformProp } from './utils';
+import { transformProp } from '../components/utils';
 import type { Adaptor, AdaptorFn } from '../provide';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
@@ -19,12 +19,12 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
   }
   const formHandlers: FormHandler = {
     validate: async () => {
-        try {
-            await (refValue as Record<string, any>)['validate']()
-        } catch (error) {
-            return false
-        }
-        return true
+      try {
+        await (refValue as Record<string, any>)['validate']();
+      } catch (_) {
+        return false;
+      }
+      return true;
     },
   };
   if (formHandlers[prop]) {

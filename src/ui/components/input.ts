@@ -1,11 +1,11 @@
 import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@/core/render';
-import { transformFlatOption } from './transform';
-import type { FlatOption } from './type';
+import type { FlatOption } from '@/core/type';
+import { transformFlatOption } from '@/core/transform';
 
 export interface InputOption extends BaseAttrs {
-  props?: InputProps;
-  events?: InputEvents;
-  slots?: InputSlots;
+  props: InputProps;
+  events: InputEvents;
+  slots: InputSlots;
 }
 export interface InputProps extends Props {
   modelValue?: string;

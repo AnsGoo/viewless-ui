@@ -1,6 +1,6 @@
 import type { BaseAttrs, Events, Props, Slots, ViewlessComponent } from '@/core/render';
-import { transformFlatOption } from './transform';
-import type { FlatOption } from './type';
+import type { FlatOption } from '@/core/type';
+import { transformFlatOption } from '@/core/transform';
 
 export interface FormProps extends Props {
   modelValue?: Record<string, any>;
@@ -44,9 +44,9 @@ export interface FormItemProps extends Props {
 export interface FormItemEvents extends Events {}
 
 export interface FormItemOption extends BaseAttrs {
-  props?: FormItemProps | undefined;
-  events?: FormItemEvents;
-  slots?: FormItemSlots;
+  props: FormItemProps;
+  events: FormItemEvents;
+  slots: FormItemSlots;
 }
 
 export interface FormItemSlots extends Slots {
