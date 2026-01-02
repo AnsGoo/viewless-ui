@@ -68,7 +68,7 @@ type ToPropsProperty<P extends Props> = {
  *  }
  * ```
  */
-export type FlatOption<T extends ComponentOption | BaseAttrs> =
+export type FlatOption<T extends ComponentOption> =
   T extends ComponentOption<infer P, infer E, infer S>
     ? BaseAttrs & ToPropsProperty<P> & ToEventProperty<E> & ToSlotProperty<S>
     : T;
