@@ -1,6 +1,6 @@
 import { provide } from 'vue';
-import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from '@/core/const';
-import type { HandleAdaptor, UiComponent } from '@/core/render';
+import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
+import type { HandleAdaptor, UiComponent } from './render';
 
 export type Adaptor = (opt: UiComponent) => UiComponent;
 export type AdaptorFn = () => {

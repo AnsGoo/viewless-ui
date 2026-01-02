@@ -3,9 +3,9 @@ import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
-import type { InputOption } from '../components/input';
-import { transformEvent, transformProp } from '../components/utils';
-import type { Adaptor, AdaptorFn } from '../provide';
+import type { InputOption } from '@/ui/components/input';
+import { transformEvent, transformProp } from '@/ui/components/utils';
+import type { Adaptor, AdaptorFn } from '@/core/provide';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);

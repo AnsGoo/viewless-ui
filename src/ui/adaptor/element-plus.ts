@@ -3,9 +3,9 @@ import { ElCard, ElForm, ElFormItem, ElInput } from 'element-plus';
 import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
-import type { InputOption } from '../components/input';
-import { transformProp } from '../components/utils';
-import type { Adaptor, AdaptorFn } from '../provide';
+import type { InputOption } from '@/ui/components/input';
+import { transformProp } from '@/ui/components/utils';
+import type { Adaptor, AdaptorFn } from '@/core/provide';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(ElForm);

@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { UseViewlessForm } from '@/examples/form';
 import { useAdaptor as useElementPlusAdaptor } from "@/ui/adaptor/element-plus.ts";
-import { useProvideAdaptor } from "@/ui/provide.ts";
+import { useProvideAdaptor } from "@/core/provide.ts";
 const ViewlessForm = UseViewlessForm();
 useProvideAdaptor(useElementPlusAdaptor);
 function handleChange(model:any) {
