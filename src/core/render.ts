@@ -186,12 +186,11 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
     opt = adaptor(opt);
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
-  // 创建 slot 函数对象
-  const innerProps = mergeProps(props, {...kwargs, ...attrs || {}});
+  const innerProps = mergeProps(props, {...kwargs, ...(attrs || {})});
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
   const innerSlots = transformSlot(slots, {...context, attrs: {}});
-  return h(Comp, { ...innerProps, ...innerEvents, ...attrs }, innerSlots);
+  return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
 type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
@@ -226,9 +225,10 @@ export function defineViewlessComponent({
     render() {
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
+      const attrs = this.$attrs;
       return renderComponent(option, { adaptor, refMap, attrs: {
-        class: this.$attrs.class,
-        style: this.$attrs.style,
+        class: attrs.class,
+        style: attrs.style,
       }, handleAdaptor });
     },
   });

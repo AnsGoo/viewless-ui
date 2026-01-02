@@ -46,7 +46,7 @@ export function UseViewlessForm() {
         () => model.username,
         (newValue, oldValue) => {
           console.log('用户名变化了', newValue, oldValue);
-          // context.emit('change', model);
+          context.emit('formChange', { ...model });
         },
       );
 

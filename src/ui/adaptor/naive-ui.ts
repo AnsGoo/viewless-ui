@@ -1,4 +1,4 @@
-import { shallowRef, type Component, type TemplateRef } from 'vue';
+import { shallowRef, toRef, type Component, type TemplateRef } from 'vue';
 import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
@@ -11,6 +11,25 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
   transformProp(opt.props, 'modelValue', 'model');
   transformProp(opt.props, 'labelPosition', 'labelPlacement');
+  const formITems = (opt.slots?.default) ||[]
+  const rules = opt.props?.rules || {}
+  formITems.forEach((item) => {
+    const prop = item.props!.prop || '';
+    if(!prop || !item.props!.required === undefined) {
+      return;
+    }
+    if(rules[prop]) {
+      if(rules[prop].required === undefined) {
+        rules[prop]['required'] = toRef(item.props!, 'required');
+      }
+    } else {
+      rules[prop] = {
+        required: toRef(item.props!, 'required'),
+        trigger: ['blur', 'change'],
+      }
+    }
+  })
+  opt.props!.rules = rules;
   return opt as UiComponent<FormOption>;
 }
 
