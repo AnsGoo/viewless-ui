@@ -46,7 +46,6 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
 function useCardAdaptor(opt: UiComponent<CardOption>) {
   opt.component = shallowRef(ElCard);
   transformProp(opt.props, 'title', 'header');
-  console.log('card opt', opt.props);
   return opt as UiComponent<CardOption>;
 }
 

@@ -15,7 +15,7 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
   const rules = opt.props?.rules || {};
   formITems.forEach((item) => {
     const prop = item.props.prop || '';
-    if (!prop || item.props.required !== undefined) {
+    if (!prop || item.props.required === undefined) {
       return;
     }
     if (rules[prop]) {

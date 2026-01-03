@@ -29,7 +29,6 @@ export function UseViewlessForm() {
       const formRef = useViewlessTemplateRef('formRef');
 
       onMounted(async () => {
-        console.log('组件挂载完成');
         if (formRef.value) {
           console.log(
             'formRef.value.validate()',
@@ -87,7 +86,7 @@ export function UseViewlessForm() {
                   placeholder: '请输入密码',
                   type: 'password',
                   'onUpdate:modelValue': (value: string) => {
-                    console.log('密码输入框值变化了', value);
+
                     model.password = value;
                   },
                 }),
