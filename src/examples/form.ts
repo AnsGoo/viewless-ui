@@ -1,5 +1,5 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { defineViewlessComponent, useViewlessTemplateRef, type UiComponent } from '@/core/render';
+import { defineViewlessComponent, useViewlessTemplateRef } from '@/core/render';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 import type { FormHandler } from '@/ui/components/form';
 
@@ -52,8 +52,7 @@ export function UseViewlessForm() {
         },
       );
 
-      return reactive<UiComponent>(
-        useCard({
+      return  useCard({
           $key: 'form-card',
           title: props.title,
           defaultSlot: useForm({
@@ -93,8 +92,7 @@ export function UseViewlessForm() {
               }),
             ],
           }),
-        }),
-      );
+        })
     },
   });
 }

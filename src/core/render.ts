@@ -4,7 +4,10 @@ import {
   getCurrentInstance,
   h,
   inject,
+  isReactive,
+  isRef,
   isVNode,
+  reactive,
   shallowReadonly,
   useTemplateRef,
 } from 'vue';
@@ -164,7 +167,7 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
     }
   }
 
-  return attrs;
+  return isReactive(attrs) ? attrs : reactive(attrs); 
 }
 
 export type HandleAdaptor = (
@@ -193,7 +196,8 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
   const innerSlots = transformSlot(slots, { ...context, attrs: {} });
-  return h(Comp, { ...innerProps, ...innerEvents }, innerSlots);
+  const comp = isRef(Comp) ? Comp.value : Comp;
+  return h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
 type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
