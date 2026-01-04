@@ -54,61 +54,60 @@ export function UseViewlessForm() {
       );
 
       return useCard({
-          $key: 'form-card',
-          title: props.title,
-          defaultSlot: useForm({
-            modelValue: model,
-            $ref: 'formRef',
-            labelPosition: 'top',
-            defaultSlot: [
-              useFormItem({
-                prop: 'username',
-                label: '用户名',
-                required: true,
-                $key: 'username',
-                defaultSlot: useInput({
-                  modelValue: username,
-                  placeholder: '请输入用户名',
-                  'onUpdate:modelValue': (value: string) => {
-                    console.log('用户名输入框值变化了', value);
-                    model.username = value;
-                  },
+        $key: 'form-card',
+        title: props.title,
+        defaultSlot: useForm({
+          modelValue: model,
+          $ref: 'formRef',
+          labelPosition: 'top',
+          defaultSlot: [
+            useFormItem({
+              prop: 'username',
+              label: '用户名',
+              required: true,
+              $key: 'username',
+              defaultSlot: useInput({
+                modelValue: username,
+                placeholder: '请输入用户名',
+                'onUpdate:modelValue': (value: string) => {
+                  console.log('用户名输入框值变化了', value);
+                  model.username = value;
+                },
+              }),
+            }),
+            useFormItem({
+              prop: 'password',
+              label: '密码',
+              required: true,
+              $key: 'password',
+              $vshow: computed(() => model.username !== '1234'),
+              defaultSlot: useInput({
+                modelValue: password,
+                placeholder: '请输入密码',
+                type: 'password',
+                'onUpdate:modelValue': (value: string) => {
+                  model.password = value;
+                },
+              }),
+            }),
+            useFormItem({
+              $key: 'button',
+              prop: 'button',
+              defaultSlot: [
+                useButton({
+                  $key: 'submit',
+                  type: 'primary',
+                  defaultSlot: '提交',
                 }),
-              }),
-              useFormItem({
-                prop: 'password',
-                label: '密码',
-                required: true,
-                $key: 'password',
-                $vshow: computed(() => model.username !== '1234'),
-                defaultSlot: useInput({
-                  modelValue: password,
-                  placeholder: '请输入密码',
-                  type: 'password',
-                  'onUpdate:modelValue': (value: string) => {
-
-                    model.password = value;
-                  },
+                useButton({
+                  $key: 'reset',
+                  defaultSlot: '重置',
                 }),
-              }),
-              useFormItem({
-                $key: 'button',
-                prop: 'button',
-                defaultSlot: [
-                  useButton({
-                    $key: 'submit',
-                    type: 'primary',
-                    defaultSlot: '提交',
-                  }),
-                  useButton({
-                    $key: 'reset',
-                    defaultSlot: '重置',
-                  }),
-                ],
-              }),
-            ],
-          }),
-        })
+              ],
+            }),
+          ],
+        }),
+      });
     },
   });
 }

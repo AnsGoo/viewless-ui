@@ -14,7 +14,7 @@ export interface ButtonEvents extends Events {
   click?: (e: MouseEvent) => void;
 }
 export interface ButtonSlots extends Slots {
-    default?: ViewlessComponent | string | undefined;
+  default?: ViewlessComponent | string | undefined;
 }
 
 export function useButton(option: FlatOption<ButtonOption>) {

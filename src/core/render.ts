@@ -167,7 +167,7 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
     }
   }
 
-  return isReactive(attrs) ? attrs : reactive(attrs); 
+  return isReactive(attrs) ? attrs : reactive(attrs);
 }
 
 export type HandleAdaptor = (
@@ -191,7 +191,7 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
     opt = adaptor(opt);
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
-  const innerProps = mergeProps(props, { ...kwargs});
+  const innerProps = mergeProps(props, { ...kwargs });
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
   const innerSlots = transformSlot(slots, { ...context });
@@ -199,7 +199,7 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   return h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
-type InnerSetup = (props: Record<string, any>, context: any) =>  UiComponent;
+type InnerSetup = (props: Record<string, any>, context: any) => UiComponent;
 
 export function defineViewlessComponent({
   name,
@@ -224,7 +224,7 @@ export function defineViewlessComponent({
         delete option.props.class;
       }
       return {
-        option ,
+        option,
         context: { adaptor, refMap, handleAdaptor },
       };
     },
@@ -232,11 +232,13 @@ export function defineViewlessComponent({
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
       const attrs = this.$attrs;
-      return h('div', { ...attrs }, [renderComponent(option, {
-        adaptor,
-        refMap,
-        handleAdaptor,
-      })]);
+      return h('div', { ...attrs }, [
+        renderComponent(option, {
+          adaptor,
+          refMap,
+          handleAdaptor,
+        }),
+      ]);
     },
   });
 }
