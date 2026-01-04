@@ -199,7 +199,7 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   return h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
-type InnerSetup = (props: Record<string, any>, context: any) => {option: UiComponent, dialogs?: UiComponent[]};
+type InnerSetup = (props: Record<string, any>, context: any) =>  UiComponent;
 
 export function defineViewlessComponent({
   name,
@@ -215,7 +215,7 @@ export function defineViewlessComponent({
     props,
     setup(_props, context) {
       const refMap = new Map<string, string | Component>();
-      const {option, dialogs }= setup(_props, context);
+      const option = setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
       const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
       if (option.props) {
@@ -225,7 +225,6 @@ export function defineViewlessComponent({
       }
       return {
         option ,
-        dialogs,
         context: { adaptor, refMap, handleAdaptor },
       };
     },
@@ -233,11 +232,11 @@ export function defineViewlessComponent({
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
       const attrs = this.$attrs;
-      return h('div', { ...attrs }, renderComponent(option, {
+      return h('div', { ...attrs }, [renderComponent(option, {
         adaptor,
         refMap,
         handleAdaptor,
-      }));
+      })]);
     },
   });
 }

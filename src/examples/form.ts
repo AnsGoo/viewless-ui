@@ -53,8 +53,7 @@ export function UseViewlessForm() {
         },
       );
 
-      return {
-        option: useCard({
+      return useCard({
           $key: 'form-card',
           title: props.title,
           defaultSlot: useForm({
@@ -109,9 +108,7 @@ export function UseViewlessForm() {
               }),
             ],
           }),
-        }),
-        dialogs:[]
-      }  
+        })
     },
   });
 }
