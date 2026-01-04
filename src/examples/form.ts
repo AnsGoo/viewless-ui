@@ -2,6 +2,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 import { defineViewlessComponent, useViewlessTemplateRef } from '@/core/render';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 import type { FormHandler } from '@/ui/components/form';
+import { useButton } from '@/ui/components/button';
 
 // 定义表单数据类型
 interface FormModel {
@@ -52,7 +53,8 @@ export function UseViewlessForm() {
         },
       );
 
-      return  useCard({
+      return {
+        option: useCard({
           $key: 'form-card',
           title: props.title,
           defaultSlot: useForm({
@@ -90,9 +92,26 @@ export function UseViewlessForm() {
                   },
                 }),
               }),
+              useFormItem({
+                $key: 'button',
+                prop: 'button',
+                defaultSlot: [
+                  useButton({
+                    $key: 'submit',
+                    type: 'primary',
+                    defaultSlot: '提交',
+                  }),
+                  useButton({
+                    $key: 'reset',
+                    defaultSlot: '重置',
+                  }),
+                ],
+              }),
             ],
           }),
-        })
+        }),
+        dialogs:[]
+      }  
     },
   });
 }

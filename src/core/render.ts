@@ -176,15 +176,14 @@ export type HandleAdaptor = (
   prop: string,
 ) => any;
 interface Context {
-  attrs?: Record<string, any>;
   adaptor?: (slotContent: UiComponent) => UiComponent;
   refMap?: Map<string, string | Component>;
   handleAdaptor?: HandleAdaptor;
 }
 
-export function renderComponent(option: UiComponent, context: Context): VNode | Component {
+export function renderComponent(option: UiComponent, context: Context): VNode {
   let opt = option;
-  const { adaptor, attrs, refMap } = context;
+  const { adaptor, refMap } = context;
   if (adaptor) {
     if (opt.ref && refMap) {
       refMap.set(opt.ref, opt.component);
@@ -192,15 +191,15 @@ export function renderComponent(option: UiComponent, context: Context): VNode | 
     opt = adaptor(opt);
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
-  const innerProps = mergeProps(props, { ...kwargs, ...attrs });
+  const innerProps = mergeProps(props, { ...kwargs});
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
-  const innerSlots = transformSlot(slots, { ...context, attrs: {} });
+  const innerSlots = transformSlot(slots, { ...context });
   const comp = isRef(Comp) ? Comp.value : Comp;
   return h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
-type InnerSetup = (props: Record<string, any>, context: any) => Reactive<UiComponent>;
+type InnerSetup = (props: Record<string, any>, context: any) => {option: UiComponent, dialogs?: UiComponent[]};
 
 export function defineViewlessComponent({
   name,
@@ -216,16 +215,17 @@ export function defineViewlessComponent({
     props,
     setup(_props, context) {
       const refMap = new Map<string, string | Component>();
-      const opt = setup(_props, context);
+      const {option, dialogs }= setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
       const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
-      if (opt.props) {
+      if (option.props) {
         //  不允许通过props 配置样式，移除样式相关的属性
-        delete opt.props.style;
-        delete opt.props.class;
+        delete option.props.style;
+        delete option.props.class;
       }
       return {
-        option: opt,
+        option ,
+        dialogs,
         context: { adaptor, refMap, handleAdaptor },
       };
     },
@@ -233,15 +233,11 @@ export function defineViewlessComponent({
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
       const attrs = this.$attrs;
-      return renderComponent(option, {
+      return h('div', { ...attrs }, renderComponent(option, {
         adaptor,
         refMap,
-        attrs: {
-          class: attrs.class,
-          style: attrs.style,
-        },
         handleAdaptor,
-      });
+      }));
     },
   });
 }

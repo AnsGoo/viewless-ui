@@ -1,11 +1,12 @@
 import { shallowRef, toRef, type Component, type TemplateRef } from 'vue';
-import { NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import { NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
 import type { CardOption } from '@/ui/components/card';
 import type { InputOption } from '@/ui/components/input';
 import { transformEvent, transformProp } from '@/ui/components/utils';
 import type { Adaptor, AdaptorFn } from '@/core/provide';
+import type { ButtonOption } from '../components/button';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
@@ -71,6 +72,11 @@ function useCardAdaptor(opt: UiComponent<CardOption>) {
   return opt as UiComponent<CardOption>;
 }
 
+function useButtonAdaptor(opt: UiComponent<ButtonOption>) {
+  opt.component = shallowRef(NButton);
+  return opt as UiComponent<ButtonOption>;
+}
+
 export function useAdaptor(): ReturnType<AdaptorFn> {
   // 使用类型断言来放宽类型要求
   const adaptorMap: Record<string, Adaptor> = {
@@ -78,6 +84,7 @@ export function useAdaptor(): ReturnType<AdaptorFn> {
     FormItem: (opt: UiComponent) => useFormItemAdaptor(opt as UiComponent<FormItemOption>),
     Input: (opt: UiComponent) => useInputAdaptor(opt as UiComponent<InputOption>),
     Card: (opt: UiComponent) => useCardAdaptor(opt as UiComponent<CardOption>),
+    Button: (opt: UiComponent) => useButtonAdaptor(opt as UiComponent<ButtonOption>),
   };
 
   type HandleAdaptorItemFn = (refValue: TemplateRef['value'], prop: string) => any;

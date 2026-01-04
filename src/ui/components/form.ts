@@ -50,7 +50,7 @@ export interface FormItemOption extends BaseAttrs {
 }
 
 export interface FormItemSlots extends Slots {
-  default: ViewlessComponent;
+  default: ViewlessComponent[] | ViewlessComponent;
   label?: ViewlessComponent | string | undefined;
 }
 
