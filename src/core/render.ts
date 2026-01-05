@@ -247,45 +247,6 @@ export function defineViewlessComponent({
   });
 }
 
-export function useViewlessComponent({
-  name,
-  props,
-  emits,
-  setup,
-}: {
-  name?: string;
-  props?: Record<string, any>;
-  emits?: string[];
-  setup: InnerSetup;
-}): Component {
-  return defineComponent({
-    name: name || 'wrapper',
-    emits,
-    props,
-    setup(_props, context) {
-      const refMap = new Map<string, string | Component>();
-      const option = setup(_props, context);
-      const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
-      const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
-      return {
-        option,
-        context: { adaptor, refMap, handleAdaptor },
-      };
-    },
-    render() {
-      const { option, context, $attrs, $props } = this;
-      const { adaptor, refMap, handleAdaptor } = context;
-      return h('div', { ...$props, ...$attrs }, [
-        renderComponent(option, {
-          adaptor,
-          refMap,
-          handleAdaptor,
-        }),
-      ]);
-    },
-  });
-}
-
 export function useViewlessTemplateRef<T = unknown, Keys extends string = string>(
   key: Keys,
 ): TemplateRef<T> {
