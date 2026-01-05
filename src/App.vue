@@ -17,6 +17,9 @@
       <div class="w-1/2">
         <naive-ui-form />
       </div>
+      <div class="w-1/2">
+        <ComplexCollapse />
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +27,7 @@
 <script setup lang="ts">
 import ElementPlusForm from './components/element-plus.vue'
 import NaiveUiForm from './components/naive-ui.vue'
+import { ComplexCollapse } from './examples/example-components'
 </script>
 
 <style scoped>

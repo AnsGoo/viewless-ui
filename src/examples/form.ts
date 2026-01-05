@@ -29,12 +29,9 @@ export function UseViewlessForm() {
 
       const formRef = useViewlessTemplateRef('formRef');
 
-      onMounted(async () => {
+      onMounted(() => {
         if (formRef.value) {
-          console.log(
-            'formRef.value.validate()',
-            await (formRef.value as FormHandler).validate?.(),
-          );
+          console.log('formRef.value.validate()', formRef.value);
         }
       });
 
@@ -52,6 +49,24 @@ export function UseViewlessForm() {
           console.log('密码变化了', newValue, oldValue);
         },
       );
+
+      async function handleSubmit() {
+        console.log('提交表单', model);
+        if (!formRef.value) {
+          return;
+        }
+        const resp = await (formRef.value as FormHandler).validate?.();
+        if (resp) {
+          context.emit('submit', { ...model });
+        }
+      }
+      function handleReset() {
+        console.log('重置表单', model);
+        if (!formRef.value) {
+          return;
+        }
+        (formRef.value as FormHandler).resetFields?.();
+      }
 
       return useCard({
         $key: 'form-card',
@@ -98,10 +113,12 @@ export function UseViewlessForm() {
                   $key: 'submit',
                   type: 'primary',
                   defaultSlot: '提交',
+                  onClick: handleSubmit,
                 }),
                 useButton({
                   $key: 'reset',
                   defaultSlot: '重置',
+                  onClick: handleReset,
                 }),
               ],
             }),

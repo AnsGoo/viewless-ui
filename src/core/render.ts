@@ -11,7 +11,7 @@ import {
   shallowReadonly,
   useTemplateRef,
 } from 'vue';
-import type { Component, VNode, Reactive, TemplateRef } from 'vue';
+import type { Component, VNode, Reactive, TemplateRef, Ref } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 
 /**
@@ -89,6 +89,14 @@ function toVNodes(value: any, context: Context): VNode[] {
     const ChildComponent = renderComponent(value as UiComponent, context);
     const vnode = h(ChildComponent);
     return [vnode];
+  }
+  if (
+    value &&
+    typeof value === 'object' &&
+    'render' in value &&
+    typeof value.render === 'function'
+  ) {
+    return [h(value)];
   }
 
   // 处理 VNode
@@ -199,30 +207,28 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   return h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
 }
 
-type InnerSetup = (props: Record<string, any>, context: any) => UiComponent;
+type InnerSetup = (props: Record<string, any>, context: any) => Partial<UiComponent>;
 
 export function defineViewlessComponent({
   name,
   props,
+  emits,
   setup,
 }: {
   name?: string;
   props?: Record<string, any>;
+  emits?: string[];
   setup: InnerSetup;
 }): Component {
   return defineComponent({
     name: name || 'wrapper',
+    emits,
     props,
     setup(_props, context) {
       const refMap = new Map<string, string | Component>();
       const option = setup(_props, context);
       const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
       const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
-      if (option.props) {
-        //  不允许通过props 配置样式，移除样式相关的属性
-        delete option.props.style;
-        delete option.props.class;
-      }
       return {
         option,
         context: { adaptor, refMap, handleAdaptor },
@@ -231,8 +237,44 @@ export function defineViewlessComponent({
     render() {
       const { option, context } = this;
       const { adaptor, refMap, handleAdaptor } = context;
-      const attrs = this.$attrs;
-      return h('div', { ...attrs }, [
+      return renderComponent(option, {
+        adaptor,
+        refMap,
+        handleAdaptor,
+      });
+    },
+  });
+}
+
+export function useViewlessComponent({
+  name,
+  props,
+  emits,
+  setup,
+}: {
+  name?: string;
+  props?: Record<string, any>;
+  emits?: string[];
+  setup: InnerSetup;
+}): Component {
+  return defineComponent({
+    name: name || 'wrapper',
+    emits,
+    props,
+    setup(_props, context) {
+      const refMap = new Map<string, string | Component>();
+      const option = setup(_props, context);
+      const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
+      const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
+      return {
+        option,
+        context: { adaptor, refMap, handleAdaptor },
+      };
+    },
+    render() {
+      const { option, context, $attrs, $props } = this;
+      const { adaptor, refMap, handleAdaptor } = context;
+      return h('div', { ...$props, ...$attrs }, [
         renderComponent(option, {
           adaptor,
           refMap,

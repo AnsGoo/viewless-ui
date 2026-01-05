@@ -1,5 +1,8 @@
 import { defineViewlessComponent } from '@/core/render';
 import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from 'naive-ui';
+import { UseViewlessForm } from './form';
+import { useAdaptor as useNaiveUiAdaptor } from '@/ui/adaptor/naive-ui.ts';
+import { useProvideAdaptor } from '@/core/provide.ts';
 
 // 示例1：简单的div组件
 export const SimpleDiv = defineViewlessComponent({
@@ -59,7 +62,8 @@ export const CardWithTabs = defineViewlessComponent({
 // 示例4：复杂嵌套 - Collapse包含多个Item
 export const ComplexCollapse = defineViewlessComponent({
   setup: (_props, _context) => {
-    return {
+    useProvideAdaptor(useNaiveUiAdaptor);
+    const opt = {
       component: NCollapse,
       props: {
         accordion: true,
@@ -74,7 +78,7 @@ export const ComplexCollapse = defineViewlessComponent({
               title: '折叠项1',
             },
             slots: {
-              default: '这是折叠项1的内容',
+              default: UseViewlessForm,
             },
           },
           {
@@ -91,6 +95,8 @@ export const ComplexCollapse = defineViewlessComponent({
         ],
       },
     };
+    console.log('ComplexCollapse', opt);
+    return opt;
   },
 });
 
