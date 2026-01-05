@@ -11,23 +11,15 @@
 
     <div class="text-2xl font-bold mb-4 text-center">Viewless-UI 示例</div>
     <div class="flex flex-col justify-center items-center px-4">
-      <div class="w-1/2 mb-4">
-        <element-plus-form />
-      </div>
       <div class="w-1/2">
-        <naive-ui-form />
-      </div>
-      <div class="w-1/2">
-        <ComplexCollapse />
+        <viewlessTabs />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import ElementPlusForm from './components/element-plus.vue'
-import NaiveUiForm from './components/naive-ui.vue'
-import { ComplexCollapse } from './examples/example-components'
+import { viewlessTabs } from '@/examples/examples'
 </script>
 
 <style scoped>

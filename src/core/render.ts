@@ -11,8 +11,9 @@ import {
   shallowReadonly,
   useTemplateRef,
 } from 'vue';
-import type { Component, VNode, Reactive, TemplateRef, Ref } from 'vue';
+import type { Component, VNode, Reactive, TemplateRef } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
+import type { Adaptor } from './provide';
 
 /**
  * 插槽内容类型定义
@@ -227,8 +228,8 @@ export function defineViewlessComponent({
     setup(_props, context) {
       const refMap = new Map<string, string | Component>();
       const option = setup(_props, context);
-      const adaptor = inject<(resp: UiComponent) => UiComponent>(ADAPTOR_KEY);
-      const handleAdaptor = inject<HandleAdaptor>(HANDLE_ADAPTOR_KEY);
+      const adaptor = inject<Adaptor | undefined>(ADAPTOR_KEY, undefined);
+      const handleAdaptor = inject<HandleAdaptor | undefined>(HANDLE_ADAPTOR_KEY, undefined);
       return {
         option,
         context: { adaptor, refMap, handleAdaptor },

@@ -3,7 +3,6 @@ import { defineViewlessComponent, useViewlessTemplateRef } from '@/core/render';
 import { useCard, useFormItem, useInput, useForm } from '@/ui';
 import type { FormHandler } from '@/ui/components/form';
 import { useButton } from '@/ui/components/button';
-
 // 定义表单数据类型
 interface FormModel {
   username: string;

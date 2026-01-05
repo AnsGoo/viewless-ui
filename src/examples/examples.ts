@@ -3,6 +3,8 @@ import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from 'naive
 import { UseViewlessForm } from './form';
 import { useAdaptor as useNaiveUiAdaptor } from '@/ui/adaptor/naive-ui.ts';
 import { useProvideAdaptor } from '@/core/provide.ts';
+import { useCard } from '@/ui';
+import { useAdaptor as useElementPlusAdaptor } from '@/ui/adaptor/element-plus.ts';
 
 // 示例1：简单的div组件
 export const SimpleDiv = defineViewlessComponent({
@@ -136,7 +138,35 @@ export const MixedSlotExample = defineViewlessComponent({
   },
 });
 
-export const viewlessUiTabs = defineViewlessComponent({
+const ProxyCard = defineViewlessComponent({
+  props: {
+    ui: {
+      type: String,
+      default: 'naive-ui',
+    },
+  },
+  setup: (props, _context) => {
+    if (props.ui === 'naive-ui') {
+      useProvideAdaptor(useNaiveUiAdaptor);
+    } else if (props.ui === 'element-plus') {
+      useProvideAdaptor(useElementPlusAdaptor);
+    }
+
+    return useCard({
+      title: 'Viewless UI',
+      defaultSlot: () => {
+        return {
+          component: UseViewlessForm(),
+          props: {
+            title: props.ui === 'naive-ui' ? 'NaiveUI 示例表单' : 'Element Plus 示例表单',
+          },
+        };
+      },
+    });
+  },
+});
+
+export const viewlessTabs = defineViewlessComponent({
   setup: (_props, _context) => {
     return {
       component: NTabs,
@@ -148,21 +178,35 @@ export const viewlessUiTabs = defineViewlessComponent({
           {
             component: NTabPane,
             props: {
-              name: 'tab1',
-              tab: '标签页1',
+              name: 'naive-ui',
+              tab: 'Naive UI',
             },
             slots: {
-              default: '这是标签页1的内容',
+              default: () => {
+                return {
+                  component: ProxyCard,
+                  props: {
+                    ui: 'naive-ui',
+                  },
+                };
+              },
             },
           },
           {
             component: NTabPane,
             props: {
-              name: 'tab2',
-              tab: '标签页2',
+              name: 'element-plus',
+              tab: 'Element Plus',
             },
             slots: {
-              default: '这是标签页2的内容',
+              default: () => {
+                return {
+                  component: ProxyCard,
+                  props: {
+                    ui: 'element-plus',
+                  },
+                };
+              },
             },
           },
         ],
