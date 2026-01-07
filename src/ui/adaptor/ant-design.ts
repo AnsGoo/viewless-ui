@@ -48,8 +48,8 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(Input);
-   transformProp(opt.props, 'modelValue', 'value');
-    transformEvent(opt.events, 'update:modelValue', 'update:value');
+  transformProp(opt.props, 'modelValue', 'value');
+  transformEvent(opt.events, 'update:modelValue', 'update:value');
   return opt as UiComponent<InputOption>;
 }
 
