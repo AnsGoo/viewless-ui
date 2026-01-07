@@ -21,10 +21,10 @@ export function transformEvent(
   obj: Reactive<any>,
   from: string,
   to: string,
-  defaultFn?: (...args: any[]) => any,
+  transform?: (...args: any[]) => any,
 ) {
   if (obj && obj[from]) {
     const event = obj[from];
-    obj[to] = defaultFn ? defaultFn : event;
+    obj[to] = transform?.(event) || event;
   }
 }
