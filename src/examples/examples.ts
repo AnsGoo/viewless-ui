@@ -99,7 +99,6 @@ export const ComplexCollapse = defineViewlessComponent({
         ],
       },
     };
-    console.log('ComplexCollapse', opt);
     return opt;
   },
 });
@@ -163,14 +162,11 @@ const ProxyCard = defineViewlessComponent({
 
     return useCard({
       title: 'Viewless UI',
-      defaultSlot: () => {
-        return {
-          component: UseViewlessForm(),
-          props: {
-            title: titleMap[props.ui] || 'Viewless UI 示例表单',
-          },
-        };
-      },
+      defaultSlot: () => useViewlessComponent(UseViewlessForm(),{
+        props: {
+          title: titleMap[props.ui] || 'Viewless UI 示例表单',
+        },
+      })
     });
   },
 });

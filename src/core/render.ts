@@ -66,7 +66,7 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   ref?: string;
 }
 
-export type ViewlessComponent<O extends ComponentOption = ComponentOption> = UiComponent<O>;
+export type ViewlessComponent<O extends ComponentOption = ComponentOption> = UiComponent<O> | (() => UiComponent<O>);
 
 // 辅助函数：将任何值转换为 VNode 数组
 function toVNodes(value: any, context: Context): VNode[] {
