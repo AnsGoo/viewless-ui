@@ -5,10 +5,7 @@ import { resolve } from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    tailwindcss(),
-  ],
+  plugins: [vue(), tailwindcss()],
   resolve: {
     extensions: ['.ts', '.vue', '.tsx'],
     alias: {

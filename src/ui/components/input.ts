@@ -1,6 +1,6 @@
 import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@/core/render';
 import type { FlatOption } from '@/core/type';
-import { transformFlatOption } from '@/core/transform';
+import { transformFlatOption, useViewlessComponent } from '@/core/transform';
 
 export interface InputOption extends BaseAttrs {
   props: InputProps;
@@ -33,12 +33,5 @@ export interface InputSlots extends Slots {
 }
 
 export function useInput(option: FlatOption<InputOption>) {
-  const { props, events, slots, ...kwargs } = transformFlatOption(option);
-  return {
-    component: 'Input',
-    props,
-    events,
-    slots,
-    ...kwargs,
-  };
+  return useViewlessComponent('Input', option);
 }

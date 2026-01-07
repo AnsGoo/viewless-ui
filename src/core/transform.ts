@@ -1,4 +1,5 @@
-import type { ComponentOption } from './render';
+import type { Component } from 'vue';
+import type { ComponentOption, UiComponent } from './render';
 import type { FlatOption } from './type';
 
 function firstLetterToLowerCase(str: string) {
@@ -32,4 +33,15 @@ export function transformFlatOption<T extends ComponentOption>(flatOption: FlatO
     events,
     slots,
   } as T;
+}
+
+export function useViewlessComponent<T extends ComponentOption>(
+  component: string | Component,
+  componentOption: FlatOption<T>,
+): UiComponent<T> {
+  const flatOption = transformFlatOption<T>(componentOption);
+  return {
+    component,
+    ...flatOption,
+  };
 }

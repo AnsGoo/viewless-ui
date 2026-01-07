@@ -1,6 +1,6 @@
 import type { Props, Events, Slots, ViewlessComponent, BaseAttrs } from '@/core/render';
 import type { FlatOption } from '@/core/type';
-import { transformFlatOption } from '@/core/transform';
+import { useViewlessComponent } from '@/core/transform';
 
 export interface CardProps extends Props {
   title?: string;
@@ -21,12 +21,5 @@ export interface CardOption extends BaseAttrs {
   slots: CardSlots;
 }
 export function useCard(options: FlatOption<CardOption>) {
-  const { props, events, slots, ...kwargs } = transformFlatOption(options);
-  return {
-    component: 'Card',
-    props,
-    events,
-    slots,
-    ...kwargs,
-  };
+  return useViewlessComponent('Card', options);
 }

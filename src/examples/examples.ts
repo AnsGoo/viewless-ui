@@ -5,6 +5,7 @@ import { useAdaptor as useNaiveUiAdaptor } from '@/ui/adaptor/naive-ui.ts';
 import { useProvideAdaptor } from '@/core/provide.ts';
 import { useCard } from '@/ui';
 import { useAdaptor as useElementPlusAdaptor } from '@/ui/adaptor/element-plus.ts';
+import { useViewlessComponent } from '@/core/transform';
 
 // 示例1：简单的div组件
 export const SimpleDiv = defineViewlessComponent({
@@ -168,49 +169,31 @@ const ProxyCard = defineViewlessComponent({
 
 export const viewlessTabs = defineViewlessComponent({
   setup: (_props, _context) => {
-    return {
-      component: NTabs,
-      props: {
-        type: 'line',
-      },
-      slots: {
-        default: [
-          {
-            component: NTabPane,
-            props: {
-              name: 'naive-ui',
-              tab: 'Naive UI',
-            },
-            slots: {
-              default: () => {
-                return {
-                  component: ProxyCard,
-                  props: {
-                    ui: 'naive-ui',
-                  },
-                };
-              },
-            },
+    return useViewlessComponent(NTabs, {
+      type: 'line',
+      defaultSlot: [
+        useViewlessComponent(NTabPane, {
+          name: 'naive-ui',
+          tab: 'Naive UI',
+          $key: 'naive-ui',
+          defaultSlot: () => {
+            return useViewlessComponent(ProxyCard, {
+              component: ProxyCard,
+              ui: 'naive-ui',
+            });
           },
-          {
-            component: NTabPane,
-            props: {
-              name: 'element-plus',
-              tab: 'Element Plus',
-            },
-            slots: {
-              default: () => {
-                return {
-                  component: ProxyCard,
-                  props: {
-                    ui: 'element-plus',
-                  },
-                };
-              },
-            },
+        }),
+        useViewlessComponent(NTabPane, {
+          name: 'element-plus',
+          tab: 'Element Plus',
+          $key: 'element-plus',
+          defaultSlot: () => {
+            return useViewlessComponent(ProxyCard, {
+              ui: 'element-plus',
+            });
           },
-        ],
-      },
-    };
+        }),
+      ],
+    });
   },
 });

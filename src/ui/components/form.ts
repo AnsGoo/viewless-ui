@@ -1,6 +1,6 @@
 import type { BaseAttrs, Events, Props, Slots, ViewlessComponent } from '@/core/render';
 import type { FlatOption } from '@/core/type';
-import { transformFlatOption } from '@/core/transform';
+import { transformFlatOption, useViewlessComponent } from '@/core/transform';
 
 export interface FormProps extends Props {
   modelValue?: Record<string, any>;
@@ -23,14 +23,7 @@ export interface FormOption extends BaseAttrs {
 }
 
 export function useForm(options: FlatOption<FormOption>) {
-  const { props, events, slots, ...kwargs } = transformFlatOption(options);
-  return {
-    component: 'Form',
-    props,
-    events,
-    slots,
-    ...kwargs,
-  };
+  return useViewlessComponent('Form', options);
 }
 
 export interface FormItemProps extends Props {
@@ -55,14 +48,7 @@ export interface FormItemSlots extends Slots {
 }
 
 export function useFormItem(options: FlatOption<FormItemOption>) {
-  const { props, events, slots, ...kwargs } = transformFlatOption(options);
-  return {
-    component: 'FormItem',
-    props,
-    events,
-    slots,
-    ...kwargs,
-  };
+  return useViewlessComponent('FormItem', options);
 }
 
 export interface FormHandler {
