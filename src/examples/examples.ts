@@ -162,11 +162,12 @@ const ProxyCard = defineViewlessComponent({
 
     return useCard({
       title: 'Viewless UI',
-      defaultSlot: () => useViewlessComponent(UseViewlessForm(),{
-        props: {
-          title: titleMap[props.ui] || 'Viewless UI 示例表单',
-        },
-      })
+      defaultSlot: () =>
+        useViewlessComponent(UseViewlessForm(), {
+          props: {
+            title: titleMap[props.ui] || 'Viewless UI 示例表单',
+          },
+        }),
     });
   },
 });
