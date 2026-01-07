@@ -6,6 +6,7 @@ import { useProvideAdaptor } from '@/core/provide.ts';
 import { useCard } from '@/ui';
 import { useAdaptor as useElementPlusAdaptor } from '@/ui/adaptor/element-plus.ts';
 import { useViewlessComponent } from '@/core/transform';
+import { useAdaptor as useAntDesignAdaptor } from '@/ui/adaptor/ant-design.ts';
 
 // 示例1：简单的div组件
 export const SimpleDiv = defineViewlessComponent({
@@ -151,7 +152,14 @@ const ProxyCard = defineViewlessComponent({
       useProvideAdaptor(useNaiveUiAdaptor);
     } else if (props.ui === 'element-plus') {
       useProvideAdaptor(useElementPlusAdaptor);
+    } else if (props.ui === 'ant-design') {
+      useProvideAdaptor(useAntDesignAdaptor);
     }
+    const titleMap: Record<string, string> = {
+      'naive-ui': 'NaiveUI 示例表单',
+      'element-plus': 'Element Plus 示例表单',
+      'ant-design': 'Ant Design 示例表单',
+    };
 
     return useCard({
       title: 'Viewless UI',
@@ -159,7 +167,7 @@ const ProxyCard = defineViewlessComponent({
         return {
           component: UseViewlessForm(),
           props: {
-            title: props.ui === 'naive-ui' ? 'NaiveUI 示例表单' : 'Element Plus 示例表单',
+            title: titleMap[props.ui] || 'Viewless UI 示例表单',
           },
         };
       },
@@ -190,6 +198,16 @@ export const viewlessTabs = defineViewlessComponent({
           defaultSlot: () => {
             return useViewlessComponent(ProxyCard, {
               ui: 'element-plus',
+            });
+          },
+        }),
+        useViewlessComponent(NTabPane, {
+          name: 'ant-design',
+          tab: 'Ant Design',
+          $key: 'ant-design',
+          defaultSlot: () => {
+            return useViewlessComponent(ProxyCard, {
+              ui: 'ant-design',
             });
           },
         }),
