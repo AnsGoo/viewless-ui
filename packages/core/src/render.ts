@@ -71,7 +71,7 @@ export type ViewlessComponent<O extends ComponentOption = ComponentOption> =
   | (() => UiComponent<O>);
 
 // 辅助函数：将任何值转换为 VNode 数组
-function toVNodes(value: any, context: Context): VNode[] {
+export function toVNodes(value: any, context: Context): VNode[] {
   // 处理 null/undefined - 返回空数组
   if (value === null || value === undefined) {
     return [];

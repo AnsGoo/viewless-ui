@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { h, ref, shallowRef } from 'vue';
-import { renderComponent, type UiComponent } from '../packages/core/src/render';
+import { h, ref, shallowRef, isVNode } from 'vue';
+import { renderComponent, toVNodes, type UiComponent, type Context } from '../packages/core/src/render';
 
 describe('renderComponent 函数测试', () => {
   it('应该正确渲染基本组件', () => {
@@ -342,7 +342,142 @@ describe('renderComponent 函数测试', () => {
 
     const vnode = renderComponent(option, context);
 
-    expect(vnode.props).toEqual(expect.objectContaining({ onChange: option.events.change }));
+    expect(vnode.props).toEqual(
+      expect.objectContaining({ onChange: option.events.change }),
+    );
     expect(vnode.props).not.toHaveProperty('onClick');
+  });
+});
+
+describe('toVNodes 函数测试', () => {
+  const context: Context = {};
+
+  it('应该处理 null 和 undefined 值', () => {
+    expect(toVNodes(null, context)).toEqual([]);
+    expect(toVNodes(undefined, context)).toEqual([]);
+  });
+
+  it('应该处理字符串和数字', () => {
+    const stringResult = toVNodes('hello', context);
+    const numberResult = toVNodes(123, context);
+    const negativeNumberResult = toVNodes(-456, context);
+    const zeroResult = toVNodes(0, context);
+
+    expect(stringResult).toHaveLength(1);
+    expect(stringResult[0]).toBe('hello');
+
+    expect(numberResult).toHaveLength(1);
+    expect(numberResult[0]).toBe('123');
+
+    expect(negativeNumberResult).toHaveLength(1);
+    expect(negativeNumberResult[0]).toBe('-456');
+
+    expect(zeroResult).toHaveLength(1);
+    expect(zeroResult[0]).toBe('0');
+  });
+
+  it('应该处理数组', () => {
+    const result = toVNodes(['hello', 123, null, undefined], context);
+    expect(result).toEqual(['hello', '123']);
+  });
+
+  it('应该处理嵌套数组', () => {
+    const result = toVNodes(['hello', [123, ['world', 456]]], context);
+    expect(result).toEqual(['hello', '123', 'world', '456']);
+  });
+
+  it('应该处理组件配置对象', () => {
+    const mockComponent = { render: () => h('div', 'Test Component') };
+    const componentConfig = {
+      component: mockComponent,
+      props: { id: 'test-component' },
+      events: {},
+      slots: {},
+    };
+
+    const result = toVNodes(componentConfig, context);
+
+    expect(result).toHaveLength(1);
+    expect(isVNode(result[0])).toBe(true);
+    expect(result[0].type).toBe(mockComponent);
+  });
+
+  it('应该处理带有render方法的对象', () => {
+    const renderableObject = { render: () => h('div', 'Renderable Object') };
+    const result = toVNodes(renderableObject, context);
+
+    expect(result).toHaveLength(1);
+    expect(isVNode(result[0])).toBe(true);
+    expect(result[0].type).toBe(renderableObject);
+  });
+
+  it('应该处理VNode', () => {
+    const vnode = h('div', 'Test VNode');
+    const result = toVNodes(vnode, context);
+
+    expect(result).toHaveLength(1);
+    expect(isVNode(result[0])).toBe(true);
+    expect(result[0]).toBe(vnode);
+  });
+
+  it('应该处理返回值的函数', () => {
+    const stringFn = () => 'hello from function';
+    const numberFn = () => 789;
+    const nullFn = () => null;
+
+    expect(toVNodes(stringFn, context)).toEqual(['hello from function']);
+    expect(toVNodes(numberFn, context)).toEqual(['789']);
+    expect(toVNodes(nullFn, context)).toEqual([]);
+  });
+
+  it('应该处理返回组件配置的函数', () => {
+    const mockComponent = { render: () => h('div', 'Test Component') };
+    const componentConfigFn = () => ({
+      component: mockComponent,
+      props: { id: 'test-component' },
+      events: {},
+      slots: {},
+    });
+
+    const result = toVNodes(componentConfigFn, context);
+
+    expect(result).toHaveLength(1);
+    expect(isVNode(result[0])).toBe(true);
+    expect(result[0].type).toBe(mockComponent);
+  });
+
+  it('应该处理其他类型', () => {
+    const booleanResult = toVNodes(true, context);
+    const falseResult = toVNodes(false, context);
+    const objectResult = toVNodes({ key: 'value' }, context);
+
+    expect(booleanResult).toEqual(['true']);
+    expect(falseResult).toEqual(['false']);
+    expect(objectResult).toEqual(['[object Object]']);
+  });
+
+  it('应该处理混合类型的数组', () => {
+    const mockComponent = { render: () => h('div', 'Test Component') };
+    const vnode = h('span', 'Test VNode');
+
+    const result = toVNodes([
+      'string',
+      123,
+      null,
+      { component: mockComponent, props: {}, events: {}, slots: {} },
+      vnode,
+      () => 'function result',
+      [456, 'nested string'],
+    ], context);
+
+    expect(result).toHaveLength(7);
+    expect(result[0]).toBe('string');
+    expect(result[1]).toBe('123');
+    expect(isVNode(result[2])).toBe(true);
+    expect(result[2].type).toBe(mockComponent);
+    expect(result[3]).toBe(vnode);
+    expect(result[4]).toBe('function result');
+    expect(result[5]).toBe('456');
+    expect(result[6]).toBe('nested string');
   });
 });
