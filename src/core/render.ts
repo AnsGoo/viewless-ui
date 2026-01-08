@@ -170,7 +170,7 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
       isVisible = Boolean(vshow.value);
     } else if (typeof vshow === 'boolean') {
       // 静态布尔值
-      isVisible = vshow;
+      isVisible = !!vshow;
     }
 
     if (!isVisible) {
@@ -196,7 +196,7 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   let opt = option;
   const { adaptor, refMap } = context;
   if (adaptor) {
-    if (opt.ref && refMap) {
+    if (opt.ref && refMap && !refMap.has(opt.ref)) {
       refMap.set(opt.ref, opt.component);
     }
     opt = adaptor(opt);

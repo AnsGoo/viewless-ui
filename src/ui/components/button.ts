@@ -1,6 +1,6 @@
 import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@/core/render';
 import type { FlatOption } from '@/core/type';
-import { transformFlatOption } from '@/core/transform';
+import { transformFlatOption, useViewlessComponent } from '@/core/transform';
 
 export interface ButtonOption extends BaseAttrs {
   props: ButtonProps;
@@ -18,12 +18,5 @@ export interface ButtonSlots extends Slots {
 }
 
 export function useButton(option: FlatOption<ButtonOption>) {
-  const { props, events, slots, ...kwargs } = transformFlatOption(option);
-  return {
-    component: 'Button',
-    props,
-    events,
-    slots,
-    ...kwargs,
-  };
+  return useViewlessComponent('Button', option);
 }

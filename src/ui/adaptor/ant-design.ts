@@ -11,8 +11,8 @@ import type { ButtonOption } from '../components/button';
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(Form);
   transformProp(opt.props, 'modelValue', 'model');
-  transformProp(opt.props, 'labelPosition', 'layout', (value) => {
-    if (value === 'top') {
+  transformProp(opt.props, 'labelPosition', 'layout', (position) => {
+    if (position.value === 'top') {
       return 'vertical';
     }
     return 'horizontal';

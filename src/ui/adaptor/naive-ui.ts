@@ -12,25 +12,6 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
   transformProp(opt.props, 'modelValue', 'model');
   transformProp(opt.props, 'labelPosition', 'labelPlacement');
-  const formITems = opt.slots?.default || [];
-  const rules = opt.props?.rules || {};
-  formITems.forEach((item) => {
-    const prop = item.props.prop || '';
-    if (!prop || item.props.required === undefined) {
-      return;
-    }
-    if (rules[prop]) {
-      if (rules[prop].required === undefined) {
-        rules[prop]['required'] = toRef(item.props!, 'required');
-      }
-    } else {
-      rules[prop] = {
-        required: toRef(item.props!, 'required'),
-        trigger: ['blur', 'change'],
-      };
-    }
-  });
-  opt.props!.rules = rules;
   return opt as UiComponent<FormOption>;
 }
 
@@ -57,6 +38,16 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
 function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
   opt.component = shallowRef(NFormItem);
   transformProp(opt.props, 'prop', 'path');
+  transformProp(opt.props, 'required', '', (required) => {
+    if (required.value === undefined) {
+      return;
+    }
+    if (opt.props.rule) {
+      opt.props.rule.required = required;
+    } else {
+      opt.props.rule = { required: required };
+    }
+  });
   return opt as UiComponent<FormItemOption>;
 }
 
