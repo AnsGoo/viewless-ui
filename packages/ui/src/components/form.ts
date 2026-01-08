@@ -1,6 +1,6 @@
-import type { BaseAttrs, Events, Props, Slots, ViewlessComponent } from '@/core/render';
-import type { FlatOption } from '@/core/type';
-import { transformFlatOption, useViewlessComponent } from '@/core/transform';
+import type { BaseAttrs, Events, Props, Slots, ViewlessComponent } from '@viewless/core/render';
+import type { FlatOption } from '@viewless/core/type';
+import { transformFlatOption, useViewlessComponent } from '@viewless/core/transform';
 
 export interface FormProps extends Props {
   modelValue?: Record<string, any>;

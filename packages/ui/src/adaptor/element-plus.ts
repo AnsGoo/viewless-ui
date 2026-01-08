@@ -1,11 +1,11 @@
 import { shallowRef, type Component, type TemplateRef } from 'vue';
 import { ElButton, ElCard, ElForm, ElFormItem, ElInput } from 'element-plus';
-import type { UiComponent } from '@/core/render';
-import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
-import type { CardOption } from '@/ui/components/card';
-import type { InputOption } from '@/ui/components/input';
-import { transformProp } from '@/ui/components/utils';
-import type { Adaptor, AdaptorFn } from '@/core/provide';
+import type { UiComponent } from '@viewless/core/render';
+import type { FormOption, FormItemOption, FormHandler } from '../components/form';
+import type { CardOption } from '../components/card';
+import type { InputOption } from '../components/input';
+import { transformProp } from '../components/utils';
+import type { Adaptor, AdaptorFn } from '@viewless/core/provide';
 import type { ButtonOption } from '../components/button';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {

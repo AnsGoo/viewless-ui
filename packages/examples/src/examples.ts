@@ -1,11 +1,11 @@
-import { defineViewlessComponent } from '@/core/render';
+import { defineViewlessComponent } from '@viewless/core/render';
 import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from 'naive-ui';
 import { UseViewlessForm } from './form';
-import { useAdaptor as useNaiveUiAdaptor } from '@/ui/adaptor/naive-ui.ts';
-import { useProvideAdaptor } from '@/core/provide.ts';
-import { useAdaptor as useElementPlusAdaptor } from '@/ui/adaptor/element-plus.ts';
-import { useViewlessComponent } from '@/core/transform';
-import { useAdaptor as useAntDesignAdaptor } from '@/ui/adaptor/ant-design.ts';
+import { useAdaptor as useNaiveUiAdaptor } from '@viewless/ui/adaptor/naive-ui';
+import { useProvideAdaptor } from '@viewless/core/provide';
+import { useAdaptor as useElementPlusAdaptor } from '@viewless/ui/adaptor/element-plus';
+import { useViewlessComponent } from '@viewless/core/transform';
+import { useAdaptor as useAntDesignAdaptor } from '@viewless/ui/adaptor/ant-design';
 import { reactive } from 'vue';
 
 // 示例1：简单的div组件

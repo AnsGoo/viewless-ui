@@ -1,17 +1,20 @@
 {
-  "name": "viewless-ui",
+  "name": "viewless",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx run lint && vite build",
+    "build": "pnpm lint && vite build",
     "preview": "vite preview",
     "lint": "npx oxlint --fix",
     "fmt": "npx oxfmt"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "@viewless/core": "workspace:*",
+    "@viewless/examples": "workspace:*",
+    "@viewless/ui": "workspace:*",
     "ant-design-vue": "4.x",
     "element-plus": "^2.13.0",
     "naive-ui": "^2.43.2",

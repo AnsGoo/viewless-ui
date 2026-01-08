@@ -1,6 +1,6 @@
 {
-  "name": "viewless-ui",
-  "short_name": "viewless-ui",
+  "name": "viewless",
+  "short_name": "viewless",
   "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }],
   "theme_color": "#6366F1",
   "background_color": "#6366F1",

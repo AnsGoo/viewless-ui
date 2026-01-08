@@ -1,0 +1,20 @@
+{
+  "name": "@viewless/examples",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./examples": "./src/examples.ts"
+  },
+  "dependencies": {
+    "@viewless/core": "workspace:*",
+    "@viewless/ui": "workspace:*",
+    "vue": "^3.5.26"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.4",
+    "typescript": "~5.9.3"
+  }
+}

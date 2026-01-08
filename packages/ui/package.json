@@ -1,0 +1,26 @@
+{
+  "name": "@viewless/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./adaptor/ant-design": "./src/adaptor/ant-design.ts",
+    "./adaptor/element-plus": "./src/adaptor/element-plus.ts",
+    "./adaptor/naive-ui": "./src/adaptor/naive-ui.ts",
+    "./components/button": "./src/components/button.ts",
+    "./components/card": "./src/components/card.ts",
+    "./components/form": "./src/components/form.ts",
+    "./components/input": "./src/components/input.ts",
+    "./components/utils": "./src/components/utils.ts"
+  },
+  "dependencies": {
+    "@viewless/core": "workspace:*",
+    "vue": "^3.5.26"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.4",
+    "typescript": "~5.9.3"
+  }
+}

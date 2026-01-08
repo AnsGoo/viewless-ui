@@ -1,6 +1,6 @@
-import type { Props, Events, Slots, ViewlessComponent, BaseAttrs } from '@/core/render';
-import type { FlatOption } from '@/core/type';
-import { useViewlessComponent } from '@/core/transform';
+import type { Props, Events, Slots, ViewlessComponent, BaseAttrs } from '@viewless/core/render';
+import type { FlatOption } from '@viewless/core/type';
+import { useViewlessComponent } from '@viewless/core/transform';
 
 export interface CardProps extends Props {
   title?: string;
