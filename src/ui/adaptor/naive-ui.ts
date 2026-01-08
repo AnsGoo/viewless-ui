@@ -28,6 +28,9 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
         return false;
       }
     },
+    clearValidate: () => {
+      (refValue as Record<string, any>)['restoreValidation']();
+    },
   };
   if (formHandlers[prop]) {
     return formHandlers[prop];
