@@ -23,10 +23,8 @@ export function transformProps<T extends object = Reactive<any>>(
   for (const key in props) {
     const to = props[key];
     if (to && Object.prototype.hasOwnProperty.call(props, key)) {
-      const value = transform?.(warpValues[key]!, key, warpValues) || warpValues[key]!
-      to
-        ? (obj[to as keyof T] = value)
-        : null;
+      const value = transform?.(warpValues[key]!, key, warpValues) || warpValues[key]!;
+      to ? (obj[to as keyof T] = value) : null;
     }
   }
 }

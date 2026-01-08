@@ -1,4 +1,5 @@
-import { shallowRef, toRef, type Component, type TemplateRef } from 'vue';
+import { shallowRef } from 'vue';
+import type { Component, TemplateRef } from 'vue';
 import { NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
 import type { UiComponent } from '@/core/render';
 import type { FormOption, FormItemOption, FormHandler } from '@/ui/components/form';
@@ -63,7 +64,6 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
   opt.component = shallowRef(NCard);
-  console.log(opt);
   return opt as UiComponent<CardOption>;
 }
 

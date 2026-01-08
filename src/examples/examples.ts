@@ -3,7 +3,6 @@ import { NCard, NTabs, NTabPane, NCollapse, NCollapseItem, NButton } from 'naive
 import { UseViewlessForm } from './form';
 import { useAdaptor as useNaiveUiAdaptor } from '@/ui/adaptor/naive-ui.ts';
 import { useProvideAdaptor } from '@/core/provide.ts';
-import { useCard } from '@/ui';
 import { useAdaptor as useElementPlusAdaptor } from '@/ui/adaptor/element-plus.ts';
 import { useViewlessComponent } from '@/core/transform';
 import { useAdaptor as useAntDesignAdaptor } from '@/ui/adaptor/ant-design.ts';
@@ -161,14 +160,14 @@ const ProxyCard = defineViewlessComponent({
       'ant-design': 'Ant Design 示例表单',
     });
 
-    const t =  useViewlessComponent('div',{
+    const t = useViewlessComponent('div', {
       defaultSlot: () =>
         useViewlessComponent(UseViewlessForm(), {
           title: titleMap[props.ui] || 'Viewless UI 示例表单',
         }),
     });
     console.log(t);
-    return t
+    return t;
   },
 });
 
