@@ -20,6 +20,6 @@ export interface CardOption extends BaseAttrs {
   events: CardEvents;
   slots: CardSlots;
 }
-export function useCard(options: FlatOption<CardOption>) {
-  return useViewlessComponent('Card', options);
+export function useCard(option: FlatOption<CardOption>) {
+  return useViewlessComponent('Card', option);
 }

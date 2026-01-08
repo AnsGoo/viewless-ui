@@ -7,6 +7,7 @@ import { useCard } from '@/ui';
 import { useAdaptor as useElementPlusAdaptor } from '@/ui/adaptor/element-plus.ts';
 import { useViewlessComponent } from '@/core/transform';
 import { useAdaptor as useAntDesignAdaptor } from '@/ui/adaptor/ant-design.ts';
+import { reactive } from 'vue';
 
 // 示例1：简单的div组件
 export const SimpleDiv = defineViewlessComponent({
@@ -154,21 +155,20 @@ const ProxyCard = defineViewlessComponent({
     } else if (props.ui === 'ant-design') {
       useProvideAdaptor(useAntDesignAdaptor);
     }
-    const titleMap: Record<string, string> = {
+    const titleMap: Record<string, string> = reactive({
       'naive-ui': 'NaiveUI 示例表单',
       'element-plus': 'Element Plus 示例表单',
       'ant-design': 'Ant Design 示例表单',
-    };
+    });
 
-    return useCard({
-      title: 'Viewless UI',
+    const t =  useViewlessComponent('div',{
       defaultSlot: () =>
         useViewlessComponent(UseViewlessForm(), {
-          props: {
-            title: titleMap[props.ui] || 'Viewless UI 示例表单',
-          },
+          title: titleMap[props.ui] || 'Viewless UI 示例表单',
         }),
     });
+    console.log(t);
+    return t
   },
 });
 

@@ -63,6 +63,7 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
   opt.component = shallowRef(NCard);
+  console.log(opt);
   return opt as UiComponent<CardOption>;
 }
 
