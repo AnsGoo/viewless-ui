@@ -178,8 +178,8 @@ function useViewlessComponent(options: UiComponent): UiComponent;
 
 | 属性        | 类型                                    | 说明                                          |
 | ----------- | --------------------------------------- | --------------------------------------------- |
-| `component` | `string  Component`                   | 组件本身，可以是 HTML 标签字符串或 Vue 组件   |
-| `key`       | `string  number  symbol`            | 用于列表渲染时的唯一标识                      |
+| `component` | `string  Component`                     | 组件本身，可以是 HTML 标签字符串或 Vue 组件   |
+| `key`       | `string  number  symbol`                | 用于列表渲染时的唯一标识                      |
 | `props`     | `Record<string, any>`                   | 组件的属性配置                                |
 | `events`    | `Record<string, (...args: any) => any>` | 事件处理函数，会自动转换为 on 开头格式        |
 | `slots`     | `Record<string, SlotContent>`           | 插槽内容配置                                  |
