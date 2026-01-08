@@ -8,7 +8,10 @@
     "build": "pnpm lint && vite build",
     "preview": "vite preview",
     "lint": "npx oxlint --fix",
-    "fmt": "npx oxfmt"
+    "fmt": "npx oxfmt",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -22,13 +25,17 @@
     "vue": "^3.5.26"
   },
   "devDependencies": {
+    "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.4",
     "@vitejs/plugin-vue": "^6.0.3",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
+    "jsdom": "^27.4.0",
     "oxfmt": "^0.19.0",
     "oxlint": "^1.36.0",
     "typescript": "~5.9.3",
     "vite": "8.0.0-beta.5",
+    "vitest": "^4.0.16",
     "vue-tsc": "^3.2.1"
   },
   "lint-staged": {

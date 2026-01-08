@@ -12,4 +12,11 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    plugins: [vue()],
+    include: ['**/*.test.ts', '**/*.spec.ts'],
+    exclude: ['node_modules', 'dist'],
+  },
 });

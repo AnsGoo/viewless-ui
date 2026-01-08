@@ -1,4 +1,4 @@
-import type { BaseAttrs, ComponentOption, Events, Props, Slots } from '@/core/render';
+import type { BaseAttrs, ComponentOption, Events, Props, Slots } from './render';
 
 /**
  * 辅助类型：将字符串首字母大写
