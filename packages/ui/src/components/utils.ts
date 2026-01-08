@@ -10,7 +10,9 @@ export function transformProp(
   if (obj && obj[from]) {
     const warpValue = toRef(obj, from);
     const value = transform?.(warpValue, obj) || warpValue;
-    to ? (obj[to] = value) : null;
+    if (to) {
+      obj[to] = value;
+    }
   }
 }
 
@@ -24,7 +26,9 @@ export function transformProps<T extends object = Reactive<any>>(
     const to = props[key];
     if (to && Object.prototype.hasOwnProperty.call(props, key)) {
       const value = transform?.(warpValues[key]!, key, warpValues) || warpValues[key]!;
-      to ? (obj[to as keyof T] = value) : null;
+      if (to) {
+        obj[to as keyof T] = value;
+      }
     }
   }
 }

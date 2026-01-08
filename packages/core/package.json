@@ -5,12 +5,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./const": "./src/const.ts",
-    "./provide": "./src/provide.ts",
-    "./render": "./src/render.ts",
-    "./transform": "./src/transform.ts",
-    "./type": "./src/type.ts"
+    ".": "./src/index.ts"
   },
   "dependencies": {
     "vue": "^3.5.26"

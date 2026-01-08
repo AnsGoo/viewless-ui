@@ -1,11 +1,8 @@
-import { defineViewlessComponent } from '@viewless/core/render';
+import { defineViewlessComponent } from '@viewless/core';
 import { NTabs, NTabPane } from 'naive-ui';
 import { UseViewlessForm } from './form';
-import { useAdaptor as useNaiveUiAdaptor } from '@viewless/ui/adaptor/naive-ui';
-import { useProvideAdaptor } from '@viewless/core/provide';
-import { useAdaptor as useElementPlusAdaptor } from '@viewless/ui/adaptor/element-plus';
-import { useViewlessComponent } from '@viewless/core/transform';
-import { useAdaptor as useAntDesignAdaptor } from '@viewless/ui/adaptor/ant-design';
+import { useProvideAdaptor, useViewlessComponent } from '@viewless/core';
+import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless/ui';
 import { reactive } from 'vue';
 
 const ProxyCard = defineViewlessComponent({

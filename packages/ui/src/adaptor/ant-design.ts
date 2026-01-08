@@ -1,11 +1,11 @@
 import { shallowRef, type Component, type TemplateRef } from 'vue';
 import { Button, Card, Form, FormItem, Input } from 'ant-design-vue';
-import type { UiComponent } from '@viewless/core/render';
+import type { UiComponent } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
 import { transformEvent, transformProp } from '../components/utils';
-import type { Adaptor, AdaptorFn } from '@viewless/core/provide';
+import type { Adaptor, AdaptorFn } from '@viewless/core';
 import type { ButtonOption } from '../components/button';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
@@ -28,7 +28,8 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
     validate: async () => {
       try {
         await (refValue as Record<string, any>)['validate']();
-      } catch (_) {
+      } catch (_: any) {
+        // eslint-disable-line @typescript-eslint/no-unused-vars
         return false;
       }
       return true;

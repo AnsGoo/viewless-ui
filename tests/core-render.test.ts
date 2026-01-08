@@ -1,6 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { h, ref, shallowRef, isVNode } from 'vue';
-import { renderComponent, toVNodes, type UiComponent, type Context } from '../packages/core/src/render';
+import {
+  renderComponent,
+  toVNodes,
+  type UiComponent,
+  type Context,
+} from '../packages/core/src/render';
 
 describe('renderComponent 函数测试', () => {
   it('应该正确渲染基本组件', () => {
@@ -342,9 +347,7 @@ describe('renderComponent 函数测试', () => {
 
     const vnode = renderComponent(option, context);
 
-    expect(vnode.props).toEqual(
-      expect.objectContaining({ onChange: option.events.change }),
-    );
+    expect(vnode.props).toEqual(expect.objectContaining({ onChange: option.events.change }));
     expect(vnode.props).not.toHaveProperty('onClick');
   });
 });
@@ -460,15 +463,18 @@ describe('toVNodes 函数测试', () => {
     const mockComponent = { render: () => h('div', 'Test Component') };
     const vnode = h('span', 'Test VNode');
 
-    const result = toVNodes([
-      'string',
-      123,
-      null,
-      { component: mockComponent, props: {}, events: {}, slots: {} },
-      vnode,
-      () => 'function result',
-      [456, 'nested string'],
-    ], context);
+    const result = toVNodes(
+      [
+        'string',
+        123,
+        null,
+        { component: mockComponent, props: {}, events: {}, slots: {} },
+        vnode,
+        () => 'function result',
+        [456, 'nested string'],
+      ],
+      context,
+    );
 
     expect(result).toHaveLength(7);
     expect(result[0]).toBe('string');

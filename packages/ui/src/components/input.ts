@@ -1,6 +1,12 @@
-import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@viewless/core/render';
-import type { FlatOption } from '@viewless/core/type';
-import { transformFlatOption, useViewlessComponent } from '@viewless/core/transform';
+import type {
+  Events,
+  Props,
+  Slots,
+  BaseAttrs,
+  ViewlessComponent,
+  FlatOption,
+} from '@viewless/core';
+import { useViewlessComponent } from '@viewless/core';
 
 export interface InputOption extends BaseAttrs {
   props: InputProps;

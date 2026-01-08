@@ -5,15 +5,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./adaptor/ant-design": "./src/adaptor/ant-design.ts",
-    "./adaptor/element-plus": "./src/adaptor/element-plus.ts",
-    "./adaptor/naive-ui": "./src/adaptor/naive-ui.ts",
-    "./components/button": "./src/components/button.ts",
-    "./components/card": "./src/components/card.ts",
-    "./components/form": "./src/components/form.ts",
-    "./components/input": "./src/components/input.ts",
-    "./components/utils": "./src/components/utils.ts"
+    ".": "./src/index.ts"
   },
   "dependencies": {
     "@viewless/core": "workspace:*",

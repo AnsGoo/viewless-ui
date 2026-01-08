@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { viewlessTabs } from '@viewless/examples/examples'
+import { viewlessTabs } from '@viewless/examples'
 </script>
 
 <style scoped>
