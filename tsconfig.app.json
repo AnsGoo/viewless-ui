@@ -5,6 +5,7 @@
     "types": ["vite/client", "naive-ui/volar", "element-plus/global"],
     /* Linting */
     "strict": true,
+    "isolatedDeclarations": true,
     "declarationMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,

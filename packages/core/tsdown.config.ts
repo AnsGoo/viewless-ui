@@ -6,6 +6,10 @@ export default defineConfig({
   dts: {
     sourcemap: true,
   },
+  platform: 'browser',
   external: ['vue'],
   outDir: 'dist',
+  exports:{
+    devExports:"development"
+  }
 });
