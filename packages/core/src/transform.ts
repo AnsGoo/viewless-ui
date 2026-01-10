@@ -35,7 +35,7 @@ export function transformFlatOption<T extends ComponentOption>(flatOption: FlatO
   } as T;
 }
 
-export function useViewlessComponent<T extends ComponentOption>(
+export function useViewlessComponentOption<T extends ComponentOption>(
   component: string | Component,
   componentOption: FlatOption<T>,
 ): UiComponent<T> {

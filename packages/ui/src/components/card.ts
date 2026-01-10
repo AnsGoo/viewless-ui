@@ -6,7 +6,7 @@ import type {
   BaseAttrs,
   FlatOption,
 } from '@viewless/core';
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 
 export interface CardProps extends Props {
   title?: string;
@@ -27,5 +27,5 @@ export interface CardOption extends BaseAttrs {
   slots: CardSlots;
 }
 export function useCard(option: FlatOption<CardOption>) {
-  return useViewlessComponent('Card', option);
+  return useViewlessComponentOption('Card', option);
 }

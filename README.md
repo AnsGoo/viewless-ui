@@ -85,11 +85,11 @@ pnpm add @viewless/core
 ### 基本用法
 
 ```typescript
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 import { NButton } from 'naive-ui';
 
 // 定义一个简单的按钮组件
-const MyButton = useViewlessComponent({
+const MyButton = useViewlessComponentOption({
   component: NButton,
   props: {
     type: 'primary',
@@ -155,7 +155,7 @@ import { FormExample } from '@viewless/examples/form';
 
 ## API 参考
 
-### useViewlessComponent
+### useViewlessComponentOption
 
 创建一个无模板组件配置。
 
@@ -171,7 +171,7 @@ interface UiComponent {
 
 type ViewlessComponent = UiComponent | UiComponent[];
 
-function useViewlessComponent(options: UiComponent): UiComponent;
+function useViewlessComponentOption(options: UiComponent): UiComponent;
 ```
 
 ### UiComponent 属性说明
@@ -281,7 +281,7 @@ ViewlessUI 可以与任何 Vue 3 UI 库配合使用。以下是集成示例：
 ### Naive UI
 
 ```typescript
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 import { NInput, NSelect, NDatePicker } from 'naive-ui';
 import { naiveUiAdaptor } from '@viewless/ui/adaptor/naive-ui';
 import { provide } from 'vue';
@@ -291,7 +291,7 @@ import { ADAPTOR_KEY } from '@viewless/core/const';
 provide(ADAPTOR_KEY, naiveUiAdaptor);
 
 // 创建组件
-const FormInput = useViewlessComponent({
+const FormInput = useViewlessComponentOption({
   component: NInput,
   props: {
     placeholder: '请输入',
@@ -302,7 +302,7 @@ const FormInput = useViewlessComponent({
 ### Element Plus
 
 ```typescript
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 import { ElInput, ElSelect, ElDatePicker } from 'element-plus';
 import { elementPlusAdaptor } from '@viewless/ui/adaptor/element-plus';
 import { provide } from 'vue';
@@ -312,7 +312,7 @@ import { ADAPTOR_KEY } from '@viewless/core/const';
 provide(ADAPTOR_KEY, elementPlusAdaptor);
 
 // 创建组件
-const FormInput = useViewlessComponent({
+const FormInput = useViewlessComponentOption({
   component: ElInput,
   props: {
     placeholder: '请输入',
@@ -326,10 +326,10 @@ const FormInput = useViewlessComponent({
 
 ```typescript
 import { shallowRef } from 'vue';
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 import { NCard } from 'naive-ui';
 
-const DynamicCard = useViewlessComponent({
+const DynamicCard = useViewlessComponentOption({
   component: shallowRef(NCard),
   props: {
     title: '动态组件',
@@ -341,7 +341,7 @@ const DynamicCard = useViewlessComponent({
 
 ```typescript
 import { reactive, computed } from 'vue';
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 
 const state = reactive({
   count: 0,
@@ -352,7 +352,7 @@ const toggleVisible = () => {
   state.visible = !state.visible;
 };
 
-const ResponsiveComponent = useViewlessComponent({
+const ResponsiveComponent = useViewlessComponentOption({
   component: 'div',
   props: computed(() => ({
     style: {
@@ -371,9 +371,9 @@ const ResponsiveComponent = useViewlessComponent({
 ### 组件数组
 
 ```typescript
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 
-const MultipleComponents = useViewlessComponent([
+const MultipleComponents = useViewlessComponentOption([
   {
     component: 'div',
     key: '1',

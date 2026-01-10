@@ -6,7 +6,7 @@ import type {
   ViewlessComponent,
   FlatOption,
 } from '@viewless/core';
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 
 export interface FormProps extends Props {
   modelValue?: Record<string, any>;
@@ -29,7 +29,7 @@ export interface FormOption extends BaseAttrs {
 }
 
 export function useForm(options: FlatOption<FormOption>) {
-  return useViewlessComponent('Form', options);
+  return useViewlessComponentOption('Form', options);
 }
 
 export interface FormItemProps extends Props {
@@ -54,10 +54,10 @@ export interface FormItemSlots extends Slots {
 }
 
 export function useFormItem(options: FlatOption<FormItemOption>) {
-  return useViewlessComponent('FormItem', options);
+  return useViewlessComponentOption('FormItem', options);
 }
 
-export interface FormHandler {
+export interface FormHandler extends Record<string, any> {
   validate?: () => Promise<boolean>;
   clearValidate?: () => void;
 }

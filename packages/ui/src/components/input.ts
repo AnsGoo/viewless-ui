@@ -6,7 +6,7 @@ import type {
   ViewlessComponent,
   FlatOption,
 } from '@viewless/core';
-import { useViewlessComponent } from '@viewless/core';
+import { useViewlessComponentOption } from '@viewless/core';
 
 export interface InputOption extends BaseAttrs {
   props: InputProps;
@@ -39,5 +39,5 @@ export interface InputSlots extends Slots {
 }
 
 export function useInput(option: FlatOption<InputOption>) {
-  return useViewlessComponent('Input', option);
+  return useViewlessComponentOption('Input', option);
 }

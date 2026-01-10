@@ -6,7 +6,7 @@ export type Adaptor = (opt: UiComponent) => UiComponent;
 export type AdaptorFn = () => {
   adaptorMap: Record<string, Adaptor>;
   adaptor: Adaptor;
-  handleAdaptor: HandleAdaptor;
+  handleAdaptor?: HandleAdaptor;
 };
 
 export function useProvideAdaptor(useAdaptor: AdaptorFn) {

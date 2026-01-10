@@ -1,7 +1,7 @@
 import { defineViewlessComponent } from '@viewless/core';
 import { NTabs, NTabPane } from 'naive-ui';
 import { UseViewlessForm } from './form';
-import { useProvideAdaptor, useViewlessComponent } from '@viewless/core';
+import { useProvideAdaptor, useViewlessComponentOption } from '@viewless/core';
 import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless/ui';
 import { reactive } from 'vue';
 
@@ -26,49 +26,46 @@ const ProxyCard = defineViewlessComponent({
       'ant-design': 'Ant Design 示例表单',
     });
 
-    const t = useViewlessComponent('div', {
-      defaultSlot: () =>
-        useViewlessComponent(UseViewlessForm(), {
-          title: titleMap[props.ui] || 'Viewless UI 示例表单',
-        }),
+    return useViewlessComponentOption('div', {
+      defaultSlot: useViewlessComponentOption(UseViewlessForm(), {
+        title: titleMap[props.ui] || 'Viewless UI 示例表单',
+      }),
     });
-    console.log(t);
-    return t;
   },
 });
 
 export const viewlessTabs = defineViewlessComponent({
   setup: (_props, _context) => {
-    return useViewlessComponent(NTabs, {
+    return useViewlessComponentOption(NTabs, {
       type: 'line',
       defaultSlot: [
-        useViewlessComponent(NTabPane, {
+        useViewlessComponentOption(NTabPane, {
           name: 'naive-ui',
           tab: 'Naive UI',
           $key: 'naive-ui',
           defaultSlot: () => {
-            return useViewlessComponent(ProxyCard, {
+            return useViewlessComponentOption(ProxyCard, {
               component: ProxyCard,
               ui: 'naive-ui',
             });
           },
         }),
-        useViewlessComponent(NTabPane, {
+        useViewlessComponentOption(NTabPane, {
           name: 'element-plus',
           tab: 'Element Plus',
           $key: 'element-plus',
           defaultSlot: () => {
-            return useViewlessComponent(ProxyCard, {
+            return useViewlessComponentOption(ProxyCard, {
               ui: 'element-plus',
             });
           },
         }),
-        useViewlessComponent(NTabPane, {
+        useViewlessComponentOption(NTabPane, {
           name: 'ant-design',
           tab: 'Ant Design',
           $key: 'ant-design',
           defaultSlot: () => {
-            return useViewlessComponent(ProxyCard, {
+            return useViewlessComponentOption(ProxyCard, {
               ui: 'ant-design',
             });
           },
