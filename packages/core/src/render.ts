@@ -265,7 +265,7 @@ export function useViewlessTemplateRef<T = unknown, Keys extends string = string
           if (!target.value) {
             return target.value;
           }
-          return new Proxy(target.value!, {
+          return new Proxy(target.value, {
             get(obj: TemplateRef['value'], prop: string) {
               const { context } = (vm || {}) as any;
               const { refMap, handleAdaptor }: Context = context || {};
