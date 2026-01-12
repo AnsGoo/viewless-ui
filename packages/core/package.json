@@ -9,6 +9,12 @@
       "default": "./dist/index.js"
     }
   },
+  "publishConfig": {
+    "exports": {
+      ".": "./dist/index.js",
+      "./package.json": "./package.json"
+    }
+  },
   "scripts": {
     "build": "tsdown"
   },
@@ -18,11 +24,5 @@
   "devDependencies": {
     "@types/node": "^24.10.4",
     "typescript": "~5.9.3"
-  },
-  "publishConfig": {
-    "exports": {
-      ".": "./dist/index.js",
-      "./package.json": "./package.json"
-    }
   }
 }

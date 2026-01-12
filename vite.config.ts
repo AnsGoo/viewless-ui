@@ -18,5 +18,11 @@ export default defineConfig({
     plugins: [vue()],
     include: ['**/*.test.ts', '**/*.spec.ts'],
     exclude: ['node_modules', 'dist'],
+    reporters: ['default'],
+    coverage: {
+      reporter: ['text', 'html'],
+      enabled: true,
+    },
+    pool: 'threads',
   },
 });
