@@ -19,6 +19,8 @@ export interface CardSlots extends Slots {
   default?: ViewlessComponent;
   title?: ViewlessComponent;
   footer?: ViewlessComponent;
+  actions?: ViewlessComponent;
+
 }
 
 export interface CardOption extends BaseAttrs {
