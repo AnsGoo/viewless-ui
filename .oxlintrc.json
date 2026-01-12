@@ -139,5 +139,5 @@
     "builtin": true
   },
   "globals": {},
-  "ignorePatterns": ["node_modules/**", "dist/**", ".vite/**"]
+  "ignorePatterns": ["node_modules/**", "dist/**", ".vite/**", "html/**"]
 }

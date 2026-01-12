@@ -1,5 +1,5 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["node_modules/**", "dist/**", ".vite/**"],
+  "ignorePatterns": ["node_modules/**", "dist/**", ".vite/**", "html/**"],
   "singleQuote": true
 }
