@@ -1,4 +1,4 @@
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, toRef, watch } from 'vue';
 import { defineViewlessComponent, useViewlessTemplateRef } from '@viewless/core';
 import { useCard, useFormItem, useInput, useForm, useButton } from '@viewless/ui';
 import type { FormHandler } from '@viewless/ui';
@@ -18,11 +18,9 @@ export function UseViewlessForm() {
       },
     },
     setup(props, context) {
-      const username = ref('123');
-      const password = ref('');
       const model: FormModel = reactive({
-        username,
-        password,
+        username: '123',
+        password: '',
       });
 
       const formRef = useViewlessTemplateRef('formRef');
@@ -80,7 +78,7 @@ export function UseViewlessForm() {
               required: true,
               $key: 'username',
               defaultSlot: useInput({
-                modelValue: username,
+                modelValue: toRef(model, 'username'),
                 placeholder: '请输入用户名',
                 'onUpdate:modelValue': (value: string) => {
                   console.log('用户名输入框值变化了', value);
@@ -95,7 +93,7 @@ export function UseViewlessForm() {
               $key: 'password',
               $vshow: computed(() => model.username !== '1234'),
               defaultSlot: useInput({
-                modelValue: password,
+                modelValue: toRef(model, 'password'),
                 placeholder: '请输入密码',
                 type: 'password',
                 'onUpdate:modelValue': (value: string) => {
