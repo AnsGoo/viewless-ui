@@ -3,7 +3,7 @@ import { NTabs, NTabPane } from 'naive-ui';
 import { UseViewlessForm } from './form';
 import { useProvideAdaptor, useViewlessComponentOption } from '@viewless/core';
 import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless/ui';
-import { reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 const ProxyCard = defineViewlessComponent({
   props: {
@@ -36,8 +36,18 @@ const ProxyCard = defineViewlessComponent({
 
 export const viewlessTabs = defineViewlessComponent({
   setup: (_props, _context) => {
+    const activeTab = ref('naive-ui');
+    onMounted(() => {
+      setTimeout(() => {
+        activeTab.value = 'element-plus';
+      }, 1000);
+    })
     return useViewlessComponentOption(NTabs, {
       type: 'line',
+      value: activeTab,
+      onUpdateValue: (value: string) => {
+        activeTab.value = value;
+      },
       defaultSlot: [
         useViewlessComponentOption(NTabPane, {
           name: 'naive-ui',
