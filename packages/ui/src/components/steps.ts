@@ -8,7 +8,6 @@ import type {
 } from '@viewless/core';
 import { useViewlessComponentOption } from '@viewless/core';
 
-
 export interface StepsItemProps extends Props {
   status?: 'process' | 'finish' | 'error' | 'wait';
   description?: string;

@@ -41,11 +41,11 @@ export const viewlessTabs = defineViewlessComponent({
       setTimeout(() => {
         activeTab.value = 'element-plus';
       }, 1000);
-    })
+    });
     return useViewlessComponentOption(NTabs, {
       type: 'line',
       value: activeTab,
-      onUpdateValue: (value: string) => {
+      ['onUpdate:value']: (value: string) => {
         activeTab.value = value;
       },
       defaultSlot: [

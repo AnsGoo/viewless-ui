@@ -1,37 +1,4 @@
-import { toRef, toRefs } from 'vue';
-import type { Reactive, Ref, ToRefs } from 'vue';
-
-export function transformProp(
-  obj: Reactive<any>,
-  from: string,
-  to: string,
-  transform?: (value: Ref<any>, obj?: Reactive<any>) => any,
-) {
-  if (obj && obj[from]) {
-    const warpValue = toRef(obj, from);
-    const value = transform?.(warpValue, obj) || warpValue;
-    if (to) {
-      obj[to] = value;
-    }
-  }
-}
-
-export function transformProps<T extends object = Reactive<any>>(
-  obj: T,
-  props: Record<keyof T, string>,
-  transform?: (value: Ref<any>, prop: string, obj?: ToRefs<T>) => any,
-) {
-  const warpValues = toRefs<T>(obj);
-  for (const key in props) {
-    const to = props[key];
-    if (to && Object.prototype.hasOwnProperty.call(props, key)) {
-      const value = transform?.(warpValues[key]!, key, warpValues) || warpValues[key]!;
-      if (to) {
-        obj[to as keyof T] = value;
-      }
-    }
-  }
-}
+import type { Reactive, ToRefs } from 'vue';
 
 export function transformEvent(
   obj: Reactive<any>,
@@ -43,4 +10,14 @@ export function transformEvent(
     const event = obj[from];
     obj[to] = transform?.(event) || event;
   }
+}
+
+export function transformProps<T extends object = Reactive<any>>(
+  obj: T,
+  transform: (props: T, shadowProps: Reactive<any>, warpValues: ToRefs<T>) => any,
+) {
+  const warpValues = obj as ToRefs<T>;
+  const shadowProps = {};
+  transform(obj, shadowProps, warpValues);
+  return shadowProps;
 }

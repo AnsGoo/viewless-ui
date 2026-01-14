@@ -8,7 +8,6 @@ import type {
 } from '@viewless/core';
 import { useViewlessComponentOption } from '@viewless/core';
 
-
 export interface CollapseItemProps extends Props {
   title?: string;
   disabled?: boolean;
@@ -30,13 +29,13 @@ export interface CollapseItemOption extends BaseAttrs {
 
 export interface CollapseProps extends Props {
   names?: string[];
-  arrowPlacement?: 'left' | 'right'
+  arrowPlacement?: 'left' | 'right';
   accordion?: boolean;
 }
 
 export interface CollapseEvents extends Events {
-    itemClick: (name: string) => void;
-    ['update:names']: (name: string, value: boolean) => void;
+  itemClick: (name: string) => void;
+  ['update:names']: (name: string, value: boolean) => void;
 }
 
 export interface CollapseSlots extends Slots {

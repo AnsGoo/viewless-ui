@@ -28,14 +28,12 @@ export interface MenuProps extends Props {
   collapsed?: boolean;
 }
 
-
 export interface MenuEvents extends Events {
-    ['update:value']: (value: string) => void;
-    ['update:expandKeys']: (expandKeys: string[]) => void;
+  ['update:value']: (value: string) => void;
+  ['update:expandKeys']: (expandKeys: string[]) => void;
 }
 
-export interface MenuSlots extends Slots {
-}
+export interface MenuSlots extends Slots {}
 
 export interface MenuOption extends BaseAttrs {
   props: MenuProps;

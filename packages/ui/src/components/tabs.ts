@@ -8,7 +8,6 @@ import type {
 } from '@viewless/core';
 import { useViewlessComponentOption } from '@viewless/core';
 
-
 export interface TabItemProps extends Props {
   lazy?: string;
   disabled?: boolean;
@@ -21,7 +20,6 @@ export interface TabItemEvents extends Events {}
 export interface TabItemSlots extends Slots {
   default?: ViewlessComponent;
   title?: ViewlessComponent;
- 
 }
 
 export interface TabItemOption extends BaseAttrs {
@@ -32,14 +30,14 @@ export interface TabItemOption extends BaseAttrs {
 
 export interface TabProps extends Props {
   size?: 'small' | 'medium' | 'large' | 'huge';
-  type?: 'line' | 'bar' | 'card'|'segment';
+  type?: 'line' | 'bar' | 'card' | 'segment';
   name: string;
   placement?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 export interface TabsEvents extends Events {
-    ['update:name']: (value: string) => void;
-    itemClick: (name: string) => void;
+  ['update:name']: (value: string) => void;
+  itemClick: (name: string) => void;
 }
 
 export interface TabsSlots extends Slots {

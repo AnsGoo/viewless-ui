@@ -8,7 +8,6 @@ import type {
 } from '@viewless/core';
 import { useViewlessComponentOption } from '@viewless/core';
 
-
 export interface TimelineItemProps extends Props {
   lineType?: 'default' | 'dashed';
   type?: 'default' | 'success' | 'info' | 'warning' | 'error';
@@ -23,7 +22,7 @@ export interface TimelineItemSlots extends Slots {
   default?: ViewlessComponent;
   icon?: ViewlessComponent;
   footer?: ViewlessComponent;
-  header?: ViewlessComponent ;
+  header?: ViewlessComponent;
 }
 
 export interface TimelineProps extends Props {
@@ -32,8 +31,7 @@ export interface TimelineProps extends Props {
   size?: 'small' | 'medium' | 'large' | 'huge';
 }
 
-export interface TimelineEvents extends Events {
-}
+export interface TimelineEvents extends Events {}
 
 export interface TimelineSlots extends Slots {
   default?: ViewlessComponent;

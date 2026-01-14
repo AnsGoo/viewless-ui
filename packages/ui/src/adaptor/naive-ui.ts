@@ -5,14 +5,23 @@ import type { UiComponent, Adaptor, AdaptorFn } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
-import { transformEvent, transformProp } from '../components/utils';
+import { transformEvent, transformProps } from '../components/utils';
 import type { ButtonOption } from '../components/button';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
-  transformProp(opt.props, 'modelValue', 'model');
-  transformProp(opt.props, 'labelPosition', 'labelPlacement');
-  return opt as UiComponent<FormOption>;
+  const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
+    for (const key in props) {
+      if (key === 'modelValue') {
+        shadowProps['model'] = warpValues[key];
+      } else if (key === 'labelPosition') {
+        shadowProps['labelPlacement'] = warpValues[key];
+      } else {
+        shadowProps[key] = warpValues[key];
+      }
+    }
+  });
+  return { ...opt, props: shadowProps } as UiComponent<FormOption>;
 }
 
 function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHandler) {
@@ -41,25 +50,39 @@ function useFormHandleAdaptor(refValue: TemplateRef['value'], prop: keyof FormHa
 
 function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
   opt.component = shallowRef(NFormItem);
-  transformProp(opt.props, 'prop', 'path');
-  transformProp(opt.props, 'required', '', (required) => {
-    if (required.value === undefined) {
-      return;
-    }
-    if (opt.props.rule) {
-      opt.props.rule.required = required;
-    } else {
-      opt.props.rule = { required: required };
+  const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
+    for (const key in props) {
+      if (key === 'prop') {
+        shadowProps['path'] = warpValues[key];
+      } else if (key === 'required') {
+        const rule = warpValues['rule'] as Record<string, any>;
+        if (rule) {
+          rule['required'] = warpValues[key] as Record<string, any>;
+          shadowProps['rule'] = rule;
+        } else {
+          shadowProps['rule'] = { required: warpValues[key] };
+        }
+      } else {
+        shadowProps[key] = warpValues[key];
+      }
     }
   });
-  return opt as UiComponent<FormItemOption>;
+  return { ...opt, props: shadowProps } as UiComponent<FormItemOption>;
 }
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(NInput);
-  transformProp(opt.props, 'modelValue', 'value');
+  const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
+    for (const key in props) {
+      if (key === 'modelValue') {
+        shadowProps['value'] = warpValues[key];
+      } else {
+        shadowProps[key] = warpValues[key];
+      }
+    }
+  });
   transformEvent(opt.events, 'update:modelValue', 'update:value');
-  return opt as UiComponent<InputOption>;
+  return { ...opt, props: shadowProps } as UiComponent<InputOption>;
 }
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
