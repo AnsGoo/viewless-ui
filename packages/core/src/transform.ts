@@ -1,4 +1,4 @@
-import { shallowRef, type Component } from 'vue';
+import { shallowRef, type Component, reactive, isRef, toRefs } from 'vue';
 import type { ComponentOption, UiComponent } from './render';
 import type { FlatOption } from './type';
 
@@ -40,8 +40,9 @@ export function useViewlessComponentOption<T extends ComponentOption>(
   componentOption: FlatOption<T>,
 ): UiComponent<T> {
   const flatOption = transformFlatOption<T>(componentOption);
-  return {
-    component: typeof component === 'string' ? component : shallowRef(component),
+  const opt = {
+    component: typeof component === 'string' || isRef(component) ? component : shallowRef(component),
     ...flatOption,
   };
+  return opt as UiComponent<T>;
 }

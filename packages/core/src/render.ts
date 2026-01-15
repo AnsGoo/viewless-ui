@@ -9,6 +9,7 @@ import {
   isVNode,
   reactive,
   shallowReadonly,
+  shallowReactive,
   useTemplateRef,
 } from 'vue';
 import type { Component, VNode, Reactive, TemplateRef } from 'vue';
@@ -66,12 +67,21 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   ref?: string;
 }
 
+
+function isViewlessComponent(opt: UiComponent) {
+  return opt && typeof opt === 'object' && opt.component && !isVNode(opt.component);
+}
+
+function isComponent(opt: Component) {
+  return opt && typeof opt === 'object' && opt.component && opt.render && typeof opt.render === 'function';
+}
+
 export type ViewlessComponent<O extends ComponentOption = ComponentOption> =
   | UiComponent<O>
   | (() => UiComponent<O>);
 
 // 辅助函数：将任何值转换为 VNode 数组
-export function toVNodes(value: any, context: Context): VNode[] {
+export function toVNodes(value: SlotContent, context: Context): VNode[] {
   // 处理 null/undefined - 返回空数组
   if (value === null || value === undefined) {
     return [];
@@ -88,16 +98,12 @@ export function toVNodes(value: any, context: Context): VNode[] {
   }
 
   // 处理组件配置对象
-  if (value && typeof value === 'object' && 'component' in value && !isVNode(value)) {
-    const ChildComponent = renderComponent(value as UiComponent, context);
-    const vnode = h(ChildComponent);
+  if (isViewlessComponent(value)) {
+    const vnode = renderComponent(value as UiComponent, context);
     return [vnode];
   }
   if (
-    value &&
-    typeof value === 'object' &&
-    'render' in value &&
-    typeof value.render === 'function'
+    isComponent(value)
   ) {
     return [h(value)];
   }
@@ -130,16 +136,16 @@ function transformEvents(events: Record<string, Event>) {
 }
 
 function transformSlot(slots: Record<string, any | any[]>, context: Context) {
-  const slotFns: Record<string, () => VNode[]> = {};
+  const slotObj: Record<string, () => VNode[]> = {};
 
   // 处理每个 slot
   for (const [slotName, slotValue] of Object.entries(slots)) {
-    slotFns[slotName] = () => {
+    slotObj[slotName] = () => {
       // 使用改进的 toVNodes 函数处理所有类型的 slot 内容
       return toVNodes(slotValue, context);
     };
   }
-  return slotFns;
+  return slotObj;
 }
 
 function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive<any>) {

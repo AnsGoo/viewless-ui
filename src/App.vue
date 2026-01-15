@@ -14,12 +14,22 @@
       <div class="w-1/2">
         <viewlessTabs />
       </div>
+       <!-- <div class="w-1/2">
+        <ProxyCard />
+      </div> -->
+       <!-- <div class="w-1/2">
+        <viewlessInput />
+      </div> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { viewlessTabs } from '@viewless/examples'
+import { useProvideAdaptor } from '@viewless/core'
+import { useNaiveUiAdaptor } from '@viewless/ui'
+import { viewlessTabs, viewlessInput, ProxyCard } from '@viewless/examples'
+
+useProvideAdaptor(useNaiveUiAdaptor);
 </script>
 
 <style scoped>

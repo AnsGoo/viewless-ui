@@ -3,9 +3,9 @@ import { NTabs, NTabPane } from 'naive-ui';
 import { UseViewlessForm } from './form';
 import { useProvideAdaptor, useViewlessComponentOption } from '@viewless/core';
 import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless/ui';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, toRef, watch } from 'vue';
 
-const ProxyCard = defineViewlessComponent({
+export const ProxyCard = defineViewlessComponent({
   props: {
     ui: {
       type: String,
@@ -53,12 +53,9 @@ export const viewlessTabs = defineViewlessComponent({
           name: 'naive-ui',
           tab: 'Naive UI',
           $key: 'naive-ui',
-          defaultSlot: () => {
-            return useViewlessComponentOption(ProxyCard, {
-              component: ProxyCard,
+          defaultSlot: useViewlessComponentOption(ProxyCard, {
               ui: 'naive-ui',
-            });
-          },
+            }),
         }),
         useViewlessComponentOption(NTabPane, {
           name: 'element-plus',
@@ -81,6 +78,28 @@ export const viewlessTabs = defineViewlessComponent({
           },
         }),
       ],
+    });
+  },
+});
+
+export const viewlessInput = defineViewlessComponent({
+  setup: (_props, _context) => {
+    const model = reactive({
+      value: '123',
+    });
+    onMounted(() => {
+      setTimeout(() => {
+        model.value = '456';
+      }, 2000);
+    });
+    watch(model, (newValue) => {
+      console.log(newValue);
+    });
+    return useViewlessComponentOption('Input', {
+      value: toRef(model, 'value'),
+      ['onUpdate:value']: (value: string) => {
+        model.value = value;
+      },
     });
   },
 });
