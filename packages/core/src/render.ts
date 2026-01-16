@@ -12,9 +12,16 @@ import {
   shallowReactive,
   useTemplateRef,
 } from 'vue';
-import type { Component, VNode, Reactive, TemplateRef } from 'vue';
+import type { Component, VNode, Reactive, TemplateRef, withDirectives, reslveDirective } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 import type { Adaptor } from './provide';
+
+export interface Directive {
+  name:string,
+  value?:any,
+  arg?:string
+  modifiers:string
+}
 
 /**
  * 插槽内容类型定义
@@ -55,6 +62,7 @@ export type ComponentOption<
   key?: string | number | symbol;
   vshow?: boolean;
   ref?: string;
+  vdirs:Directive[]
 };
 
 export interface UiComponent<O extends ComponentOption = ComponentOption> {
@@ -65,6 +73,7 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   slots: O['slots'];
   vshow?: boolean;
   ref?: string;
+  vdirs?: Directive[]
 }
 
 function isViewlessComponent(opt: UiComponent) {
@@ -210,13 +219,26 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
     }
     opt = adaptor({ ...opt });
   }
-  const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
+  const { component: Comp, props = {}, events = {}, slots = {}, vdirs = [], ...kwargs } = opt;
   const innerProps = mergeProps(props, { ...kwargs });
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
   const innerSlots = transformSlot(slots, { ...context });
   const comp = isRef(Comp) ? Comp.value : Comp;
-  return h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
+  const vNode =  h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
+  if(vdirs.length > 0) {
+    const directives = []
+    vdirs.forEach((dir:Directive) => {
+      const {name, value, arg,modifiers} = dir
+      const dirInstance = reslveDirective(name)
+      if(dirInstance) {
+        return
+      }
+      directives.push([dirInstance, value, arg, modifiers])
+    });
+    return withDirectives(vNode, directives)
+  }
+  return vNode
 }
 
 type InnerSetup = (props: Record<string, any>, context: any) => Partial<UiComponent>;
