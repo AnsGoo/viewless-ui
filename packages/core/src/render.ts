@@ -11,8 +11,9 @@ import {
   shallowReadonly,
   shallowReactive,
   useTemplateRef,
+  withDirectives, resolveDirective, vShow, toValue
 } from 'vue';
-import type { Component, VNode, Reactive, TemplateRef, withDirectives, reslveDirective } from 'vue';
+import type { Component, VNode, Reactive, TemplateRef } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 import type { Adaptor } from './provide';
 
@@ -230,11 +231,11 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
     const directives = []
     vdirs.forEach((dir:Directive) => {
       const {name, value, arg,modifiers} = dir
-      const dirInstance = reslveDirective(name)
-      if(dirInstance) {
+      const dirInstance = name === 'show' ? vShow : resolveDirective(name)
+      if(!dirInstance) {
         return
       }
-      directives.push([dirInstance, value, arg, modifiers])
+      directives.push([dirInstance, toValue(value), arg, modifiers])
     });
     return withDirectives(vNode, directives)
   }

@@ -91,7 +91,12 @@ export function UseViewlessForm() {
               label: '密码',
               required: true,
               $key: 'password',
-              $vshow: computed(() => model.username !== '1234'),
+              vdirs: [
+                {
+                  name: 'show',
+                  value: computed(() => model.username !== '1234'),
+                },
+              ],
               defaultSlot: useInput({
                 modelValue: toRef(model, 'password'),
                 placeholder: '请输入密码',
