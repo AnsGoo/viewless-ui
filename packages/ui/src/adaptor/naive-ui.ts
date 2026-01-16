@@ -97,14 +97,12 @@ function useButtonAdaptor(opt: UiComponent<ButtonOption>) {
 
 function useTabsAdaptor(opt: UiComponent<TabsOption>) {
   opt.component = shallowRef(NTabs);
-  const shadowProps = transformProps(opt.props);
-  return { ...opt, props: shadowProps } as UiComponent<TabsOption>;
+  return opt as UiComponent<TabsOption>;
 }
 
 function useTabItemAdaptor(opt: UiComponent<TabItemOption>) {
   opt.component = shallowRef(NTabPane);
-  const shadowProps = transformProps(opt.props);
-  return { ...opt, props: shadowProps } as UiComponent<TabItemOption>;
+  return opt as UiComponent<TabItemOption>;
 }
 
 export function useAdaptor(): ReturnType<AdaptorFn> {

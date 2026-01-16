@@ -1,6 +1,5 @@
 import type { Reactive, ToRefs } from 'vue';
-import { isReactive, toRefs, toRaw, isRef } from 'vue';
-import type { Ref } from 'vue';
+import { isReactive, toRefs, toRaw } from 'vue';
 import { Logger, LogLevel } from '@viewless/core';
 
 const logger = new Logger('viewless/ui', {

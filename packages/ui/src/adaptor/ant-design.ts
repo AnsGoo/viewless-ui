@@ -79,12 +79,7 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
   opt.component = shallowRef(Card);
-  const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
-    for (const key in props) {
-      shadowProps[key] = warpValues[key];
-    }
-  });
-  return { ...opt, props: shadowProps } as UiComponent<CardOption>;
+  return opt as UiComponent<CardOption>;
 }
 
 function useButtonAdaptor(opt: UiComponent<ButtonOption>) {

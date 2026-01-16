@@ -1,4 +1,4 @@
-import { shallowRef, type Component, reactive, isRef, toRefs } from 'vue';
+import { shallowRef, type Component, isRef } from 'vue';
 import type { ComponentOption, UiComponent } from './render';
 import type { FlatOption } from './type';
 
