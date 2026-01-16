@@ -6,7 +6,7 @@ export enum LogLevel {
   INFO = 'info',
   WARN = 'warn',
   ERROR = 'error',
-  NONE = 'none'
+  NONE = 'none',
 }
 
 /**
@@ -30,7 +30,7 @@ const DEFAULT_LOG_CONFIG: LogConfig = {
   level: LogLevel.INFO,
   enabled: true,
   showTimestamp: true,
-  showModuleName: true
+  showModuleName: true,
 };
 
 /**
@@ -41,7 +41,7 @@ const LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
   [LogLevel.INFO]: 1,
   [LogLevel.WARN]: 2,
   [LogLevel.ERROR]: 3,
-  [LogLevel.NONE]: 4
+  [LogLevel.NONE]: 4,
 };
 
 /**
@@ -60,7 +60,7 @@ export class Logger {
     this.moduleName = moduleName;
     this.config = {
       ...DEFAULT_LOG_CONFIG,
-      ...config
+      ...config,
     };
   }
 
@@ -71,7 +71,7 @@ export class Logger {
   updateConfig(config: Partial<LogConfig>): void {
     this.config = {
       ...this.config,
-      ...config
+      ...config,
     };
   }
 

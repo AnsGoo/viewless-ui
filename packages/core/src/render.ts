@@ -67,13 +67,18 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   ref?: string;
 }
 
-
 function isViewlessComponent(opt: UiComponent) {
   return opt && typeof opt === 'object' && opt.component && !isVNode(opt.component);
 }
 
 function isComponent(opt: Component) {
-  return opt && typeof opt === 'object' && opt.component && opt.render && typeof opt.render === 'function';
+  return (
+    opt &&
+    typeof opt === 'object' &&
+    opt.component &&
+    opt.render &&
+    typeof opt.render === 'function'
+  );
 }
 
 export type ViewlessComponent<O extends ComponentOption = ComponentOption> =
@@ -98,13 +103,11 @@ export function toVNodes(value: SlotContent, context: Context): VNode[] {
   }
 
   // 处理组件配置对象
-  if (isViewlessComponent(value)) {
+  if (isViewlessComponent(value as UiComponent)) {
     const vnode = renderComponent(value as UiComponent, context);
     return [vnode];
   }
-  if (
-    isComponent(value)
-  ) {
+  if (isComponent(value as Component)) {
     return [h(value)];
   }
 
@@ -205,7 +208,7 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
     if (opt.ref && refMap && !refMap.has(opt.ref)) {
       refMap.set(opt.ref, opt.component);
     }
-    opt = adaptor(opt);
+    opt = adaptor({ ...opt });
   }
   const { component: Comp, props = {}, events = {}, slots = {}, ...kwargs } = opt;
   const innerProps = mergeProps(props, { ...kwargs });

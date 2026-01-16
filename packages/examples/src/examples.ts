@@ -1,5 +1,4 @@
 import { defineViewlessComponent } from '@viewless/core';
-import { NTabs, NTabPane } from 'naive-ui';
 import { UseViewlessForm } from './form';
 import { useProvideAdaptor, useViewlessComponentOption } from '@viewless/core';
 import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless/ui';
@@ -42,35 +41,36 @@ export const viewlessTabs = defineViewlessComponent({
         activeTab.value = 'element-plus';
       }, 1000);
     });
-    return useViewlessComponentOption(NTabs, {
+    const opt = useViewlessComponentOption('Tabs', {
       type: 'line',
       value: activeTab,
       ['onUpdate:value']: (value: string) => {
         activeTab.value = value;
       },
       defaultSlot: [
-        useViewlessComponentOption(NTabPane, {
+        useViewlessComponentOption('TabItem', {
           name: 'naive-ui',
           tab: 'Naive UI',
           $key: 'naive-ui',
+          displayDirective: 'show:lazy',
           defaultSlot: useViewlessComponentOption(ProxyCard, {
-              ui: 'naive-ui',
-            }),
+            ui: 'naive-ui',
+          }),
         }),
-        useViewlessComponentOption(NTabPane, {
+        useViewlessComponentOption('TabItem', {
           name: 'element-plus',
           tab: 'Element Plus',
           $key: 'element-plus',
-          defaultSlot: () => {
-            return useViewlessComponentOption(ProxyCard, {
-              ui: 'element-plus',
-            });
-          },
+          displayDirective: 'show:lazy',
+          defaultSlot: useViewlessComponentOption(ProxyCard, {
+            ui: 'element-plus',
+          }),
         }),
-        useViewlessComponentOption(NTabPane, {
+        useViewlessComponentOption('TabItem', {
           name: 'ant-design',
           tab: 'Ant Design',
           $key: 'ant-design',
+          displayDirective: 'show:lazy',
           defaultSlot: () => {
             return useViewlessComponentOption(ProxyCard, {
               ui: 'ant-design',
@@ -79,6 +79,8 @@ export const viewlessTabs = defineViewlessComponent({
         }),
       ],
     });
+    console.log(opt);
+    return opt;
   },
 });
 

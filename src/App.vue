@@ -14,10 +14,10 @@
       <div class="w-1/2">
         <viewlessTabs />
       </div>
-       <!-- <div class="w-1/2">
+      <!-- <div class="w-1/2">
         <ProxyCard />
       </div> -->
-       <!-- <div class="w-1/2">
+      <!-- <div class="w-1/2">
         <viewlessInput />
       </div> -->
     </div>

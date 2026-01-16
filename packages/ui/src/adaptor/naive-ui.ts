@@ -1,13 +1,13 @@
 import { shallowRef } from 'vue';
 import type { Component, TemplateRef } from 'vue';
-import { NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui';
+import { NButton, NCard, NForm, NFormItem, NInput, NTabPane, NTabs } from 'naive-ui';
 import type { UiComponent, Adaptor, AdaptorFn } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
+import type { TabsOption, TabItemOption } from '../components/tabs';
 import { transformEvent, transformProps } from '../components/utils';
 import type { ButtonOption } from '../components/button';
-
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
   const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
@@ -95,6 +95,18 @@ function useButtonAdaptor(opt: UiComponent<ButtonOption>) {
   return opt as UiComponent<ButtonOption>;
 }
 
+function useTabsAdaptor(opt: UiComponent<TabsOption>) {
+  opt.component = shallowRef(NTabs);
+  const shadowProps = transformProps(opt.props);
+  return { ...opt, props: shadowProps } as UiComponent<TabsOption>;
+}
+
+function useTabItemAdaptor(opt: UiComponent<TabItemOption>) {
+  opt.component = shallowRef(NTabPane);
+  const shadowProps = transformProps(opt.props);
+  return { ...opt, props: shadowProps } as UiComponent<TabItemOption>;
+}
+
 export function useAdaptor(): ReturnType<AdaptorFn> {
   // 使用类型断言来放宽类型要求
   const adaptorMap: Record<string, Adaptor> = {
@@ -103,6 +115,8 @@ export function useAdaptor(): ReturnType<AdaptorFn> {
     Input: (opt: UiComponent) => useInputAdaptor(opt as UiComponent<InputOption>),
     Card: (opt: UiComponent) => useCardAdaptor(opt as UiComponent<CardOption>),
     Button: (opt: UiComponent) => useButtonAdaptor(opt as UiComponent<ButtonOption>),
+    Tabs: (opt: UiComponent) => useTabsAdaptor(opt as UiComponent<TabsOption>),
+    TabItem: (opt: UiComponent) => useTabItemAdaptor(opt as UiComponent<TabItemOption>),
   };
 
   type HandleAdaptorItemFn = (refValue: TemplateRef['value'], prop: string) => any;

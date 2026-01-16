@@ -41,7 +41,8 @@ export function useViewlessComponentOption<T extends ComponentOption>(
 ): UiComponent<T> {
   const flatOption = transformFlatOption<T>(componentOption);
   const opt = {
-    component: typeof component === 'string' || isRef(component) ? component : shallowRef(component),
+    component:
+      typeof component === 'string' || isRef(component) ? component : shallowRef(component),
     ...flatOption,
   };
   return opt as UiComponent<T>;

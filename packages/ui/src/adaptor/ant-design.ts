@@ -1,10 +1,10 @@
-import { shallowRef, type Component, type TemplateRef } from 'vue';
+import { shallowRef, type Component, type TemplateRef, isRef, computed } from 'vue';
 import { Button, Card, Form, FormItem, Input } from 'ant-design-vue';
 import type { UiComponent } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
-import { transformEvent } from '../components/utils';
+import { getValue, transformEvent } from '../components/utils';
 import type { Adaptor, AdaptorFn } from '@viewless/core';
 import type { ButtonOption } from '../components/button';
 import { transformProps } from '../components/utils';
@@ -16,8 +16,9 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
       if (key === 'modelValue') {
         shadowProps['model'] = warpValues[key];
       } else if (key === 'labelPosition') {
-        const position = warpValues[key] as string;
-        shadowProps['layout'] = position === 'top' ? 'vertical' : 'horizontal';
+        const positionValue = warpValues[key];
+        const getPostion = () => (getValue(positionValue) === 'top' ? 'vertical' : 'horizontal');
+        shadowProps['layout'] = isRef(positionValue) ? computed(getPostion) : getPostion();
       } else {
         shadowProps[key] = warpValues[key];
       }
@@ -109,13 +110,15 @@ export function useAdaptor(): ReturnType<AdaptorFn> {
 
   const adaptor = (opt: UiComponent) => {
     if (typeof opt.component !== 'string') {
-      return opt;
+      const shadowProps = transformProps(opt.props);
+      return { ...opt, props: shadowProps };
     }
     const adaptorFn = adaptorMap[opt.component];
     if (adaptorFn) {
       return adaptorFn(opt);
     }
-    return opt;
+    const shadowProps = transformProps(opt.props);
+    return { ...opt, props: shadowProps };
   };
 
   const handleAdaptor = (
