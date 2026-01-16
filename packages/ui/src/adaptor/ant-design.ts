@@ -17,8 +17,8 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
         shadowProps['model'] = warpValues[key];
       } else if (key === 'labelPosition') {
         const positionValue = warpValues[key];
-        const getPostion = () => (getValue(positionValue) === 'top' ? 'vertical' : 'horizontal');
-        shadowProps['layout'] = isRef(positionValue) ? computed(getPostion) : getPostion();
+        const getPostion = () => getValue(positionValue) === 'top' ? 'vertical' : 'horizontal'
+        shadowProps['layout'] = isRef(positionValue) ? computed(getPostion): getPostion() ;
       } else {
         shadowProps[key] = warpValues[key];
       }
@@ -110,15 +110,13 @@ export function useAdaptor(): ReturnType<AdaptorFn> {
 
   const adaptor = (opt: UiComponent) => {
     if (typeof opt.component !== 'string') {
-      const shadowProps = transformProps(opt.props);
-      return { ...opt, props: shadowProps };
+      return opt;
     }
     const adaptorFn = adaptorMap[opt.component];
     if (adaptorFn) {
       return adaptorFn(opt);
     }
-    const shadowProps = transformProps(opt.props);
-    return { ...opt, props: shadowProps };
+    return opt;
   };
 
   const handleAdaptor = (
