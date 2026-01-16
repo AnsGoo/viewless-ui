@@ -44,7 +44,3 @@ export function transformProps<T extends object = Reactive<any>>(
 
   return shadowProps;
 }
-
-export function getValue(obj: Ref<any> | any) {
-  return isRef(obj) ? obj.value : obj;
-}

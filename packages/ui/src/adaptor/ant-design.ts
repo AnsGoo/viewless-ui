@@ -4,7 +4,7 @@ import type { UiComponent } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
-import { getValue, transformEvent } from '../components/utils';
+import { transformEvent } from '../components/utils';
 import type { Adaptor, AdaptorFn } from '@viewless/core';
 import type { ButtonOption } from '../components/button';
 import { transformProps } from '../components/utils';
@@ -17,8 +17,8 @@ function useFormAdaptor(opt: UiComponent<FormOption>) {
         shadowProps['model'] = warpValues[key];
       } else if (key === 'labelPosition') {
         const positionValue = warpValues[key];
-        const getPostion = () => getValue(positionValue) === 'top' ? 'vertical' : 'horizontal'
-        shadowProps['layout'] = isRef(positionValue) ? computed(getPostion): getPostion() ;
+        const getPostion = () => (toValue(positionValue) === 'top' ? 'vertical' : 'horizontal');
+        shadowProps['layout'] = isRef(positionValue) ? computed(getPostion) : getPostion();
       } else {
         shadowProps[key] = warpValues[key];
       }

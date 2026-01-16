@@ -11,17 +11,20 @@ import {
   shallowReadonly,
   shallowReactive,
   useTemplateRef,
-  withDirectives, resolveDirective, vShow, toValue
+  withDirectives,
+  resolveDirective,
+  vShow,
+  toValue,
 } from 'vue';
 import type { Component, VNode, Reactive, TemplateRef } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 import type { Adaptor } from './provide';
 
 export interface Directive {
-  name:string,
-  value?:any,
-  arg?:string
-  modifiers:string
+  name: string;
+  value?: any;
+  arg?: string;
+  modifiers: string;
 }
 
 /**
@@ -63,7 +66,7 @@ export type ComponentOption<
   key?: string | number | symbol;
   vshow?: boolean;
   ref?: string;
-  vdirs:Directive[]
+  vdirs: Directive[];
 };
 
 export interface UiComponent<O extends ComponentOption = ComponentOption> {
@@ -74,7 +77,7 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   slots: O['slots'];
   vshow?: boolean;
   ref?: string;
-  vdirs?: Directive[]
+  vdirs?: Directive[];
 }
 
 function isViewlessComponent(opt: UiComponent) {
@@ -225,21 +228,21 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   const innerEvents = transformEvents(events);
   // 创建 slot 函数对象
   const innerSlots = transformSlot(slots, { ...context });
-  const comp = isRef(Comp) ? Comp.value : Comp;
-  const vNode =  h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
-  if(vdirs.length > 0) {
-    const directives = []
-    vdirs.forEach((dir:Directive) => {
-      const {name, value, arg,modifiers} = dir
-      const dirInstance = name === 'show' ? vShow : resolveDirective(name)
-      if(!dirInstance) {
-        return
+  const comp = toValue(Comp);
+  const vNode = h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
+  if (vdirs.length > 0) {
+    const directives = [];
+    vdirs.forEach((dir: Directive) => {
+      const { name, value, arg, modifiers } = dir;
+      const dirInstance = name === 'show' ? vShow : resolveDirective(name);
+      if (!dirInstance) {
+        return;
       }
-      directives.push([dirInstance, toValue(value), arg, modifiers])
+      directives.push([dirInstance, toValue(value), arg, modifiers]);
     });
-    return withDirectives(vNode, directives)
+    return withDirectives(vNode, directives);
   }
-  return vNode
+  return vNode;
 }
 
 type InnerSetup = (props: Record<string, any>, context: any) => Partial<UiComponent>;
