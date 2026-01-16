@@ -41,7 +41,7 @@ export const viewlessTabs = defineViewlessComponent({
         activeTab.value = 'element-plus';
       }, 1000);
     });
-    const opt = useViewlessComponentOption('Tabs', {
+    return useViewlessComponentOption('Tabs', {
       type: 'line',
       value: activeTab,
       ['onUpdate:value']: (value: string) => {
@@ -79,8 +79,6 @@ export const viewlessTabs = defineViewlessComponent({
         }),
       ],
     });
-    console.log(opt);
-    return opt;
   },
 });
 
