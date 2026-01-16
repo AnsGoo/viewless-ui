@@ -7,7 +7,7 @@ function firstLetterToLowerCase(str: string) {
 }
 
 export function transformFlatOption<T extends ComponentOption>(flatOption: FlatOption<T>): T {
-  const { $key, $vshow, $ref, ...rest } = flatOption;
+  const { $key, $vshow, $ref, vdirs,  ...rest } = flatOption;
   const props = {} as T['props'];
   const events = {} as T['events'];
   const slots = {} as T['slots'];
@@ -32,6 +32,7 @@ export function transformFlatOption<T extends ComponentOption>(flatOption: FlatO
     props,
     events,
     slots,
+    vdirs,
   } as T;
 }
 
