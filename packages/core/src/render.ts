@@ -36,7 +36,6 @@ export type SlotContent =
   | number
   | UiComponent
   | SlotContent[]
-  | Component
   | (() => SlotContent)
   | null; // 保留 null 用于显式清空插槽
 
@@ -97,7 +96,7 @@ export type ViewlessComponent<O extends ComponentOption = ComponentOption> =
   | (() => UiComponent<O>);
 
 // 辅助函数：将任何值转换为 VNode 数组
-export function toVNodes(value: SlotContent, context: Context): VNode[] {
+export function toVNodes(value: SlotContent | Component, context: Context): VNode[] {
   // 处理 null/undefined - 返回空数组
   if (value === null || value === undefined) {
     return [];
@@ -181,21 +180,8 @@ function mergeProps(attrs: Reactive<any> | Record<string, any>, kwargs: Reactive
   attrs.class = kwargs.class || '';
 
   // 处理 vshow 属性，支持响应式值和计算属性
-  if (typeof vshow !== 'undefined') {
-    let isVisible = true;
-
-    // 处理不同的响应式类型
-    if (vshow && typeof vshow === 'object' && 'value' in vshow) {
-      // Ref 或 ComputedRef
-      isVisible = Boolean(vshow.value);
-    } else if (typeof vshow === 'boolean') {
-      // 静态布尔值
-      isVisible = !!vshow;
-    }
-
-    if (!isVisible) {
-      attrs.style.display = 'none';
-    }
+  if (typeof vshow !== 'undefined' && !toValue(vshow)) {
+    attrs.style.display = 'none';
   }
 
   return isReactive(attrs) ? attrs : reactive(attrs);
@@ -232,12 +218,13 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   if (vdirs.length > 0) {
     const directives: DirectiveArguments = [];
     vdirs.forEach((dir: DirectiveOption) => {
-      const { name, value, arg, modifiers } = dir;
+      const { name, value, arg, modifiers = {} } = dir;
       const dirInstance = name === 'show' ? vShow : resolveDirective(name);
       if (!dirInstance) {
         return;
       }
-      directives.push([dirInstance, toValue(value), arg, modifiers]);
+      const dirItem = [dirInstance, toValue(value), arg, modifiers];
+      directives.push(dirItem);
     });
     return withDirectives(vNode, directives);
   }

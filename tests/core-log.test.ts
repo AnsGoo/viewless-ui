@@ -47,6 +47,7 @@ describe('Logger', () => {
     // 检查日志消息是否不包含ISO格式的时间戳
     expect(consoleDebugMock).toHaveBeenCalledWith(
       expect.not.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/),
+      'debug message'
     );
   });
 
@@ -97,9 +98,14 @@ describe('Logger', () => {
     });
 
     logger.info('test message');
-    expect(consoleInfoMock).toHaveBeenCalledWith(expect.stringContaining('INFO'));
-    expect(consoleInfoMock).toHaveBeenCalledWith(expect.stringContaining('test-module'));
-    expect(consoleInfoMock).toHaveBeenCalledWith(expect.stringContaining('test message'));
+    expect(consoleInfoMock).toHaveBeenCalledWith(
+      expect.stringContaining('[INFO]'),
+      'test message'
+    );
+    expect(consoleInfoMock).toHaveBeenCalledWith(
+      expect.stringContaining('[test-module]'),
+      'test message'
+    );
   });
 
   it('应该支持log方法', () => {
