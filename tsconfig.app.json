@@ -2,7 +2,13 @@
   "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "types": ["vite/client", "naive-ui/volar", "element-plus/global"],
+    "types": [
+      "vite/client",
+      "naive-ui/volar",
+      "element-plus/global",
+      "vitest/importMeta",
+      "vitest/globals"
+    ],
     /* Linting */
     "strict": true,
     "isolatedDeclarations": true,

@@ -5,10 +5,10 @@ import type { UiComponent } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
-import { transformEvents } from '../components/utils';
+import { transformEvents } from '../utils';
 import type { Adaptor, AdaptorFn } from '@viewless/core';
 import type { ButtonOption } from '../components/button';
-import { transformProps } from '../components/utils';
+import { transformProps } from '../utils';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(Form);

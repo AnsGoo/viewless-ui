@@ -6,7 +6,7 @@ import type { FormOption, FormItemOption, FormHandler } from '../components/form
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
 import type { TabsOption, TabItemOption } from '../components/tabs';
-import { transformEvents, transformProps } from '../components/utils';
+import { transformEvents, transformProps } from '../utils';
 import type { ButtonOption } from '../components/button';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {

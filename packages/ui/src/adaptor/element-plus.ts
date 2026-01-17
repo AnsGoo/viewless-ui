@@ -4,7 +4,7 @@ import type { UiComponent, Adaptor, AdaptorFn } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
-import { transformProps } from '../components/utils';
+import { transformProps } from '../utils';
 import type { ButtonOption } from '../components/button';
 
 function useFormAdaptor(opt: UiComponent<FormOption>) {

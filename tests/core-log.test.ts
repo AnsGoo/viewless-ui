@@ -47,7 +47,7 @@ describe('Logger', () => {
     // 检查日志消息是否不包含ISO格式的时间戳
     expect(consoleDebugMock).toHaveBeenCalledWith(
       expect.not.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/),
-      'debug message'
+      'debug message',
     );
   });
 
@@ -98,13 +98,10 @@ describe('Logger', () => {
     });
 
     logger.info('test message');
-    expect(consoleInfoMock).toHaveBeenCalledWith(
-      expect.stringContaining('[INFO]'),
-      'test message'
-    );
+    expect(consoleInfoMock).toHaveBeenCalledWith(expect.stringContaining('[INFO]'), 'test message');
     expect(consoleInfoMock).toHaveBeenCalledWith(
       expect.stringContaining('[test-module]'),
-      'test message'
+      'test message',
     );
   });
 
@@ -146,7 +143,6 @@ describe('createLogger', () => {
   beforeEach(() => {
     consoleDebugMock = vi.spyOn(console, 'debug').mockImplementation(() => {});
   });
-
   afterEach(() => {
     consoleDebugMock.mockRestore();
   });
