@@ -6,16 +6,20 @@ const logger = new Logger('viewless/ui', {
   level: LogLevel.DEBUG,
 });
 
-export function transformEvent(
-  obj: Reactive<any>,
-  from: string,
-  to: string,
-  transform?: (...args: any[]) => any,
-) {
-  if (obj && obj[from]) {
-    const event = obj[from];
-    obj[to] = transform?.(event) || event;
+
+type ElementEvent = (...args: any[]) => any;
+export function transformEvents<T extends object = Record<string, ElementEvent>>(events: T, transform?: (events: T, shadowEvents: Record<string, any>) => any) {
+  const eventHandlers: Record<string, any> = {};
+  if (transform) {
+    transform(events, eventHandlers);
+  } else {
+    for (const [eventName, handler] of Object.entries(events)) {
+      if (typeof handler === 'function') {
+        eventHandlers[eventName] = handler;
+      }
+    }
   }
+  return eventHandlers;
 }
 
 export function transformProps<T extends object = Reactive<any>>(

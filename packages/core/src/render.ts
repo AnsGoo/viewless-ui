@@ -14,15 +14,15 @@ import {
   vShow,
   toValue,
 } from 'vue';
-import type { Component, VNode, Reactive, TemplateRef } from 'vue';
+import type { Component, VNode, Reactive, TemplateRef, Directive, DirectiveArguments } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 import type { Adaptor } from './provide';
 
-export interface Directive {
+export interface DirectiveOption {
   name: string;
   value?: any;
   arg?: string;
-  modifiers: string;
+  modifiers: Record<string, boolean>;
 }
 
 /**
@@ -51,7 +51,7 @@ export interface Events {
 
 export type Slots = Record<string, SlotContent>;
 
-export type BaseAttrs = Pick<UiComponent, 'key' | 'vshow' | 'ref'>;
+export type BaseAttrs = Partial<Pick<UiComponent, 'key' | 'vshow' | 'ref'| 'vdirs'>>;
 
 export type ComponentOption<
   P extends Props = Props,
@@ -64,7 +64,7 @@ export type ComponentOption<
   key?: string | number | symbol;
   vshow?: boolean;
   ref?: string;
-  vdirs: Directive[];
+  vdirs?: DirectiveOption[];
 };
 
 export interface UiComponent<O extends ComponentOption = ComponentOption> {
@@ -75,7 +75,7 @@ export interface UiComponent<O extends ComponentOption = ComponentOption> {
   slots: O['slots'];
   vshow?: boolean;
   ref?: string;
-  vdirs?: Directive[];
+  vdirs?: DirectiveOption[];
 }
 
 function isViewlessComponent(opt: UiComponent) {
@@ -229,8 +229,8 @@ export function renderComponent(option: UiComponent, context: Context): VNode {
   const comp = toValue(Comp);
   const vNode = h(comp!, { ...innerProps, ...innerEvents }, innerSlots);
   if (vdirs.length > 0) {
-    const directives = [];
-    vdirs.forEach((dir: Directive) => {
+    const directives: DirectiveArguments = [];
+    vdirs.forEach((dir: DirectiveOption) => {
       const { name, value, arg, modifiers } = dir;
       const dirInstance = name === 'show' ? vShow : resolveDirective(name);
       if (!dirInstance) {

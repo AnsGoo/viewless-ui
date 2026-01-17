@@ -4,8 +4,8 @@ import type { Component, TemplateRef } from 'vue';
 import type { UiComponent } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
-import type { InputOption } from '../components/input';
-import { transformEvent } from '../components/utils';
+import type { InputEvents, InputOption } from '../components/input';
+import { transformEvents } from '../components/utils';
 import type { Adaptor, AdaptorFn } from '@viewless/core';
 import type { ButtonOption } from '../components/button';
 import { transformProps } from '../components/utils';
@@ -65,7 +65,15 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(Input);
-  transformEvent(opt.events, 'update:modelValue', 'update:value');
+  const shadowEvents = transformEvents<InputOption['events']>(opt.events, (events, shadowEvents) => {
+    for (const eventName in events) {
+      if(eventName === 'update:modelValue') {
+          shadowEvents['update:value'] = events[eventName];
+      } else {
+        shadowEvents[eventName] = events[eventName];
+      }
+    }
+  });
   const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
     for (const key in props) {
       if (key === 'modelValue') {
@@ -75,7 +83,7 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
       }
     }
   });
-  return { ...opt, props: shadowProps } as UiComponent<InputOption>;
+  return { ...opt, props: shadowProps, events: shadowEvents } as UiComponent<InputOption>;
 }
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {

@@ -6,8 +6,10 @@ import type { FormOption, FormItemOption, FormHandler } from '../components/form
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
 import type { TabsOption, TabItemOption } from '../components/tabs';
-import { transformEvent, transformProps } from '../components/utils';
+import { transformEvents, transformProps } from '../components/utils';
 import type { ButtonOption } from '../components/button';
+
+
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
   const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
@@ -81,8 +83,16 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
       }
     }
   });
-  transformEvent(opt.events, 'update:modelValue', 'update:value');
-  return { ...opt, props: shadowProps } as UiComponent<InputOption>;
+  const shadowEvents = transformEvents(opt.events, (events, shadowEvents) => {
+    for (const eventName in events) {
+      if(eventName === 'update:modelValue') {
+          shadowEvents['update:value'] = events[eventName];
+      } else {
+        shadowEvents[eventName] = events[eventName];
+      }
+    }
+  });
+  return { ...opt, props: shadowProps, events: shadowEvents } as UiComponent<InputOption>;
 }
 
 function useCardAdaptor(opt: UiComponent<CardOption>) {
