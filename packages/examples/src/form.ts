@@ -23,7 +23,7 @@ export function UseViewlessForm() {
         password: '',
       });
 
-      const formRef = useViewlessTemplateRef('formRef');
+      const formRef = useViewlessTemplateRef<FormHandler>('formRef');
 
       onMounted(() => {
         if (formRef.value) {
@@ -51,6 +51,7 @@ export function UseViewlessForm() {
         if (!formRef.value) {
           return;
         }
+        console.log(formRef.value);
         const resp = await (formRef.value as FormHandler).validate?.();
         if (resp) {
           context.emit('submit', { ...model });

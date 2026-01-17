@@ -4,7 +4,7 @@ import type { Component, TemplateRef } from 'vue';
 import type { UiComponent } from '@viewless/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
-import type { InputEvents, InputOption } from '../components/input';
+import type { InputOption } from '../components/input';
 import { transformEvents } from '../components/utils';
 import type { Adaptor, AdaptorFn } from '@viewless/core';
 import type { ButtonOption } from '../components/button';

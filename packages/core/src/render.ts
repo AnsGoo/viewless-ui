@@ -13,8 +13,9 @@ import {
   resolveDirective,
   vShow,
   toValue,
+  shallowRef,
 } from 'vue';
-import type { Component, VNode, Reactive, TemplateRef, Directive, DirectiveArguments } from 'vue';
+import type { Component, VNode, Reactive, TemplateRef, DirectiveArguments } from 'vue';
 import { ADAPTOR_KEY, HANDLE_ADAPTOR_KEY } from './const';
 import type { Adaptor } from './provide';
 
@@ -22,7 +23,7 @@ export interface DirectiveOption {
   name: string;
   value?: any;
   arg?: string;
-  modifiers: Record<string, boolean>;
+  modifiers?: Record<string, boolean>;
 }
 
 /**
@@ -286,33 +287,43 @@ export function useViewlessTemplateRef<T = unknown, Keys extends string = string
   key: Keys,
 ): TemplateRef<T> {
   const temRef = useTemplateRef<T>(key);
+  const shadowRef = shallowRef<TemplateRef<T>['value']>(null);
   const vm = getCurrentInstance()!.proxy;
+  return new Proxy(temRef, {
+    get(target: TemplateRef<T>, prop) {
+      if (!target) {
+        return target;
+      }
+      if (prop === 'value') {
+        if (!target.value) {
+          return target.value;
+        }
+        if (shadowRef.value) {
+          return shadowRef.value;
+        }
 
-  const proxyRef = shallowReadonly(
-    new Proxy(temRef, {
-      get(target, prop) {
-        if (!target) {
-          return target;
-        }
-        if (prop === 'value') {
-          if (!target.value) {
-            return target.value;
+        const shadowHandler: Record<string, any> = {};
+        const attrs = Object.getOwnPropertyNames(target.value);
+        attrs.forEach((attr) => {
+          const { context } = (vm || {}) as any;
+          const { refMap, handleAdaptor }: Context = context || {};
+          if (refMap && refMap.get(key) && handleAdaptor) {
+            const component = refMap.get(key);
+            const handler = handleAdaptor(target.value, component!, attr);
+            if (handler) {
+              shadowHandler[attr] = handler;
+              return;
+            }
+            if (attr.startsWith('$')) {
+              return;
+            }
           }
-          return new Proxy(target.value, {
-            get(obj: TemplateRef['value'], prop: string) {
-              const { context } = (vm || {}) as any;
-              const { refMap, handleAdaptor }: Context = context || {};
-              if (refMap && refMap.get(key) && handleAdaptor) {
-                const component = refMap.get(key);
-                return handleAdaptor(obj, component!, prop);
-              }
-              return Reflect.get(obj as object, prop);
-            },
-          });
-        }
-        return Reflect.get(target, prop);
-      },
-    }),
-  );
-  return proxyRef;
+          shadowHandler[attr] = (target.value as T)[attr];
+        });
+        shadowRef.value = shallowReadonly(shadowHandler);
+        return shadowRef.value;
+      }
+      return Reflect.get(target, prop);
+    },
+  });
 }
