@@ -1,5 +1,4 @@
-import type { Reactive, ToRefs } from 'vue';
-import { isReactive, toRefs, toRaw } from 'vue';
+import { isReactive, toRaw } from 'vue';
 import { Logger, LogLevel } from '@viewless/core';
 
 const logger = new Logger('viewless/ui', {
@@ -8,32 +7,31 @@ const logger = new Logger('viewless/ui', {
 
 
 type ElementEvent = (...args: any[]) => any;
+
 export function transformEvents<T extends object = Record<string, ElementEvent>>(events: T, transform?: (events: T, shadowEvents: Record<string, any>) => any) {
-  const eventHandlers: Record<string, any> = {};
+  const shadowEvents: Record<string, any> = {};
   if (transform) {
-    transform(events, eventHandlers);
+    transform(events, shadowEvents);
   } else {
     for (const [eventName, handler] of Object.entries(events)) {
       if (typeof handler === 'function') {
-        eventHandlers[eventName] = handler;
+        shadowEvents[eventName] = handler;
       }
     }
   }
-  return eventHandlers;
+  return shadowEvents;
 }
 
-export function transformProps<T extends object = Reactive<any>>(
+export function transformProps<T extends object = Record<string, any>>(
   obj: T,
-  transform?: (props: T, shadowProps: Reactive<any>, warpValues: ToRefs<T>) => any,
+  transform?: (props: T, shadowProps: Record<string, any>, warpValues: T) => any,
 ) {
-  let warpValues = obj as ToRefs<T>;
+  let warpValues = obj;
   let props = obj;
   const shadowProps: Record<string, any> = {};
   if (isReactive(obj)) {
     logger.warn('props obj must be plain object, but got reactive object', obj);
-    props = toRaw(obj);
-    warpValues = toRefs(obj);
-    props = toRaw(obj);
+    warpValues = toRaw(obj);
   }
 
   if (transform) {
@@ -44,6 +42,5 @@ export function transformProps<T extends object = Reactive<any>>(
       shadowProps[key] = props[key];
     }
   }
-
   return shadowProps;
 }

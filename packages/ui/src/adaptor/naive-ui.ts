@@ -59,7 +59,7 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
       } else if (key === 'required') {
         const rule = warpValues['rule'] as Record<string, any>;
         if (rule) {
-          rule['required'] = warpValues[key] as Record<string, any>;
+          rule['required'] = warpValues[key];
           shadowProps['rule'] = rule;
         } else {
           shadowProps['rule'] = { required: warpValues[key] };
