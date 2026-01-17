@@ -35,6 +35,7 @@ export type SlotContent =
   | number
   | UiComponent
   | SlotContent[]
+  | Component
   | (() => SlotContent)
   | null; // 保留 null 用于显式清空插槽
 
@@ -51,7 +52,7 @@ export interface Events {
 
 export type Slots = Record<string, SlotContent>;
 
-export type BaseAttrs = Partial<Pick<UiComponent, 'key' | 'vshow' | 'ref'| 'vdirs'>>;
+export type BaseAttrs = Partial<Pick<UiComponent, 'key' | 'vshow' | 'ref' | 'vdirs'>>;
 
 export type ComponentOption<
   P extends Props = Props,
@@ -86,9 +87,7 @@ function isComponent(opt: Component) {
   return (
     opt &&
     typeof opt === 'object' &&
-    opt.component &&
-    opt.render &&
-    typeof opt.render === 'function'
+    ((opt.render && typeof opt.render === 'function') || opt.template)
   );
 }
 
@@ -206,7 +205,8 @@ export type HandleAdaptor = (
   component: string | Component,
   prop: string,
 ) => any;
-interface Context {
+
+export interface Context {
   adaptor?: (slotContent: UiComponent) => UiComponent;
   refMap?: Map<string, string | Component>;
   handleAdaptor?: HandleAdaptor;

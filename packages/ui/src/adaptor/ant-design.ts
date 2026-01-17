@@ -65,15 +65,18 @@ function useFormItemAdaptor(opt: UiComponent<FormItemOption>) {
 
 function useInputAdaptor(opt: UiComponent<InputOption>) {
   opt.component = shallowRef(Input);
-  const shadowEvents = transformEvents<InputOption['events']>(opt.events, (events, shadowEvents) => {
-    for (const eventName in events) {
-      if(eventName === 'update:modelValue') {
+  const shadowEvents = transformEvents<InputOption['events']>(
+    opt.events,
+    (events, shadowEvents) => {
+      for (const eventName in events) {
+        if (eventName === 'update:modelValue') {
           shadowEvents['update:value'] = events[eventName];
-      } else {
-        shadowEvents[eventName] = events[eventName];
+        } else {
+          shadowEvents[eventName] = events[eventName];
+        }
       }
-    }
-  });
+    },
+  );
   const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
     for (const key in props) {
       if (key === 'modelValue') {

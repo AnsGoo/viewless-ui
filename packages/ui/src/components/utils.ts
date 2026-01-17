@@ -5,10 +5,12 @@ const logger = new Logger('viewless/ui', {
   level: LogLevel.DEBUG,
 });
 
-
 type ElementEvent = (...args: any[]) => any;
 
-export function transformEvents<T extends object = Record<string, ElementEvent>>(events: T, transform?: (events: T, shadowEvents: Record<string, any>) => any) {
+export function transformEvents<T extends object = Record<string, ElementEvent>>(
+  events: T,
+  transform?: (events: T, shadowEvents: Record<string, any>) => any,
+) {
   const shadowEvents: Record<string, any> = {};
   if (transform) {
     transform(events, shadowEvents);

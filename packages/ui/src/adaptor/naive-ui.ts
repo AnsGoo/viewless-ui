@@ -9,7 +9,6 @@ import type { TabsOption, TabItemOption } from '../components/tabs';
 import { transformEvents, transformProps } from '../components/utils';
 import type { ButtonOption } from '../components/button';
 
-
 function useFormAdaptor(opt: UiComponent<FormOption>) {
   opt.component = shallowRef(NForm);
   const shadowProps = transformProps(opt.props, (props, shadowProps, warpValues) => {
@@ -85,8 +84,8 @@ function useInputAdaptor(opt: UiComponent<InputOption>) {
   });
   const shadowEvents = transformEvents(opt.events, (events, shadowEvents) => {
     for (const eventName in events) {
-      if(eventName === 'update:modelValue') {
-          shadowEvents['update:value'] = events[eventName];
+      if (eventName === 'update:modelValue') {
+        shadowEvents['update:value'] = events[eventName];
       } else {
         shadowEvents[eventName] = events[eventName];
       }

@@ -1,11 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { h, ref, shallowRef, isVNode } from 'vue';
-import {
-  renderComponent,
-  toVNodes,
-  type UiComponent,
-  type Context,
-} from '../packages/core/src/render';
+import { h, ref, shallowRef, isVNode, defineComponent } from 'vue';
+import { renderComponent, toVNodes, type UiComponent, type Context } from '@viewless/core';
 
 describe('renderComponent 函数测试', () => {
   it('应该正确渲染基本组件', () => {
@@ -240,14 +235,16 @@ describe('renderComponent 函数测试', () => {
   });
 
   it('应该正确处理组件类型的插槽内容', () => {
-    const mockComponent = { render: () => h('div', 'Test Component') };
-    const slotComponent = { render: () => h('span', 'Slot Component') };
+    const mockComponent = defineComponent({ render: () => h('div', 'Test Component') });
+    const slotComponent = defineComponent({ render: () => h('span', 'Slot Component') });
     const option: UiComponent = {
       component: mockComponent,
       props: { id: 'test-component' },
       events: {},
       slots: {
-        content: slotComponent,
+        content: {
+          component: slotComponent,
+        },
       },
     };
     const context = {};
@@ -406,7 +403,7 @@ describe('toVNodes 函数测试', () => {
   });
 
   it('应该处理带有render方法的对象', () => {
-    const renderableObject = { render: () => h('div', 'Renderable Object') };
+    const renderableObject = defineComponent({ render: () => h('div', 'Renderable Object') });
     const result = toVNodes(renderableObject, context);
 
     expect(result).toHaveLength(1);
