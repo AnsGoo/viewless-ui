@@ -11,6 +11,7 @@
     ],
     /* Linting */
     "strict": true,
+    "declaration": true,
     "isolatedDeclarations": true,
     "declarationMap": true,
     "noUnusedLocals": true,

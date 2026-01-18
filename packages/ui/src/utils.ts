@@ -9,9 +9,9 @@ type ElementEvent = (...args: any[]) => any;
 
 export function transformEvents<T extends object = Record<string, ElementEvent>>(
   events: T,
-  transform?: (events: T, shadowEvents: Record<string, any>) => any,
+  transform?: (events: T, shadowEvents: Record<string, ElementEvent>) => any,
 ) {
-  const shadowEvents: Record<string, any> = {};
+  const shadowEvents: Record<string, ElementEvent> = {};
   if (transform) {
     transform(events, shadowEvents);
   } else {
