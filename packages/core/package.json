@@ -14,7 +14,8 @@
     "exports": {
       ".": "./dist/index.js",
       "./package.json": "./package.json"
-    }
+    },
+    "access": "public"
   },
   "files": [
     "dist",
