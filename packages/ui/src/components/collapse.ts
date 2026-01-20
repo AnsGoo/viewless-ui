@@ -5,8 +5,8 @@ import type {
   ViewlessComponent,
   BaseAttrs,
   FlatOption,
-} from '@viewless/core';
-import { useViewlessComponentOption } from '@viewless/core';
+} from '@viewless-ui/core';
+import { useViewlessComponentOption } from '@viewless-ui/core';
 
 export interface CollapseItemProps extends Props {
   title?: string;

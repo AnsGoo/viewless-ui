@@ -1,7 +1,7 @@
-import { defineViewlessComponent } from '@viewless/core';
+import { defineViewlessComponent } from '@viewless-ui/core';
 import { UseViewlessForm } from './form';
-import { useProvideAdaptor, useViewlessComponentOption } from '@viewless/core';
-import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless/ui';
+import { useProvideAdaptor, useViewlessComponentOption } from '@viewless-ui/core';
+import { useAntDesignAdaptor, useElementPlusAdaptor, useNaiveUiAdaptor } from '@viewless-ui/ui'; 
 import { onMounted, reactive, ref, toRef, watch } from 'vue';
 
 export const ProxyCard = defineViewlessComponent({

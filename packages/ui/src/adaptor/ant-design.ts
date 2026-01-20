@@ -1,12 +1,12 @@
 import { shallowRef, isRef, computed, toValue } from 'vue';
 import { Button, Card, Form, FormItem, Input } from 'ant-design-vue';
 import type { Component, TemplateRef } from 'vue';
-import type { UiComponent } from '@viewless/core';
+import type { UiComponent } from '@viewless-ui/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';
 import { transformEvents } from '../utils';
-import type { Adaptor, AdaptorFn } from '@viewless/core';
+import type { Adaptor, AdaptorFn } from '@viewless-ui/core';
 import type { ButtonOption } from '../components/button';
 import { transformProps } from '../utils';
 

@@ -1,6 +1,6 @@
 import { shallowRef, type Component, type TemplateRef } from 'vue';
 import { ElButton, ElCard, ElForm, ElFormItem, ElInput } from 'element-plus';
-import type { UiComponent, Adaptor, AdaptorFn } from '@viewless/core';
+import type { UiComponent, Adaptor, AdaptorFn } from '@viewless-ui/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';

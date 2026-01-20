@@ -1,6 +1,6 @@
-import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@viewless/core';
-import type { FlatOption } from '@viewless/core';
-import { useViewlessComponentOption } from '@viewless/core';
+import type { Events, Props, Slots, BaseAttrs, ViewlessComponent } from '@viewless-ui/core';
+import type { FlatOption } from '@viewless-ui/core';
+import { useViewlessComponentOption } from '@viewless-ui/core';
 
 export interface ButtonOption extends BaseAttrs {
   props: ButtonProps;

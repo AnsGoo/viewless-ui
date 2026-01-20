@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "@viewless/core": "workspace:*",
+    "@viewless-ui/core": "workspace:*",
     "@viewless/examples": "workspace:*",
-    "@viewless/ui": "workspace:*",
+    "@viewless-ui/ui": "workspace:*",
     "ant-design-vue": "4.x",
     "element-plus": "^2.13.0",
     "naive-ui": "^2.43.2",

@@ -1,7 +1,7 @@
 import { computed, onMounted, reactive, toRef, watch } from 'vue';
-import { defineViewlessComponent, useViewlessTemplateRef } from '@viewless/core';
-import { useCard, useFormItem, useInput, useForm, useButton } from '@viewless/ui';
-import type { FormHandler } from '@viewless/ui';
+import { defineViewlessComponent, useViewlessTemplateRef } from '@viewless-ui/core';
+import { useCard, useFormItem, useInput, useForm, useButton } from '@viewless-ui/ui';
+import type { FormHandler } from '@viewless-ui/ui';
 // 定义表单数据类型
 interface FormModel {
   username: string;

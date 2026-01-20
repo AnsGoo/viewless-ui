@@ -16,11 +16,15 @@
       "./package.json": "./package.json"
     }
   },
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "build": "tsdown"
   },
   "dependencies": {
-    "@viewless/core": "workspace:*",
+    "@viewless-ui/core": "workspace:*",
     "vue": "^3.5.26"
   },
   "devDependencies": {

@@ -25,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import { useProvideAdaptor } from '@viewless/core'
-import { useNaiveUiAdaptor } from '@viewless/ui'
+import { useProvideAdaptor } from '@viewless-ui/core'
+import { useNaiveUiAdaptor } from '@viewless-ui/ui'
 import { viewlessTabs, viewlessInput, ProxyCard } from '@viewless/examples'
 
 useProvideAdaptor(useNaiveUiAdaptor);

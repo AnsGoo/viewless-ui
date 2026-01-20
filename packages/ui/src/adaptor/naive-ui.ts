@@ -1,7 +1,7 @@
 import { shallowRef } from 'vue';
 import type { Component, TemplateRef } from 'vue';
 import { NButton, NCard, NForm, NFormItem, NInput, NTabPane, NTabs } from 'naive-ui';
-import type { UiComponent, Adaptor, AdaptorFn } from '@viewless/core';
+import type { UiComponent, Adaptor, AdaptorFn } from '@viewless-ui/core';
 import type { FormOption, FormItemOption, FormHandler } from '../components/form';
 import type { CardOption } from '../components/card';
 import type { InputOption } from '../components/input';

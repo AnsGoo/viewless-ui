@@ -11,15 +11,15 @@ importers:
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@8.0.0-beta.5(@types/node@24.10.4)(jiti@2.6.1))
-      '@viewless/core':
+      '@viewless-ui/core':
         specifier: workspace:*
         version: link:packages/core
+      '@viewless-ui/ui':
+        specifier: workspace:*
+        version: link:packages/ui
       '@viewless/examples':
         specifier: workspace:*
         version: link:packages/examples
-      '@viewless/ui':
-        specifier: workspace:*
-        version: link:packages/ui
       ant-design-vue:
         specifier: 4.x
         version: 4.2.6(vue@3.5.26(typescript@5.9.3))
@@ -97,10 +97,10 @@ importers:
 
   packages/examples:
     dependencies:
-      '@viewless/core':
+      '@viewless-ui/core':
         specifier: workspace:*
         version: link:../core
-      '@viewless/ui':
+      '@viewless-ui/ui':
         specifier: workspace:*
         version: link:../ui
       vue:
@@ -116,7 +116,7 @@ importers:
 
   packages/ui:
     dependencies:
-      '@viewless/core':
+      '@viewless-ui/core':
         specifier: workspace:*
         version: link:../core
       vue:

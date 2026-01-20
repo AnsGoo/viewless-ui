@@ -1,5 +1,5 @@
 import { isReactive, toRaw } from 'vue';
-import { Logger, LogLevel } from '@viewless/core';
+import { Logger, LogLevel } from '@viewless-ui/core';
 
 const logger = new Logger('viewless/ui', {
   level: LogLevel.DEBUG,

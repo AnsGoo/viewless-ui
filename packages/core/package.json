@@ -16,6 +16,10 @@
       "./package.json": "./package.json"
     }
   },
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "build": "tsdown"
   },

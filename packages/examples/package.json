@@ -8,8 +8,8 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@viewless/core": "workspace:*",
-    "@viewless/ui": "workspace:*",
+    "@viewless-ui/core": "workspace:*",
+    "@viewless-ui/ui": "workspace:*",
     "vue": "^3.5.26"
   },
   "devDependencies": {
