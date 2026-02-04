@@ -2,8 +2,17 @@ import { defineConfig } from 'tsdown';
 
 export default defineConfig({
   entry: './src/index.ts',
-  format: ['esm', 'umd', 'iife'],
-  globalName: 'ViewlessCore',
+  format: {
+    esm: {},
+    umd: {
+      name: 'ViewlessCore',
+      globalName:'ViewlessCore',
+    },
+    iife: {
+      name: 'ViewlessCore',
+      globalName:'ViewlessCore',
+    },
+  },
   dts: {
     sourcemap: true,
   },
