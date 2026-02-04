@@ -2,12 +2,13 @@ import { defineConfig } from 'tsdown';
 
 export default defineConfig({
   entry: './src/index.ts',
-  format: 'esm',
+  format: ['esm', 'umd', 'iife'],
+  globalName: 'ViewlessUI',
   dts: {
     sourcemap: true,
   },
   platform: 'browser',
-  external: ['vue', '@viewless/core'],
+  external: ['vue', '@viewless-ui/core'],
   outDir: 'dist',
   exports: {
     devExports: 'development',
