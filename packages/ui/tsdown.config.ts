@@ -9,9 +9,6 @@ export default defineConfig({
   },
   platform: 'browser',
   external: ['vue', '@viewless-ui/core'],
-  alias: {
-    'ViewlessCore': '@viewless-ui/core',
-  },
   outDir: 'dist',
   exports: {
     devExports: 'development',
