@@ -15,32 +15,32 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.2.1",
     "@viewless-ui/core": "workspace:*",
-    "@viewless/examples": "workspace:*",
     "@viewless-ui/ui": "workspace:*",
-    "ant-design-vue": "4.x",
-    "element-plus": "^2.13.0",
-    "naive-ui": "^2.43.2",
-    "tailwindcss": "^4.1.18",
-    "vue": "^3.5.26"
+    "@viewless/examples": "workspace:*",
+    "ant-design-vue": "~4.2.6",
+    "element-plus": "^2.13.5",
+    "naive-ui": "^2.44.1",
+    "tailwindcss": "^4.2.1",
+    "vue": "^3.5.30"
   },
   "devDependencies": {
     "@types/jsdom": "^27.0.0",
-    "@types/node": "^24.10.4",
-    "@vitejs/plugin-vue": "^6.0.3",
+    "@types/node": "^24.12.0",
+    "@vitejs/plugin-vue": "^6.0.5",
     "@vitest/coverage-v8": "4.0.16",
     "@vitest/ui": "4.0.16",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.8.1",
     "jsdom": "^27.4.0",
     "oxfmt": "^0.19.0",
-    "oxlint": "^1.36.0",
+    "oxlint": "^1.56.0",
     "tsdown": "0.19.0-beta.5",
     "typescript": "~5.9.3",
     "vite": "8.0.0-beta.5",
-    "vitest": "^4.0.16",
-    "vue-tsc": "^3.2.1"
+    "vitest": "^4.1.0",
+    "vue-tsc": "^3.2.6"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,vue}": "oxlint"
